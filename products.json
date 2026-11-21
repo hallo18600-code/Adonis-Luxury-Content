@@ -1,0 +1,370 @@
+{
+ "updated": "2026-11-21",
+ "shop": "adonis-lxry.myshopify.com",
+ "products": [
+  {
+   "id": "ralph-lauren-slim-fit-tshirt",
+   "brand": "Ralph Lauren",
+   "name": "Slim-Fit T-Shirt",
+   "type": "T-Shirt",
+   "price": 29.9,
+   "size": "S",
+   "color": "Grau",
+   "cond": 9,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/Schwarzes_Polo_Ralph_Lauren_T-Shirt.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/Schwarzes_T-Shirt_von_hinten.png"
+   ]
+  },
+  {
+   "id": "ralph-lauren-quarterzip",
+   "brand": "Ralph Lauren",
+   "name": "Quarterzip",
+   "type": "Quarterzip",
+   "price": 49.99,
+   "size": "S",
+   "color": "Blau",
+   "cond": null,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/65d0b204-550d-4acc-a02f-7e70fa556d7e.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/298d6c14-024c-4089-b931-e20aaf614534.png"
+   ]
+  },
+  {
+   "id": "ralph-lauren-polo-shirt",
+   "brand": "Ralph Lauren",
+   "name": "Poloshirt",
+   "type": "Poloshirt",
+   "price": 29.9,
+   "size": "L",
+   "color": "Blau",
+   "cond": 9,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/19fe37bf-aa98-49a3-9681-93f05a83a8d6.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/5d10e521-bbcc-4b00-b035-a85093e99c1f.png"
+   ]
+  },
+  {
+   "id": "ralph-lauren-pufferjacke",
+   "brand": "Ralph Lauren",
+   "name": "Pufferjacke",
+   "type": "Jacke",
+   "price": 179.9,
+   "size": "M",
+   "color": "Schwarz",
+   "cond": 10,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/63fa4779-d464-48b5-8ee9-a0efc0ff3955.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/7177dfa8-a18d-4bce-9ae6-f590a1456747.png"
+   ]
+  },
+  {
+   "id": "blauer-usa-pufferjacke",
+   "brand": "Blauer USA",
+   "name": "Pufferjacke",
+   "type": "Jacke",
+   "price": 79.99,
+   "size": null,
+   "color": null,
+   "cond": 8,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/0104ceeb-58bc-42ec-a009-a53399aec8c6.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/06c73ae4-59a2-4442-88e2-82aef32f93f6.png"
+   ]
+  },
+  {
+   "id": "lacoste-sweater-grau",
+   "brand": "Lacoste",
+   "name": "Sweater",
+   "type": "Sweater",
+   "price": 44.9,
+   "size": "S",
+   "color": "Grau",
+   "cond": 9,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/6809848f-8ade-423b-abdd-1dca02bbee47.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/a10bcca5-2195-408f-89e0-e6e721e4a524.png"
+   ]
+  },
+  {
+   "id": "ralph-lauren-hoodie",
+   "brand": "Ralph Lauren",
+   "name": "Hoodie",
+   "type": "Hoodie",
+   "price": 69.9,
+   "size": "S",
+   "color": "Grau",
+   "cond": 9,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/cfbbe8ae-8ed0-40c7-aa2f-c28373c7ac7f.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/ace5a5c3-59b2-4ca4-bcf4-1d4c227758c0.png"
+   ]
+  },
+  {
+   "id": "ralph-lauren-teddy-slimfit-shirt",
+   "brand": "Ralph Lauren",
+   "name": "Teddy Slim-Fit Shirt",
+   "type": "T-Shirt",
+   "price": 34.9,
+   "size": "S",
+   "color": "Blau",
+   "cond": 8,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/a0b18d44-13ed-4924-a32d-e7769a6191cd.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/ac7ab481-ae46-4a18-a671-aaa72866ce9c.png"
+   ]
+  },
+  {
+   "id": "ralph-lauren-sweater-navyblau",
+   "brand": "Ralph Lauren",
+   "name": "Sweater",
+   "type": "Sweater",
+   "price": 49.99,
+   "size": "L",
+   "color": "Blau",
+   "cond": 9,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/01a7c96a-c07d-4f2b-82dc-6a6d4def8738.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/e5a30de0-17ec-4862-8871-2b889143f0cc.png"
+   ]
+  },
+  {
+   "id": "ralph-lauren-sweatershirt",
+   "brand": "Ralph Lauren",
+   "name": "Sweatshirt",
+   "type": "Sweatshirt",
+   "price": 52.9,
+   "size": "L",
+   "color": "Grau",
+   "cond": 10,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/fef1797e-a72f-4606-a3ed-a36acf833533.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/f87ee401-ec89-41fc-b7c0-64f4e1389576.png"
+   ]
+  },
+  {
+   "id": "ralph-lauren-sweater",
+   "brand": "Ralph Lauren",
+   "name": "Sweater",
+   "type": "Sweater",
+   "price": 54.9,
+   "size": "M",
+   "color": "Grau",
+   "cond": 9,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/22101213-d732-4b1f-afb4-9a6a4a1bc20e.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/d99c027b-ffe5-4726-aa58-d7687e9de92c.png"
+   ]
+  },
+  {
+   "id": "ralph-lauren-teddy-hoodie",
+   "brand": "Ralph Lauren",
+   "name": "Teddy Hoodie",
+   "type": "Hoodie",
+   "price": 84.9,
+   "size": null,
+   "color": null,
+   "cond": 10,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/5f6ab927-47a3-498b-a7e2-7a1490ed53bd.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/5a164890-6b64-4579-b8c1-a916018eab25.png"
+   ]
+  },
+  {
+   "id": "burberry-polo-shirt",
+   "brand": "Burberry",
+   "name": "Poloshirt",
+   "type": "Poloshirt",
+   "price": 49.99,
+   "size": null,
+   "color": null,
+   "cond": 9,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/fb97fe25-7655-4b96-b716-225ccba9f623.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/d0e11c0a-47f7-4a54-8150-0dd9a3dc5b55.png"
+   ]
+  },
+  {
+   "id": "ralph-lauren-polo-shirt-1",
+   "brand": "Ralph Lauren",
+   "name": "Poloshirt",
+   "type": "Poloshirt",
+   "price": 34.9,
+   "size": null,
+   "color": null,
+   "cond": 10,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/6527e191-0a6d-4e0e-a7c2-d28d4fcce817.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/61bd784e-6ce9-4c91-b25c-8921ec59ce72.png"
+   ]
+  },
+  {
+   "id": "ralph-lauren-polo-shirt-2",
+   "brand": "Ralph Lauren",
+   "name": "Poloshirt",
+   "type": "Poloshirt",
+   "price": 32.9,
+   "size": "M",
+   "color": "Grau",
+   "cond": 10,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/500490b8-0680-4804-817d-5ddb7234587c.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/38c741a8-a44c-4a8c-9682-a9193f4bd338.png"
+   ]
+  },
+  {
+   "id": "ralph-lauren-polo-shirt-3",
+   "brand": "Ralph Lauren",
+   "name": "Poloshirt",
+   "type": "Poloshirt",
+   "price": 34.9,
+   "size": "M",
+   "color": "Gestreift",
+   "cond": 10,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/dd2c1f58-98df-4754-8cb4-8426111587b1.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/b92a9744-3e42-4607-ad63-fbf045af9279.png"
+   ]
+  },
+  {
+   "id": "ralph-lauren-hoodie-1",
+   "brand": "Ralph Lauren",
+   "name": "Hoodie",
+   "type": "Hoodie",
+   "price": 54.9,
+   "size": "M",
+   "color": "Marineblau",
+   "cond": 9,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/a25baa50-a67a-419a-9751-f76fe09ec343.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/59aa49b9-65db-4cb2-b986-10ca70eb86c1.png"
+   ]
+  },
+  {
+   "id": "blauer-usa-pufferjacke-frauen",
+   "brand": "Blauer USA",
+   "name": "Pufferjacke Frauen",
+   "type": "Jacke",
+   "price": 109.9,
+   "size": null,
+   "color": null,
+   "cond": 9,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/a920a8f6-3266-4853-a04c-b59d5e6fd57f.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/f67e9f19-79a2-4f3f-8897-4a08a57e8f38.png"
+   ]
+  },
+  {
+   "id": "blauer-usa-pufferjacke-frauen-1",
+   "brand": "Blauer USA",
+   "name": "Pufferjacke Frauen",
+   "type": "Jacke",
+   "price": 109.9,
+   "size": null,
+   "color": null,
+   "cond": 8,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/977f8841-91bd-4f6d-9357-a62b2cc9a909.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/8ce812b1-bf97-4d79-ac18-558286c14e89.png"
+   ]
+  },
+  {
+   "id": "ralph-lauren-polo-shirt-4",
+   "brand": "Ralph Lauren",
+   "name": "Polo shirt",
+   "type": "Poloshirt",
+   "price": 32.9,
+   "size": "M",
+   "color": "Marineblau",
+   "cond": 9,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/6003b8a2-54ba-49b1-834c-a67f6c61b5ca.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/b2aa5514-616a-4188-a37c-ecf18a5f0247.png"
+   ]
+  },
+  {
+   "id": "lacoste-sweater",
+   "brand": "Lacoste",
+   "name": "Sweater",
+   "type": "Sweater",
+   "price": 49.99,
+   "size": "M",
+   "color": "Schwarz",
+   "cond": 9,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/b4a7826e-e268-4b82-8d89-0ca65b9a18ae.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/29d5a2f6-0e83-4e1a-9fce-e15be6fef025.png"
+   ]
+  },
+  {
+   "id": "lacoste-sweater-1",
+   "brand": "Lacoste",
+   "name": "Sweater",
+   "type": "Sweater",
+   "price": 45.99,
+   "size": null,
+   "color": null,
+   "cond": 9,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/3d7f4364-2f73-404e-a7c2-503b3fc10376.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/ab139eeb-f0bc-487b-8c6b-9059ecf59aac.png"
+   ]
+  },
+  {
+   "id": "moncler-cardigan",
+   "brand": "Moncler",
+   "name": "Cardigan",
+   "type": "Jacke",
+   "price": 349.99,
+   "size": null,
+   "color": null,
+   "cond": 8,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/187ba916-599d-49e5-aa96-a95f2e1559ec.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/b27934a2-bcab-4afd-b218-ea884fb30e39.png"
+   ]
+  },
+  {
+   "id": "moncler-polo-longsleeve",
+   "brand": "Moncler",
+   "name": "Polo Longsleeve",
+   "type": "Poloshirt",
+   "price": 68.99,
+   "size": null,
+   "color": "Marineblau",
+   "cond": 9,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/b89b48ca-0088-4d62-8cb4-9908b1107d22.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/ce789572-a0d6-45e2-9346-0c767186ceb0.png"
+   ]
+  },
+  {
+   "id": "ralph-lauren-strickpullover",
+   "brand": "Ralph Lauren",
+   "name": "Strickpullover",
+   "type": "Sweater",
+   "price": 52.99,
+   "size": null,
+   "color": null,
+   "cond": 9,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/13a7b9e1-e923-4663-ab59-eb3b3524a4fd.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/7255b08a-97f8-4cda-a325-e0967aa3d200.png"
+   ]
+  },
+  {
+   "id": "ralph-lauren-polo-longsleeve",
+   "brand": "Ralph Lauren",
+   "name": "Polo Longsleeve",
+   "type": "Poloshirt",
+   "price": 32.99,
+   "size": "S",
+   "color": "Grau",
+   "cond": 9,
+   "img": [
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/9ac17547-ed82-49c6-9fa4-26446ecb55d7.png",
+    "https://cdn.shopify.com/s/files/1/0988/8838/4840/files/89516c99-763b-44e2-b737-3e207540694f.png"
+   ]
+  }
+ ]
+}
