@@ -170,7 +170,7 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
    dazu wechselnd Uhr / Parfum / Mütze. Farben, Uhr und Duft passen immer zusammen.
    Teile: teile.json (freigestellt, 4K in teile/, kleiner in teile-hd/) + eigene Uploads.
    ============================================================ */
-const BUILD = '2026-11-22 c';
+const BUILD = '2026-11-22 d';
 const $ = s => document.querySelector(s);
 const rnd = Math.random;
 const pick = a => a[Math.floor(rnd() * a.length)];
@@ -257,6 +257,10 @@ const SERIES = {
     titles: [L('Old-Money-Outfits', 'Old money outfits'), L('So ziehst du dich Old Money an', 'How to dress old money')],
     tops: [[['knit', 'shirt'], 3], [['knit'], 3], [['shirt'], 2], [['polo'], 2], [['outer_l', 'knit'], 2], [['outer_l', 'polo'], 1]],
     extras: [['w', 3], ['ws', 3], ['s', 1.5], ['', 1]], white: 0.3, tags: ['#oldmoneystyle', '#oldmoneyaesthetic'] },
+  luxus: { label: 'Luxus-Hintergrund', ex: 'Villen, Autos, Schnee', lux: true,
+    titles: [L('Old-Money-Outfits', 'Old money outfits'), L('Zieh dich an wie das Leben, das du willst', 'Dress for the life you want'), L('Outfits für Villa und Ski-Resort', 'Outfits for the villa life'), L('So zieht sich Geld an', 'What money looks like')],
+    tops: [[['knit'], 3], [['knit', 'shirt'], 2], [['outer_w', 'knit'], 2], [['outer_l', 'knit'], 2], [['polo'], 1.5], [['shirt'], 1.5], [['outer_w'], 1.5]],
+    extras: [['ws', 3], ['w', 2], ['s', 1.5], ['hw', 1]], white: 0.2, quietish: true, tags: ['#luxurylifestyle', '#oldmoneyaesthetic'] },
   shewants: { label: 'Was sie will', ex: 'Outfits she wants you to wear',
     titles: [L('Outfits, die sie an dir sehen will', 'Outfits she wants you to wear'), L('Zieh das an und sie merkt es', 'Wear this and she’ll notice')],
     tops: [[['knit'], 3], [['knit', 'shirt'], 2], [['outer_l', 'knit'], 2], [['shirt'], 1.5], [['polo'], 1.5], [['outer_w', 'knit'], 1]],
@@ -337,9 +341,17 @@ function planPost(series, n, lang) {
   }
   const title = pick(cfg.titles), cols = outfits.flatMap(o => [o.items.outer.color, o.items.inner && o.items.inner.color, o.items.pants.color]).filter(Boolean);
   const bgOK = k => cols.filter(c => BGS[k].avoid.includes(c)).length <= cols.length * .2;
-  const bg = S.theme !== 'mix' && BGS[S.theme] ? S.theme : wpick(Object.entries(BGS).filter(([k]) => bgOK(k) && k !== recent.bg).map(([k, b]) => [k, b.w]));
-  recent.bg = bg;
-  const slides = outfits.map((o, i) => ({ layout: 'outfit', idx: i + 1, o, title: i === 0 ? T(title, lang) : null, bg, seed: Math.random().toString(36).slice(2), lang }));
+  let bg = null, bgs = null;
+  if (cfg.lux) {
+    // jede Slide ein anderes Luxus-Bild; dunkle Outfits bekommen die hellsten Bilder
+    const order = Object.keys(LUX).sort((a, b) => LUX[b].lum - LUX[a].lum), left = shuffle(order);
+    const tone = o => { const l = [o.items.outer, o.items.inner, o.items.pants].filter(Boolean).map(p => LUMC[p.color] ?? .5); return l.reduce((x, y) => x + y, 0) / l.length; };
+    bgs = outfits.map(o => { left.sort((a, b) => tone(o) < .45 ? LUX[b].lum - LUX[a].lum + (rnd() - .5) * 40 : LUX[a].lum - LUX[b].lum + (rnd() - .5) * 40); return 'lux:' + left.shift(); });
+  } else {
+    bg = S.theme !== 'mix' && BGS[S.theme] ? S.theme : wpick(Object.entries(BGS).filter(([k]) => bgOK(k) && k !== recent.bg).map(([k, b]) => [k, b.w]));
+    recent.bg = bg;
+  }
+  const slides = outfits.map((o, i) => ({ layout: 'outfit', idx: i + 1, o, title: i === 0 ? T(title, lang) : null, bg: bgs ? bgs[i] : bg, seed: Math.random().toString(36).slice(2), lang }));
   const tags = TAGS.map(g => pick(g));
   if (rnd() < .5) tags[4] = pick(cfg.tags);
   let cta = pick(CTAS[lang]); if (cta === recent.cta) cta = pick(CTAS[lang]); recent.cta = cta;
@@ -379,53 +391,56 @@ async function getArt(p) {
   return pr;
 }
 
-/* ---------- Hintergründe (Teppich wie bei Flatlay-Fotos) ---------- */
-// Böden: Teppich (Bouclé) und ganz cleane Filz-/Woll-Böden. avoid = Farben, die darauf untergehen
+/* ---------- Hintergründe ----------
+   Teppiche = echte Fotos (4K, in Farben umgefärbt), Clean = einfarbig, Luxus = Villen/Autos (leicht unscharf).
+   avoid = Kleidungsfarben, die auf diesem Boden untergehen. */
 const BGS = {
-  navy:     { label: 'Navy-Teppich', base: '#13284c', hi: [60, 98, 160], lo: [6, 16, 36], w: 4, avoid: [] },
-  charcoal: { label: 'Anthrazit-Teppich', base: '#2a2c30', hi: [95, 98, 105], lo: [12, 12, 14], w: 1.5, avoid: ['black', 'charcoal'] },
-  cream:    { label: 'Creme-Teppich', base: '#e8e0d0', hi: [255, 252, 244], lo: [176, 164, 140], w: 1.5, avoid: ['white', 'cream'] },
-  forest:   { label: 'Dunkelgrün', base: '#1d3328', hi: [70, 110, 88], lo: [8, 20, 14], w: 2, avoid: [], clean: true },
-  sand:     { label: 'Sand', base: '#cbb796', hi: [240, 226, 200], lo: [150, 128, 96], w: 2, avoid: ['cream'], clean: true },
-  stone:    { label: 'Steingrau', base: '#a19e98', hi: [205, 202, 196], lo: [110, 107, 102], w: 1.5, avoid: ['grey', 'lightgrey'], clean: true },
-  ink:      { label: 'Tiefschwarz', base: '#141516', hi: [70, 72, 76], lo: [0, 0, 0], w: 1, avoid: ['black', 'charcoal'], clean: true },
-  mocha:    { label: 'Schoko', base: '#3a2a21', hi: [120, 92, 74], lo: [20, 12, 8], w: 1.5, avoid: [], clean: true },
-  wool:     { label: 'Wollweiß', base: '#eeeae3', hi: [255, 255, 255], lo: [196, 190, 180], w: 1.5, avoid: ['white', 'cream', 'lightgrey'], clean: true },
-  slate:    { label: 'Taubenblau', base: '#4a5a70', hi: [130, 148, 172], lo: [26, 34, 46], w: 1.5, avoid: ['navy'], clean: true },
+  shag_navy:     { label: 'Hochflor Navy', img: 'shag_navy', base: '#16203a', w: 3, avoid: [] },
+  shag_charcoal: { label: 'Hochflor Grau', img: 'shag_charcoal', base: '#3a3e45', w: 2, avoid: ['black', 'charcoal'] },
+  shag_cream:    { label: 'Hochflor Creme', img: 'shag_cream', base: '#d8d1c4', w: 1.5, avoid: ['white', 'cream', 'lightgrey'] },
+  shag_sand:     { label: 'Hochflor Sand', img: 'shag_sand', base: '#b9a588', w: 1.2, avoid: ['cream'] },
+  shag_forest:   { label: 'Hochflor Grün', img: 'shag_forest', base: '#22342a', w: 1.2, avoid: [] },
+  soft_navy:     { label: 'Velours Navy', img: 'soft_navy', base: '#1f2d4b', w: 2, avoid: [] },
+  soft_blue:     { label: 'Velours Taubenblau', img: 'soft_blue', base: '#6f8296', w: 1.5, avoid: ['lightblue'] },
+  soft_stone:    { label: 'Velours Stein', img: 'soft_stone', base: '#938d85', w: 1.2, avoid: ['grey', 'lightgrey'] },
+  soft_cream:    { label: 'Velours Creme', img: 'soft_cream', base: '#dcd6ca', w: 1.2, avoid: ['white', 'cream', 'lightgrey'] },
+  soft_mocha:    { label: 'Velours Schoko', img: 'soft_mocha', base: '#4c3b30', w: 1.2, avoid: [] },
+  soft_sage:     { label: 'Velours Salbei', img: 'soft_sage', base: '#768070', w: 1, avoid: [] },
+  flat_slate:    { label: 'Clean Schiefer', color: '#5e656f', w: 1.5, avoid: [] },
+  flat_warm:     { label: 'Clean Warmgrau', color: '#8b857c', w: 1, avoid: ['grey', 'lightgrey'] },
+  flat_ivory:    { label: 'Clean Elfenbein', color: '#ebe6dd', w: 1, avoid: ['white', 'cream', 'lightgrey'] },
+  flat_navy:     { label: 'Clean Navy', color: '#1b2438', w: 1, avoid: ['navy', 'black'] },
+  flat_olive:    { label: 'Clean Oliv', color: '#4a5142', w: 0.8, avoid: [] },
 };
-const bgCache = {};
-function background(ctx, key) {
-  const k = key + W;
-  if (!bgCache[k]) {
-    const b = BGS[key] || BGS.navy, c = document.createElement('canvas'); c.width = W; c.height = H;
-    const x = c.getContext('2d'), r = seedRnd('rug' + key), s = W / 1080;
-    x.fillStyle = b.base; x.fillRect(0, 0, W, H);
-    if (b.clean) {
-      // clean: feiner Filz – sehr kleine, weiche Fasern, kaum Kontrast
-      const n = Math.round(W * H / 40);
-      for (let i = 0; i < n; i++) {
-        const col = r() < .5 ? b.hi : b.lo, a = .05 + r() * .1;
-        x.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${a})`; x.lineWidth = (0.5 + r() * .8) * s;
-        const px = r() * W, py = r() * H, l = (1 + r() * 2.5) * s, an = r() * 6.28;
-        x.beginPath(); x.moveTo(px, py); x.lineTo(px + Math.cos(an) * l, py + Math.sin(an) * l); x.stroke();
-      }
-    } else {
-      // Bouclé-Struktur: viele kleine Schlaufen in hell und dunkel
-      const n = Math.round(W * H / 90);
-      for (let i = 0; i < n; i++) {
-        const light = r() < .5, col = light ? b.hi : b.lo, a = .12 + r() * .28;
-        x.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${a})`; x.lineWidth = (0.8 + r() * 1.6) * s;
-        const px = r() * W, py = r() * H, rad = (1.5 + r() * 3.5) * s, st = r() * 6.28;
-        x.beginPath(); x.arc(px, py, rad, st, st + 2 + r() * 3); x.stroke();
-      }
-    }
-    // weiches Licht von oben links, Rand etwas dunkler
-    const g = x.createRadialGradient(W * .35, H * .3, W * .1, W * .5, H * .55, H * .85);
-    g.addColorStop(0, 'rgba(255,255,255,.07)'); g.addColorStop(1, 'rgba(0,0,0,.22)');
-    x.fillStyle = g; x.fillRect(0, 0, W, H);
-    bgCache[k] = c;
+// Luxus-Hintergründe: lum = Helligkeit (0–255)
+const LUX = { palms: { lum: 134 }, riviera: { lum: 118 }, chateau: { lum: 111 }, stmoritz: { lum: 154 }, chalet: { lum: 107 } };
+const LUMC = { navy: .15, black: .08, charcoal: .2, grey: .5, lightgrey: .75, white: .95, cream: .9, lightblue: .8, denim: .3 };
+const bgImgs = new Map();
+const bgSrc = key => { const hd = W > 1200 ? '' : '_hd'; if (key.startsWith('lux:')) return `bg/lux_${key.slice(4)}${hd}.jpg`; const b = BGS[key]; return b && b.img ? `bg/${b.img}${hd}.jpg` : null; };
+function loadBg(key) {
+  const src = bgSrc(key); if (!src) return Promise.resolve(null);
+  if (!bgImgs.has(src)) { const p = loadImg(src).catch(() => null); bgImgs.set(src, p); if (bgImgs.size > 8) bgImgs.delete(bgImgs.keys().next().value); }
+  return bgImgs.get(src);
+}
+function cover(ctx, img) { const s = Math.max(W / img.naturalWidth, H / img.naturalHeight), w = img.naturalWidth * s, h = img.naturalHeight * s; ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h); }
+function background(ctx, key, img, outfitLum) {
+  if (key.startsWith('lux:')) {
+    if (img) cover(ctx, img); else { ctx.fillStyle = '#777'; ctx.fillRect(0, 0, W, H); }
+    // Kontrast sichern: helle Outfits → Bild abdunkeln, dunkle Outfits → leicht aufhellen
+    const lum = (LUX[key.slice(4)] || { lum: 128 }).lum / 255, dark = outfitLum < .45;
+    const g = ctx.createRadialGradient(W / 2, H * .52, W * .1, W / 2, H * .52, H * .75);
+    if (dark) { const a = lum < .5 ? .26 : .12; g.addColorStop(0, `rgba(255,255,255,${a})`); g.addColorStop(1, `rgba(255,255,255,${a * .35})`); }
+    else { const a = lum > .5 ? .34 : .2; g.addColorStop(0, `rgba(0,0,0,${a})`); g.addColorStop(1, `rgba(0,0,0,${a * .5})`); }
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    return;
   }
-  ctx.drawImage(bgCache[k], 0, 0);
+  const b = BGS[key] || BGS.shag_navy;
+  if (b.color) {
+    ctx.fillStyle = b.color; ctx.fillRect(0, 0, W, H);
+    const g = ctx.createRadialGradient(W * .45, H * .35, W * .05, W * .5, H * .5, H * .8);
+    g.addColorStop(0, 'rgba(255,255,255,.06)'); g.addColorStop(1, 'rgba(0,0,0,.12)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  } else if (img) cover(ctx, img);
+  else { ctx.fillStyle = b.base; ctx.fillRect(0, 0, W, H); }
 }
 
 /* ---------- Zeichnen ---------- */
@@ -436,7 +451,7 @@ function lay(ctx, art, x, y, w, h, rot = 0, anchor = 'c') {
   const cx = x + (anchor.includes('l') ? dw / 2 : anchor.includes('r') ? w - dw / 2 : w / 2);
   const cy = y + (anchor.includes('t') ? dh / 2 : anchor.includes('b') ? h - dh / 2 : h / 2);
   ctx.save(); ctx.translate(cx, cy); ctx.rotate(rot);
-  ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = W * .03; ctx.shadowOffsetX = W * .008; ctx.shadowOffsetY = W * .014;
+  ctx.shadowColor = lay.strong ? 'rgba(0,0,0,.7)' : 'rgba(0,0,0,.5)'; ctx.shadowBlur = W * (lay.strong ? .045 : .03); ctx.shadowOffsetX = W * .008; ctx.shadowOffsetY = W * .014;
   ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(art.img, bx, by, bw, bh, -dw / 2, -dh / 2, dw, dh);
   ctx.restore();
@@ -454,9 +469,11 @@ function drawCaption(ctx, text, y) {
   lines.forEach((l, i) => { const ly = top + i * lh; ctx.lineWidth = size * .17; ctx.strokeStyle = '#000'; ctx.strokeText(l, W / 2, ly); ctx.fillStyle = '#fff'; ctx.fillText(l, W / 2, ly); });
   ctx.restore();
 }
-function render(ctx, sl, arts) {
+function render(ctx, sl, arts, bgImg) {
   const A = p => p ? arts.get(p) : null, it = sl.o.items, r = seedRnd(sl.seed), j = (a) => (r() - .5) * a;
-  background(ctx, sl.bg);
+  lay.strong = sl.bg.startsWith('lux:');
+  const lums = [it.outer, it.inner, it.pants].filter(Boolean).map(p => LUMC[p.color] ?? .5);
+  background(ctx, sl.bg, bgImg, lums.reduce((x, y) => x + y, 0) / lums.length);
   const flip = r() < .5; // Spiegeln: Hose mal links, mal rechts
   const X = (x, w) => flip ? W - x - w : x, R = v => flip ? -v : v;
   // 1) Oberteile oben
@@ -491,7 +508,7 @@ async function drawSlides(slides) {
   const ctx = canvas.getContext('2d'), blobs = [];
   for (const sl of slides) {
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H);
-    render(ctx, sl, arts);
+    render(ctx, sl, arts, await loadBg(sl.bg));
     let blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', .93));
     if (!blob) { const d = atob(canvas.toDataURL('image/jpeg', .9).split(',')[1]), u8 = new Uint8Array(d.length); for (let k = 0; k < d.length; k++) u8[k] = d.charCodeAt(k); blob = new Blob([u8], { type: 'image/jpeg' }); }
     blobs.push(blob); await new Promise(r => setTimeout(r, 0));
