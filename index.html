@@ -170,7 +170,7 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
    dazu wechselnd Uhr / Parfum / Mütze. Farben, Uhr und Duft passen immer zusammen.
    Teile: teile.json (freigestellt, 4K in teile/, kleiner in teile-hd/) + eigene Uploads.
    ============================================================ */
-const BUILD = '2026-11-22 e';
+const BUILD = '2026-11-22 f';
 const $ = s => document.querySelector(s);
 const rnd = Math.random;
 const pick = a => a[Math.floor(rnd() * a.length)];
@@ -226,11 +226,11 @@ const SERIES = {
     tops: [[['outer_w'], 4], [['outer_w', 'knit'], 3], [['outer_w', 'hoodie'], 2], [['outer_l', 'knit'], 2], [['vest', 'hoodie'], 1.5], [['vest', 'knit'], 1.5], [['knit'], 1]],
     extras: [['hw', 3], ['h', 2], ['w', 2], ['ws', 1.5], ['hws', 1.5], ['', 1], ['s', 1]], white: 0, tags: ['#winteroutfit', '#outfitideas'] },
   omwinter: { label: 'Old Money Winter', ex: 'Old money outfits for winter', quiet: true,
-    titles: [L('Old-Money-Outfits für den Winter', 'Old money outfits for winter'), L('Old Money im Winter', 'Old money winter outfits')],
+    titles: [L('Old Money im Winter', 'Old money winter outfits')],
     tops: [[['outer_w', 'knit'], 4], [['outer_l', 'knit'], 3], [['knit', 'shirt'], 2], [['vest', 'knit'], 2], [['knit'], 2], [['outer_w'], 1]],
     extras: [['hw', 3], ['w', 3], ['ws', 2], ['hws', 1.5], ['s', 1], ['', 1]], white: 0, tags: ['#oldmoneystyle', '#winteroutfit'] },
   fall: { label: 'Herbst', ex: 'Fall outfits that always work',
-    titles: [L('Herbst-Outfits, die immer funktionieren', 'Fall outfits that always work'), L('Herbst-Outfits', 'Fall outfit ideas')],
+    notitle: true, titles: [L('Herbst-Outfits', 'Fall outfits')],
     tops: [[['outer_l'], 3], [['outer_l', 'knit'], 2], [['knit'], 3], [['knit', 'shirt'], 1.5], [['vest', 'knit'], 1.5], [['hoodie'], 1.5], [['sweat'], 1.5], [['shirt'], 1]],
     extras: [['w', 3], ['ws', 2], ['s', 2], ['', 2], ['hw', 1]], white: 0.1, tags: ['#falloutfit', '#outfitideas'] },
   date: { label: 'Erstes Date', ex: 'First date outfits',
@@ -246,11 +246,11 @@ const SERIES = {
     tops: [[['knit'], 3], [['outer_w', 'knit'], 2], [['outer_l', 'knit'], 2], [['polo'], 1.5], [['outer_w', 'polo'], 1.5], [['shirt'], 1]],
     extras: [['ws', 5], ['w', 2], ['s', 1.5]], white: 0, dark: true, tags: ['#newyearseve', '#nye'] },
   parents: { label: 'Ihre Eltern', ex: 'Meeting her parents', quiet: true,
-    titles: [L('Wenn du ihre Eltern triffst', 'Meeting her parents'), L('Outfits für das Treffen mit ihren Eltern', 'What to wear to meet her parents')],
+    titles: [L('Wenn du ihre Eltern triffst', 'Meeting her parents')],
     tops: [[['knit'], 3], [['knit', 'shirt'], 3], [['shirt'], 2], [['polo'], 1.5], [['outer_l', 'knit'], 1.5]],
     extras: [['w', 4], ['ws', 2], ['', 1.5], ['s', 1]], white: 0.15, tags: ['#meettheparents', '#oldmoneystyle'] },
   uni: { label: 'Uni / Schule', ex: 'Uni outfits',
-    titles: [L('Outfits für die Uni', 'Uni outfits'), L('Outfits für die Schule', 'School outfits'), L('Was ich in der Uni trage', 'What I wear to uni')],
+    titles: [L('Outfits für die Uni', 'Uni outfits'), L('Outfits für die Schule', 'School outfits')],
     tops: [[['hoodie'], 2.5], [['sweat'], 2], [['knit'], 2], [['outer_w'], 2], [['vest', 'hoodie'], 2], [['outer_l', 'hoodie'], 1.5], [['outer_w', 'hoodie'], 1.5], [['polo'], 1]],
     extras: [['', 3], ['w', 2], ['h', 2], ['hw', 1.5], ['s', 1]], white: 0, tags: ['#unioutfit', '#schooloutfit'] },
   oldmoney: { label: 'Old Money', ex: 'Old money outfits', quiet: true,
@@ -258,7 +258,7 @@ const SERIES = {
     tops: [[['knit', 'shirt'], 3], [['knit'], 3], [['shirt'], 2], [['polo'], 2], [['outer_l', 'knit'], 2], [['outer_l', 'polo'], 1]],
     extras: [['w', 3], ['ws', 3], ['s', 1.5], ['', 1]], white: 0.3, tags: ['#oldmoneystyle', '#oldmoneyaesthetic'] },
   luxus: { label: 'Luxus-Hintergrund', ex: 'Villen, Autos, Schnee', lux: true,
-    titles: [L('Old-Money-Outfits', 'Old money outfits'), L('Zieh dich an wie das Leben, das du willst', 'Dress for the life you want'), L('Outfits für Villa und Ski-Resort', 'Outfits for the villa life'), L('So zieht sich Geld an', 'What money looks like')],
+    titles: [L('Old-Money-Outfits', 'Old money outfits')],
     tops: [[['knit'], 3], [['knit', 'shirt'], 2], [['outer_w', 'knit'], 2], [['outer_l', 'knit'], 2], [['polo'], 1.5], [['shirt'], 1.5], [['outer_w'], 1.5]],
     extras: [['ws', 3], ['w', 2], ['s', 1.5], ['hw', 1]], white: 0.2, quietish: true, tags: ['#luxurylifestyle', '#oldmoneyaesthetic'] },
   pure: { label: 'Nur Outfits', ex: 'ohne Text, nur Bilder', notitle: true,
@@ -282,7 +282,7 @@ const SERIES = {
     tops: [[['knit'], 3], [['knit', 'shirt'], 2], [['hoodie'], 1.5], [['shirt'], 1], [['sweat'], 1]],
     extras: [['ws', 3], ['w', 2], ['s', 2], ['hs', 1]], white: 0.2, tags: ['#starboy', '#outfitideas'] },
   shewants: { label: 'Was sie will', ex: 'Outfits she wants you to wear',
-    titles: [L('Outfits, die sie an dir sehen will', 'Outfits she wants you to wear'), L('Zieh das an und sie merkt es', 'Wear this and she’ll notice')],
+    notitle: true, titles: [L('Outfits für sie', 'Outfits for her')],
     tops: [[['knit'], 3], [['knit', 'shirt'], 2], [['outer_l', 'knit'], 2], [['shirt'], 1.5], [['polo'], 1.5], [['outer_w', 'knit'], 1]],
     extras: [['ws', 4], ['s', 3], ['hs', 1]], white: 0.15, quietish: true, tags: ['#outfitideas', '#mensfashion'] },
 };
