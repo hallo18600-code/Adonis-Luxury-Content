@@ -190,7 +190,7 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
    dazu wechselnd Uhr / Parfum / Mütze. Farben, Uhr und Duft passen immer zusammen.
    Teile: teile.json (freigestellt, 4K in teile/, kleiner in teile-hd/) + eigene Uploads.
    ============================================================ */
-const BUILD = '2026-11-22 j';
+const BUILD = '2026-11-22 k';
 const $ = s => document.querySelector(s);
 const rnd = Math.random;
 const pick = a => a[Math.floor(rnd() * a.length)];
@@ -313,6 +313,18 @@ const SERIES = {
     titles: [L('Emo vs. Road Man vs. Grisch', 'emo vs road man vs grisch')],
     tops: [[['knit'], 3], [['knit', 'shirt'], 2.5], [['outer_w', 'knit'], 1.5], [['polo'], 1.5], [['outer_l', 'knit'], 1]],
     extras: [['ws', 3], ['w', 3], ['hw', 1], ['s', 1]], white: 0.15, quietish: true, tags: ['#grisch', '#grischstyle'] },
+  bateman: { label: 'Winter Fits (Bateman)', ex: 'Winter fits · Intro', intro: ['bateman'], bg: 'intro_white',
+    titles: [L('winter fits', 'winter fits')],
+    tops: [[['outer_w'], 3], [['outer_w', 'knit'], 3], [['outer_w', 'hoodie'], 1.5], [['knit'], 2], [['vest', 'knit'], 1.5]],
+    extras: [['hw', 3], ['ws', 2], ['w', 2], ['h', 1.5], ['hws', 1]], white: 0, tags: ['#winteroutfit', '#winterfits'] },
+  handshake: { label: 'Old Money × Grisch', ex: 'Handschlag-Meme', intro: ['handshake'], bg: 'intro_white',
+    titles: [L('Old Money × Grisch', 'old money x grisch')],
+    tops: [[['knit'], 3], [['outer_w', 'knit'], 2], [['outer_l', 'knit'], 2], [['knit', 'shirt'], 2], [['polo'], 1], [['outer_w'], 1.5]],
+    extras: [['ws', 3], ['w', 3], ['hw', 1], ['s', 1]], white: 0.2, tags: ['#grisch', '#oldmoneystyle'] },
+  beststyle: { label: 'Best-Style-Meme', ex: '„I am the best style“ · …', intro: ['beststyle'], bg: 'intro_white',
+    titles: [L('Wer hat den besten Style?', 'who has the best style')],
+    tops: [[['outer_w'], 3], [['outer_w', 'knit'], 2.5], [['knit'], 2], [['outer_w', 'hoodie'], 1], [['vest', 'knit'], 1]],
+    extras: [['ws', 3], ['w', 3], ['hw', 1.5], ['s', 1]], white: 0, tags: ['#grisch', '#grischstyle'] },
   shewants: { label: 'Was sie will', ex: 'Outfits she wants you to wear',
     notitle: true, titles: [L('Outfits für sie', 'Outfits for her')],
     tops: [[['knit'], 3], [['knit', 'shirt'], 2], [['outer_l', 'knit'], 2], [['shirt'], 1.5], [['polo'], 1.5], [['outer_w', 'knit'], 1]],
