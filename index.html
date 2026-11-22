@@ -163,7 +163,6 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
       <div class="opt"><span>Outfits pro Post</span><div class="seg" id="sCount"><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button></div></div>
       <div class="opt"><span>Sprache auf den Slides</span><div class="seg" id="sLang"><button type="button" data-v="de">Deutsch</button><button type="button" data-v="en">English</button></div></div>
       <div class="opt"><span>Boden</span><div class="types" id="sTheme" role="group" aria-label="Boden"></div></div>
-      <div class="opt"><span>Auflösung</span><div class="seg" id="sRes"><button type="button" data-v="hd">HD 1080 × 1440</button><button type="button" data-v="4k">4K 2160 × 2880</button></div></div>
     </div>
   </details>
   <details id="dTerms">
@@ -190,7 +189,7 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
    dazu wechselnd Uhr / Parfum / Mütze. Farben, Uhr und Duft passen immer zusammen.
    Teile: teile.json (freigestellt, 4K in teile/, kleiner in teile-hd/) + eigene Uploads.
    ============================================================ */
-const BUILD = '2026-11-22 k';
+const BUILD = '2026-11-22 l';
 const $ = s => document.querySelector(s);
 const rnd = Math.random;
 const pick = a => a[Math.floor(rnd() * a.length)];
@@ -325,6 +324,18 @@ const SERIES = {
     titles: [L('Wer hat den besten Style?', 'who has the best style')],
     tops: [[['outer_w'], 3], [['outer_w', 'knit'], 2.5], [['knit'], 2], [['outer_w', 'hoodie'], 1], [['vest', 'knit'], 1]],
     extras: [['ws', 3], ['w', 3], ['hw', 1.5], ['s', 1]], white: 0, tags: ['#grisch', '#grischstyle'] },
+  autumnyou: { label: 'Autumn Fits For You', ex: 'Intro · Navy', intro: ['autumnyou'], bg: 'intro_autumn', quietish: true,
+    titles: [L('Herbst-Outfits für dich', 'autumn fits for you')],
+    tops: [[['outer_l'], 2], [['outer_l', 'knit'], 2.5], [['knit'], 3], [['knit', 'shirt'], 2.5], [['vest', 'knit'], 1], [['shirt'], 1]],
+    extras: [['ws', 3], ['w', 3], ['s', 1.5], ['', 1]], white: 0.25, tags: ['#falloutfit', '#autumnfits'] },
+  winteryou: { label: 'Winter Fits For You', ex: 'archive edition · Schnee', intro: ['winteryou'], fromIntro: true, avoid: ['black', 'charcoal', 'navy'], quietish: true,
+    titles: [L('Winter-Outfits für dich', 'winter fits for you')],
+    tops: [[['knit'], 3], [['outer_w', 'knit'], 2], [['knit', 'shirt'], 2], [['outer_w'], 1], [['hoodie'], 1]],
+    extras: [['ws', 3], ['w', 3], ['hw', 1.5], ['s', 1]], white: 0.2, tags: ['#winteroutfit', '#archivefashion'] },
+  niche: { label: 'Niche Outfits', ex: 'Intro · Dunkelgrün', intro: ['niche'], bg: 'intro_niche', quietish: true,
+    titles: [L('Niche Outfits', 'niche outfits')],
+    tops: [[['knit'], 3], [['knit', 'shirt'], 2.5], [['outer_l', 'knit'], 2], [['shirt'], 1.5], [['polo'], 1], [['outer_w', 'knit'], 1]],
+    extras: [['ws', 3], ['w', 2.5], ['s', 2]], white: 0.3, tags: ['#nicheoutfits', '#oldmoneystyle'] },
   shewants: { label: 'Was sie will', ex: 'Outfits she wants you to wear',
     notitle: true, titles: [L('Outfits für sie', 'Outfits for her')],
     tops: [[['knit'], 3], [['knit', 'shirt'], 2], [['outer_l', 'knit'], 2], [['shirt'], 1.5], [['polo'], 1.5], [['outer_w', 'knit'], 1]],
@@ -339,7 +350,7 @@ const TAGS = [['#fyp'], ['#viral', '#viral', '#foryou', '#foryoupage', '#trendin
 let W = 1080, H = 1440;
 const DEFAULTS = { series: 'random', count: '4', lang: 'en', theme: 'mix', res: '4k' };
 const S = Object.assign({}, DEFAULTS, load('ad-settings3', load('ad-settings2', {})));
-if (!load('ad-settings3', null)) S.res = '4k';
+S.res = '4k';
 let recent = load('ad-recent2', { series: [], use: {} });
 
 /* ---------- Outfits bauen ---------- */
@@ -353,7 +364,7 @@ function choose(cands, used) {
 function buildOutfit(cfg, used, last) {
   const pool = active();
   const quietOK = p => !(cfg.quiet && p.loud) && !(cfg.quietish && p.loud && rnd() < .7);
-  const bgAvoid = cfg.bg ? BGS[cfg.bg].avoid : [];
+  const bgAvoid = cfg.avoid || (cfg.bg ? BGS[cfg.bg].avoid : []);
   const quietOK0 = quietOK; const darkOK = p => !bgAvoid.includes(p.color) && (!cfg.dark || ['black', 'charcoal', 'navy', 'grey', 'denim'].includes(p.color) || ['shirt', 'polo'].includes(p.cat));
   for (let tries = 0; tries < 60; tries++) {
     const shape = wpick(cfg.tops);
@@ -488,11 +499,13 @@ const BGS = {
   flat_navy:     { label: 'Clean Navy', color: '#1b2438', w: 1, avoid: ['navy', 'black'] },
   intro_white:   { label: 'Weiß', color: '#fdfdfd', hidden: true, avoid: ['white', 'cream'] },
   intro_grey:    { label: 'Grau', color: '#a9aea9', hidden: true, avoid: ['grey', 'lightgrey'] },
+  intro_autumn:  { label: 'Navy', color: '#161f2e', hidden: true, avoid: ['navy', 'black', 'charcoal'] },
+  intro_niche:   { label: 'Grün', color: '#1c2419', hidden: true, avoid: ['black', 'charcoal', 'navy'] },
   intro_navy:    { label: 'Navy', color: '#252b38', hidden: true, avoid: ['navy', 'black', 'charcoal'] },
 };
 // Luxus-Hintergründe: lum = Helligkeit (0–255)
 const LUX = { palms: { lum: 134 }, riviera: { lum: 118 }, chateau: { lum: 111 }, stmoritz: { lum: 154 }, chalet: { lum: 107 },
-  leo: { lum: 90, hidden: true }, hw_elevator: { lum: 108, hidden: true }, hw_snow: { lum: 89, hidden: true }, hw_bath: { lum: 115, hidden: true }, hw_night: { lum: 57, hidden: true } };
+  leo: { lum: 90, hidden: true }, hw_elevator: { lum: 108, hidden: true }, hw_snow: { lum: 89, hidden: true }, hw_bath: { lum: 115, hidden: true }, winteryou: { lum: 35, hidden: true }, hw_night: { lum: 57, hidden: true } };
 const LUMC = { navy: .15, black: .08, charcoal: .2, grey: .5, lightgrey: .75, white: .95, cream: .9, lightblue: .8, denim: .3 };
 const bgImgs = new Map();
 const bgSrc = key => { const hd = W > 1200 ? '' : '_hd'; if (key.startsWith('lux:')) return `bg/lux_${key.slice(4)}${hd}.jpg`; const b = BGS[key]; return b && b.img ? `bg/${b.img}${hd}.jpg` : null; };
@@ -798,7 +811,7 @@ function bindSettings() {
     const el = $(id), sync = () => el.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === S[key])));
     el.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S[key] = b.dataset.v; sync(); persist(); newFeed(); }); sync();
   };
-  seg('#sCount', 'count'); seg('#sLang', 'lang'); seg('#sRes', 'res');
+  seg('#sCount', 'count'); seg('#sLang', 'lang');
   const th = $('#sTheme');
   th.innerHTML = [['mix', 'Gemischt', '#555'], ...Object.entries(BGS).filter(([k, b]) => !b.hidden).map(([k, b]) => [k, b.label, b.base])].map(([k, l, c]) => `<button type="button" class="type bgchip" data-v="${k}"><i style="background:${c}"></i>${esc(l)}</button>`).join('');
   const syncTh = () => th.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === S.theme)));
