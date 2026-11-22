@@ -170,7 +170,7 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
    dazu wechselnd Uhr / Parfum / Mütze. Farben, Uhr und Duft passen immer zusammen.
    Teile: teile.json (freigestellt, 4K in teile/, kleiner in teile-hd/) + eigene Uploads.
    ============================================================ */
-const BUILD = '2026-11-22 b';
+const BUILD = '2026-11-22 c';
 const $ = s => document.querySelector(s);
 const rnd = Math.random;
 const pick = a => a[Math.floor(rnd() * a.length)];
@@ -264,10 +264,9 @@ const SERIES = {
 };
 // Call-to-Action über den Hashtags – soll Leute in die Bio bringen
 const CTAS = {
-  en: ['Want clothes like this? Link in bio 🤍', 'Shop the look → link in bio', 'Every piece is one of one. Grab it before someone else does → bio', 'Real designer. Secondhand prices. Link in bio 🔗', 'POV: you finally found where to get these → link in bio', 'Only 1 of each. Check the bio before it’s gone ⏳', 'Dress like this for less → link in bio', 'Your new wardrobe is in our bio 👀', 'Steal his style → link in bio', 'Old money look, not old money prices → bio'],
-  de: ['Willst du solche Teile? Link in Bio 🤍', 'Den Look gibt’s in der Bio →', 'Jedes Teil nur einmal. Schnapp’s dir, bevor’s weg ist → Bio', 'Echte Designer-Teile. Secondhand-Preise. Link in Bio 🔗', 'POV: du weißt endlich, wo du sowas herbekommst → Bio', 'Nur 1× da. Check die Bio, bevor’s weg ist ⏳', 'So aussehen, ohne so viel zu zahlen → Link in Bio', 'Deine neue Garderobe ist in unserer Bio 👀', 'Old-Money-Look ohne Old-Money-Preise → Bio'],
+  en: ['Link in bio 🔗', 'Clothes like this → link in bio', 'Shop now → link in bio', 'Get the look → link in bio', 'All pieces → link in bio 🤍', 'Shop these pieces → link in bio', 'Only 1 of each → link in bio', 'Link in bio before it’s gone ⏳', 'Designer for less → link in bio', 'Your next fit → link in bio'],
+  de: ['Link in Bio 🔗', 'Solche Teile → Link in Bio', 'Jetzt shoppen → Link in Bio', 'Hol dir den Look → Link in Bio', 'Alle Teile → Link in Bio 🤍', 'Nur 1× da → Link in Bio', 'Link in Bio, bevor’s weg ist ⏳', 'Designer günstiger → Link in Bio'],
 };
-const QUESTION = { de: n => `Welches nimmst du? ${[...Array(n)].map((_, i) => i + 1).join(', ').replace(/, (\d)$/, ' oder $1')}?`, en: n => `Which one would you wear? ${[...Array(n)].map((_, i) => i + 1).join(', ').replace(/, (\d)$/, ' or $1')}?` };
 // Hashtags: #fyp immer, der Rest wechselt
 const TAGS = [['#fyp'], ['#viral', '#viral', '#foryou', '#foryoupage', '#trending'], ['#oldmoney', '#oldmoney', '#oldmoneystyle', '#oldmoneyaesthetic', '#quietluxury'], ['#grisch', '#grisch', '#grischstyle', '#grischoutfit'], ['#outfitideas', '#outfitinspo', '#mensoutfit', '#mensfashion', '#outfitoftheday']];
 
@@ -344,7 +343,7 @@ function planPost(series, n, lang) {
   const tags = TAGS.map(g => pick(g));
   if (rnd() < .5) tags[4] = pick(cfg.tags);
   let cta = pick(CTAS[lang]); if (cta === recent.cta) cta = pick(CTAS[lang]); recent.cta = cta;
-  const desc = `${T(title, lang)}\n${cta}\n${QUESTION[lang](outfits.length)}\n\n${tags.join(' ')}`;
+  const desc = `${T(title, lang)}\n${cta}\n\n${tags.join(' ')}`;
   recent.series = [series, ...recent.series.filter(x => x !== series)].slice(0, 3);
   const now = Date.now(); outfits.forEach(o => Object.values(o.items).forEach(p => { if (p) recent.use[p.id] = now; }));
   save('ad-recent2', recent);
