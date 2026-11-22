@@ -8,7 +8,8 @@
 "loud": false,
 "name": "ralph lauren harrington jacke navy",
 "hd": "teile-hd/01-ralph-lauren-harrington-jacke-navy.webp",
-"ar": 1.029
+"ar": 1.029,
+"k2": "teile-2k/01-ralph-lauren-harrington-jacke-navy.webp"
 },
 {
 "id": "p02",
@@ -19,7 +20,8 @@
 "loud": true,
 "name": "burberry daunenjacke schwarz",
 "hd": "teile-hd/02-burberry-daunenjacke-schwarz.webp",
-"ar": 1.007
+"ar": 1.007,
+"k2": "teile-2k/02-burberry-daunenjacke-schwarz.webp"
 },
 {
 "id": "p03",
@@ -30,7 +32,8 @@
 "loud": false,
 "name": "ralph lauren daunenjacke schwarz",
 "hd": "teile-hd/03-ralph-lauren-daunenjacke-schwarz.webp",
-"ar": 1.071
+"ar": 1.071,
+"k2": "teile-2k/03-ralph-lauren-daunenjacke-schwarz.webp"
 },
 {
 "id": "p04",
@@ -41,7 +44,8 @@
 "loud": false,
 "name": "ralph lauren zip hoodie grau",
 "hd": "teile-hd/04-ralph-lauren-zip-hoodie-grau.webp",
-"ar": 0.839
+"ar": 0.839,
+"k2": "teile-2k/04-ralph-lauren-zip-hoodie-grau.webp"
 },
 {
 "id": "p05",
@@ -52,7 +56,8 @@
 "loud": true,
 "name": "stone island sweatshirt navy",
 "hd": "teile-hd/05-stone-island-sweatshirt-navy.webp",
-"ar": 1.236
+"ar": 1.236,
+"k2": "teile-2k/05-stone-island-sweatshirt-navy.webp"
 },
 {
 "id": "p06",
@@ -63,7 +68,8 @@
 "loud": true,
 "name": "stone island strickpulli hellgrau",
 "hd": "teile-hd/06-stone-island-strickpulli-hellgrau.webp",
-"ar": 1.311
+"ar": 1.311,
+"k2": "teile-2k/06-stone-island-strickpulli-hellgrau.webp"
 },
 {
 "id": "p07",
@@ -74,7 +80,8 @@
 "loud": true,
 "name": "louis vuitton strickpulli schwarz",
 "hd": "teile-hd/07-louis-vuitton-strickpulli-schwarz.webp",
-"ar": 1.158
+"ar": 1.158,
+"k2": "teile-2k/07-louis-vuitton-strickpulli-schwarz.webp"
 },
 {
 "id": "p08",
@@ -85,7 +92,8 @@
 "loud": true,
 "name": "burberry strickpulli grau",
 "hd": "teile-hd/08-burberry-strickpulli-grau.webp",
-"ar": 0.787
+"ar": 0.787,
+"k2": "teile-2k/08-burberry-strickpulli-grau.webp"
 },
 {
 "id": "p09",
@@ -96,7 +104,8 @@
 "loud": false,
 "name": "ralph lauren zopfstrick quarterzip grau",
 "hd": "teile-hd/09-ralph-lauren-zopfstrick-quarterzip-grau.webp",
-"ar": 0.862
+"ar": 0.862,
+"k2": "teile-2k/09-ralph-lauren-zopfstrick-quarterzip-grau.webp"
 },
 {
 "id": "p10",
@@ -107,7 +116,8 @@
 "loud": true,
 "name": "moncler hoodie navy",
 "hd": "teile-hd/10-moncler-hoodie-navy.webp",
-"ar": 0.789
+"ar": 0.789,
+"k2": "teile-2k/10-moncler-hoodie-navy.webp"
 },
 {
 "id": "p11",
@@ -118,7 +128,8 @@
 "loud": false,
 "name": "ralph lauren quarterzip weiss",
 "hd": "teile-hd/11-ralph-lauren-quarterzip-weiss.webp",
-"ar": 0.867
+"ar": 0.867,
+"k2": "teile-2k/11-ralph-lauren-quarterzip-weiss.webp"
 },
 {
 "id": "p12",
@@ -129,7 +140,8 @@
 "loud": false,
 "name": "ralph lauren flaggen pulli creme",
 "hd": "teile-hd/12-ralph-lauren-flaggen-pulli-creme.webp",
-"ar": 0.962
+"ar": 0.962,
+"k2": "teile-2k/12-ralph-lauren-flaggen-pulli-creme.webp"
 },
 {
 "id": "p13",
@@ -140,7 +152,8 @@
 "loud": false,
 "name": "ralph lauren strick quarterzip hellgrau",
 "hd": "teile-hd/13-ralph-lauren-strick-quarterzip-hellgrau.webp",
-"ar": 0.9
+"ar": 0.9,
+"k2": "teile-2k/13-ralph-lauren-strick-quarterzip-hellgrau.webp"
 },
 {
 "id": "p14",
@@ -151,7 +164,8 @@
 "loud": false,
 "name": "ralph lauren strickpulli hellgrau",
 "hd": "teile-hd/14-ralph-lauren-strickpulli-hellgrau.webp",
-"ar": 0.968
+"ar": 0.968,
+"k2": "teile-2k/14-ralph-lauren-strickpulli-hellgrau.webp"
 },
 {
 "id": "p15",
@@ -162,7 +176,8 @@
 "loud": false,
 "name": "ralph lauren hemd blau gestreift",
 "hd": "teile-hd/15-ralph-lauren-hemd-blau-gestreift.webp",
-"ar": 0.844
+"ar": 0.844,
+"k2": "teile-2k/15-ralph-lauren-hemd-blau-gestreift.webp"
 },
 {
 "id": "p16",
@@ -173,7 +188,8 @@
 "loud": false,
 "name": "ralph lauren zopfstrick pulli schwarz",
 "hd": "teile-hd/16-ralph-lauren-zopfstrick-pulli-schwarz.webp",
-"ar": 0.736
+"ar": 0.736,
+"k2": "teile-2k/16-ralph-lauren-zopfstrick-pulli-schwarz.webp"
 },
 {
 "id": "p17",
@@ -184,7 +200,8 @@
 "loud": true,
 "name": "stone island strick halfzip schwarz",
 "hd": "teile-hd/17-stone-island-strick-halfzip-schwarz.webp",
-"ar": 0.711
+"ar": 0.711,
+"k2": "teile-2k/17-stone-island-strick-halfzip-schwarz.webp"
 },
 {
 "id": "p18",
@@ -195,7 +212,8 @@
 "loud": true,
 "name": "stone island jacke navy",
 "hd": "teile-hd/18-stone-island-jacke-navy.webp",
-"ar": 0.746
+"ar": 0.746,
+"k2": "teile-2k/18-stone-island-jacke-navy.webp"
 },
 {
 "id": "p19",
@@ -206,7 +224,8 @@
 "loud": true,
 "name": "stone island strickpulli blau",
 "hd": "teile-hd/19-stone-island-strickpulli-blau.webp",
-"ar": 1.225
+"ar": 1.225,
+"k2": "teile-2k/19-stone-island-strickpulli-blau.webp"
 },
 {
 "id": "p20",
@@ -217,7 +236,8 @@
 "loud": false,
 "name": "ralph lauren muetze navy",
 "hd": "teile-hd/20-ralph-lauren-muetze-navy.webp",
-"ar": 1.114
+"ar": 1.114,
+"k2": "teile-2k/20-ralph-lauren-muetze-navy.webp"
 },
 {
 "id": "p21",
@@ -228,7 +248,8 @@
 "loud": false,
 "name": "moncler muetze navy",
 "hd": "teile-hd/21-moncler-muetze-navy.webp",
-"ar": 0.971
+"ar": 0.971,
+"k2": "teile-2k/21-moncler-muetze-navy.webp"
 },
 {
 "id": "p22",
@@ -239,7 +260,8 @@
 "loud": false,
 "name": "ralph lauren zopfstrick muetze navy",
 "hd": "teile-hd/22-ralph-lauren-zopfstrick-muetze-navy.webp",
-"ar": 1.149
+"ar": 1.149,
+"k2": "teile-2k/22-ralph-lauren-zopfstrick-muetze-navy.webp"
 },
 {
 "id": "p23",
@@ -250,7 +272,8 @@
 "loud": false,
 "name": "ralph lauren zopfstrick muetze creme",
 "hd": "teile-hd/23-ralph-lauren-zopfstrick-muetze-creme.webp",
-"ar": 1.106
+"ar": 1.106,
+"k2": "teile-2k/23-ralph-lauren-zopfstrick-muetze-creme.webp"
 },
 {
 "id": "p24",
@@ -261,7 +284,8 @@
 "loud": false,
 "name": "lacoste muetze schwarz",
 "hd": "teile-hd/24-lacoste-muetze-schwarz.webp",
-"ar": 1.217
+"ar": 1.217,
+"k2": "teile-2k/24-lacoste-muetze-schwarz.webp"
 },
 {
 "id": "p25",
@@ -272,7 +296,8 @@
 "loud": false,
 "name": "ralph lauren strickpolo navy",
 "hd": "teile-hd/25-ralph-lauren-strickpolo-navy.webp",
-"ar": 0.929
+"ar": 0.929,
+"k2": "teile-2k/25-ralph-lauren-strickpolo-navy.webp"
 },
 {
 "id": "p26",
@@ -283,7 +308,8 @@
 "loud": true,
 "name": "ralph lauren big pony polo schwarz",
 "hd": "teile-hd/26-ralph-lauren-big-pony-polo-schwarz.webp",
-"ar": 0.959
+"ar": 0.959,
+"k2": "teile-2k/26-ralph-lauren-big-pony-polo-schwarz.webp"
 },
 {
 "id": "p27",
@@ -294,7 +320,8 @@
 "loud": false,
 "name": "moncler polo schwarz",
 "hd": "teile-hd/27-moncler-polo-schwarz.webp",
-"ar": 0.905
+"ar": 0.905,
+"k2": "teile-2k/27-moncler-polo-schwarz.webp"
 },
 {
 "id": "p28",
@@ -305,7 +332,8 @@
 "loud": true,
 "name": "ralph lauren new york polo schwarz",
 "hd": "teile-hd/28-ralph-lauren-new-york-polo-schwarz.webp",
-"ar": 1.078
+"ar": 1.078,
+"k2": "teile-2k/28-ralph-lauren-new-york-polo-schwarz.webp"
 },
 {
 "id": "p29",
@@ -316,7 +344,8 @@
 "loud": false,
 "name": "lacoste pulli grau",
 "hd": "teile-hd/29-lacoste-pulli-grau.webp",
-"ar": 0.733
+"ar": 0.733,
+"k2": "teile-2k/29-lacoste-pulli-grau.webp"
 },
 {
 "id": "p30",
@@ -327,7 +356,8 @@
 "loud": false,
 "name": "lacoste strickpulli navy",
 "hd": "teile-hd/30-lacoste-strickpulli-navy.webp",
-"ar": 0.759
+"ar": 0.759,
+"k2": "teile-2k/30-lacoste-strickpulli-navy.webp"
 },
 {
 "id": "p31",
@@ -338,7 +368,8 @@
 "loud": false,
 "name": "ralph lauren hybrid hoodie schwarz",
 "hd": "teile-hd/31-ralph-lauren-hybrid-hoodie-schwarz.webp",
-"ar": 0.966
+"ar": 0.966,
+"k2": "teile-2k/31-ralph-lauren-hybrid-hoodie-schwarz.webp"
 },
 {
 "id": "p32",
@@ -349,7 +380,8 @@
 "loud": true,
 "name": "ami paris pulli schwarz",
 "hd": "teile-hd/32-ami-paris-pulli-schwarz.webp",
-"ar": 0.976
+"ar": 0.976,
+"k2": "teile-2k/32-ami-paris-pulli-schwarz.webp"
 },
 {
 "id": "p33",
@@ -360,7 +392,8 @@
 "loud": true,
 "name": "parajumpers hybridjacke schwarz",
 "hd": "teile-hd/33-parajumpers-hybridjacke-schwarz.webp",
-"ar": 0.724
+"ar": 0.724,
+"k2": "teile-2k/33-parajumpers-hybridjacke-schwarz.webp"
 },
 {
 "id": "p34",
@@ -371,7 +404,8 @@
 "loud": false,
 "name": "ralph lauren daunenjacke navy glanz",
 "hd": "teile-hd/34-ralph-lauren-daunenjacke-navy-glanz.webp",
-"ar": 1.053
+"ar": 1.053,
+"k2": "teile-2k/34-ralph-lauren-daunenjacke-navy-glanz.webp"
 },
 {
 "id": "p35",
@@ -382,7 +416,8 @@
 "loud": true,
 "name": "moncler daunenjacke schwarz glanz",
 "hd": "teile-hd/35-moncler-daunenjacke-schwarz-glanz.webp",
-"ar": 0.883
+"ar": 0.883,
+"k2": "teile-2k/35-moncler-daunenjacke-schwarz-glanz.webp"
 },
 {
 "id": "p36",
@@ -393,7 +428,8 @@
 "loud": true,
 "name": "parajumpers daunenjacke navy",
 "hd": "teile-hd/36-parajumpers-daunenjacke-navy.webp",
-"ar": 0.754
+"ar": 0.754,
+"k2": "teile-2k/36-parajumpers-daunenjacke-navy.webp"
 },
 {
 "id": "p37",
@@ -404,7 +440,8 @@
 "loud": true,
 "name": "parajumpers daunenweste schwarz",
 "hd": "teile-hd/37-parajumpers-daunenweste-schwarz.webp",
-"ar": 0.669
+"ar": 0.669,
+"k2": "teile-2k/37-parajumpers-daunenweste-schwarz.webp"
 },
 {
 "id": "p38",
@@ -415,7 +452,8 @@
 "loud": false,
 "name": "moncler hybrid cardigan schwarz",
 "hd": "teile-hd/38-moncler-hybrid-cardigan-schwarz.webp",
-"ar": 0.864
+"ar": 0.864,
+"k2": "teile-2k/38-moncler-hybrid-cardigan-schwarz.webp"
 },
 {
 "id": "p39",
@@ -426,7 +464,8 @@
 "loud": false,
 "name": "creed aventus parfum",
 "hd": "teile-hd/39-creed-aventus-parfum.webp",
-"ar": 0.578
+"ar": 0.578,
+"k2": "teile-2k/39-creed-aventus-parfum.webp"
 },
 {
 "id": "p40",
@@ -437,7 +476,8 @@
 "loud": false,
 "name": "jpg le male elixir parfum",
 "hd": "teile-hd/40-jpg-le-male-elixir-parfum.webp",
-"ar": 0.467
+"ar": 0.467,
+"k2": "teile-2k/40-jpg-le-male-elixir-parfum.webp"
 },
 {
 "id": "p41",
@@ -448,7 +488,8 @@
 "loud": false,
 "name": "parfums de marly layton parfum",
 "hd": "teile-hd/41-parfums-de-marly-layton-parfum.webp",
-"ar": 0.536
+"ar": 0.536,
+"k2": "teile-2k/41-parfums-de-marly-layton-parfum.webp"
 },
 {
 "id": "p42",
@@ -459,7 +500,8 @@
 "loud": false,
 "name": "ysl y parfum",
 "hd": "teile-hd/42-ysl-y-parfum.webp",
-"ar": 0.452
+"ar": 0.452,
+"k2": "teile-2k/42-ysl-y-parfum.webp"
 },
 {
 "id": "p43",
@@ -470,7 +512,8 @@
 "loud": false,
 "name": "patek philippe nautilus blau",
 "hd": "teile-hd/43-patek-philippe-nautilus-blau.webp",
-"ar": 0.63
+"ar": 0.63,
+"k2": "teile-2k/43-patek-philippe-nautilus-blau.webp"
 },
 {
 "id": "p44",
@@ -481,7 +524,8 @@
 "loud": false,
 "name": "patek philippe nautilus vintage",
 "hd": "teile-hd/44-patek-philippe-nautilus-vintage.webp",
-"ar": 0.624
+"ar": 0.624,
+"k2": "teile-2k/44-patek-philippe-nautilus-vintage.webp"
 },
 {
 "id": "p45",
@@ -492,7 +536,8 @@
 "loud": false,
 "name": "rolex daytona schwarz",
 "hd": "teile-hd/45-rolex-daytona-schwarz.webp",
-"ar": 0.606
+"ar": 0.606,
+"k2": "teile-2k/45-rolex-daytona-schwarz.webp"
 },
 {
 "id": "p46",
@@ -503,7 +548,8 @@
 "loud": false,
 "name": "rolex datejust blau oyster",
 "hd": "teile-hd/46-rolex-datejust-blau-oyster.webp",
-"ar": 0.541
+"ar": 0.541,
+"k2": "teile-2k/46-rolex-datejust-blau-oyster.webp"
 },
 {
 "id": "p47",
@@ -514,7 +560,8 @@
 "loud": false,
 "name": "rolex datejust gruen jubilee",
 "hd": "teile-hd/47-rolex-datejust-gruen-jubilee.webp",
-"ar": 0.541
+"ar": 0.541,
+"k2": "teile-2k/47-rolex-datejust-gruen-jubilee.webp"
 },
 {
 "id": "p48",
@@ -525,7 +572,8 @@
 "loud": false,
 "name": "rolex datejust blau oyster 2",
 "hd": "teile-hd/48-rolex-datejust-blau-oyster-2.webp",
-"ar": 0.591
+"ar": 0.591,
+"k2": "teile-2k/48-rolex-datejust-blau-oyster-2.webp"
 },
 {
 "id": "p49",
@@ -536,7 +584,8 @@
 "loud": false,
 "name": "jeans straight dunkel",
 "hd": "teile-hd/49-jeans-straight-dunkel.webp",
-"ar": 0.484
+"ar": 0.484,
+"k2": "teile-2k/49-jeans-straight-dunkel.webp"
 },
 {
 "id": "p50",
@@ -547,7 +596,8 @@
 "loud": false,
 "name": "nudie jeans straight",
 "hd": "teile-hd/50-nudie-jeans-straight.webp",
-"ar": 0.525
+"ar": 0.525,
+"k2": "teile-2k/50-nudie-jeans-straight.webp"
 },
 {
 "id": "p51",
@@ -558,7 +608,8 @@
 "loud": false,
 "name": "ralph lauren leinenhose weiss",
 "hd": "teile-hd/51-ralph-lauren-leinenhose-weiss.webp",
-"ar": 0.471
+"ar": 0.471,
+"k2": "teile-2k/51-ralph-lauren-leinenhose-weiss.webp"
 },
 {
 "id": "p52",
@@ -569,7 +620,8 @@
 "loud": false,
 "name": "jeans bootcut dunkel",
 "hd": "teile-hd/52-jeans-bootcut-dunkel.webp",
-"ar": 0.505
+"ar": 0.505,
+"k2": "teile-2k/52-jeans-bootcut-dunkel.webp"
 },
 {
 "id": "p53",
@@ -580,7 +632,8 @@
 "loud": false,
 "name": "levis 501 jeans",
 "hd": "teile-hd/53-levis-501-jeans.webp",
-"ar": 0.481
+"ar": 0.481,
+"k2": "teile-2k/53-levis-501-jeans.webp"
 },
 {
 "id": "p54",
@@ -591,7 +644,8 @@
 "loud": true,
 "name": "parajumpers daunenjacke schwarz",
 "hd": "teile-hd/54-parajumpers-daunenjacke-schwarz.webp",
-"ar": 0.731
+"ar": 0.731,
+"k2": "teile-2k/54-parajumpers-daunenjacke-schwarz.webp"
 },
 {
 "id": "p55",
@@ -602,7 +656,8 @@
 "loud": false,
 "name": "parajumpers hybridjacke navy",
 "hd": "teile-hd/55-parajumpers-hybridjacke-navy.webp",
-"ar": 0.742
+"ar": 0.742,
+"k2": "teile-2k/55-parajumpers-hybridjacke-navy.webp"
 },
 {
 "id": "p56",
@@ -613,7 +668,8 @@
 "loud": false,
 "name": "moncler daunenweste schwarz",
 "hd": "teile-hd/56-moncler-daunenweste-schwarz.webp",
-"ar": 0.566
+"ar": 0.566,
+"k2": "teile-2k/56-moncler-daunenweste-schwarz.webp"
 },
 {
 "id": "p57",
@@ -624,7 +680,8 @@
 "loud": false,
 "name": "golden goose superstar dunkelgrau",
 "hd": "teile-hd/57-golden-goose-superstar-dunkelgrau.webp",
-"ar": 0.864
+"ar": 0.864,
+"k2": "teile-2k/57-golden-goose-superstar-dunkelgrau.webp"
 },
 {
 "id": "p58",
@@ -635,7 +692,8 @@
 "loud": false,
 "name": "maison margiela replica navy",
 "hd": "teile-hd/58-maison-margiela-replica-navy.webp",
-"ar": 1.268
+"ar": 1.268,
+"k2": "teile-2k/58-maison-margiela-replica-navy.webp"
 },
 {
 "id": "p59",
@@ -646,7 +704,8 @@
 "loud": false,
 "name": "maison margiela replica schwarz",
 "hd": "teile-hd/59-maison-margiela-replica-schwarz.webp",
-"ar": 1.257
+"ar": 1.257,
+"k2": "teile-2k/59-maison-margiela-replica-schwarz.webp"
 },
 {
 "id": "p60",
@@ -657,6 +716,7 @@
 "loud": false,
 "name": "golden goose superstar navy",
 "hd": "teile-hd/60-golden-goose-superstar-navy.webp",
-"ar": 1.305
+"ar": 1.305,
+"k2": "teile-2k/60-golden-goose-superstar-navy.webp"
 }
 ]

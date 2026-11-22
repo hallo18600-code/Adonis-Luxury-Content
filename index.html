@@ -71,6 +71,8 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
 .ph img { width: 100%; aspect-ratio: 1; object-fit: contain; border-radius: 9px; display: block; background: #1d2a44; padding: 6px; }
 .ph .name { font-size: 12px; line-height: 1.3; color: var(--muted); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .ph .name b { color: var(--fg); }
+.bgchip { width: auto; min-height: 44px; display: inline-flex; flex-direction: row; align-items: center; gap: 8px; padding: 8px 12px; }
+.bgchip i { width: 18px; height: 18px; border-radius: 5px; border: 1px solid var(--line); display: inline-block; }
 .cathead { grid-column: 1 / -1; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
 .ph.off img { opacity: .3; filter: grayscale(1); }
 .ph.off::after { content: "aus"; position: absolute; top: 6px; left: 6px; font-size: 11px; font-weight: 800; background: var(--danger); color: #1a0402; padding: 1px 7px; border-radius: 6px; }
@@ -154,7 +156,7 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
     <div class="body">
       <div class="opt"><span>Outfits pro Post</span><div class="seg" id="sCount"><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button></div></div>
       <div class="opt"><span>Sprache auf den Slides</span><div class="seg" id="sLang"><button type="button" data-v="de">Deutsch</button><button type="button" data-v="en">English</button></div></div>
-      <div class="opt"><span>Look</span><div class="seg" id="sTheme"><button type="button" data-v="mix">Gemischt</button><button type="button" data-v="navy">Navy-Teppich</button><button type="button" data-v="cream">Creme</button><button type="button" data-v="charcoal">Anthrazit</button></div></div>
+      <div class="opt"><span>Boden</span><div class="types" id="sTheme" role="group" aria-label="Boden"></div></div>
       <div class="opt"><span>Auflösung</span><div class="seg" id="sRes"><button type="button" data-v="hd">HD 1080 × 1440</button><button type="button" data-v="4k">4K 2160 × 2880</button></div></div>
     </div>
   </details>
@@ -168,7 +170,7 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
    dazu wechselnd Uhr / Parfum / Mütze. Farben, Uhr und Duft passen immer zusammen.
    Teile: teile.json (freigestellt, 4K in teile/, kleiner in teile-hd/) + eigene Uploads.
    ============================================================ */
-const BUILD = '2026-11-22 a';
+const BUILD = '2026-11-22 b';
 const $ = s => document.querySelector(s);
 const rnd = Math.random;
 const pick = a => a[Math.floor(rnd() * a.length)];
@@ -260,12 +262,20 @@ const SERIES = {
     tops: [[['knit'], 3], [['knit', 'shirt'], 2], [['outer_l', 'knit'], 2], [['shirt'], 1.5], [['polo'], 1.5], [['outer_w', 'knit'], 1]],
     extras: [['ws', 4], ['s', 3], ['hs', 1]], white: 0.15, quietish: true, tags: ['#outfitideas', '#mensfashion'] },
 };
-const CAPTION_END = { de: 'Welches Outfit ist deins? 1, 2, 3 oder 4?', en: 'Which one would you wear? 1, 2, 3 or 4?' };
+// Call-to-Action über den Hashtags – soll Leute in die Bio bringen
+const CTAS = {
+  en: ['Want clothes like this? Link in bio 🤍', 'Shop the look → link in bio', 'Every piece is one of one. Grab it before someone else does → bio', 'Real designer. Secondhand prices. Link in bio 🔗', 'POV: you finally found where to get these → link in bio', 'Only 1 of each. Check the bio before it’s gone ⏳', 'Dress like this for less → link in bio', 'Your new wardrobe is in our bio 👀', 'Steal his style → link in bio', 'Old money look, not old money prices → bio'],
+  de: ['Willst du solche Teile? Link in Bio 🤍', 'Den Look gibt’s in der Bio →', 'Jedes Teil nur einmal. Schnapp’s dir, bevor’s weg ist → Bio', 'Echte Designer-Teile. Secondhand-Preise. Link in Bio 🔗', 'POV: du weißt endlich, wo du sowas herbekommst → Bio', 'Nur 1× da. Check die Bio, bevor’s weg ist ⏳', 'So aussehen, ohne so viel zu zahlen → Link in Bio', 'Deine neue Garderobe ist in unserer Bio 👀', 'Old-Money-Look ohne Old-Money-Preise → Bio'],
+};
+const QUESTION = { de: n => `Welches nimmst du? ${[...Array(n)].map((_, i) => i + 1).join(', ').replace(/, (\d)$/, ' oder $1')}?`, en: n => `Which one would you wear? ${[...Array(n)].map((_, i) => i + 1).join(', ').replace(/, (\d)$/, ' or $1')}?` };
+// Hashtags: #fyp immer, der Rest wechselt
+const TAGS = [['#fyp'], ['#viral', '#viral', '#foryou', '#foryoupage', '#trending'], ['#oldmoney', '#oldmoney', '#oldmoneystyle', '#oldmoneyaesthetic', '#quietluxury'], ['#grisch', '#grisch', '#grischstyle', '#grischoutfit'], ['#outfitideas', '#outfitinspo', '#mensoutfit', '#mensfashion', '#outfitoftheday']];
 
 /* ---------- Einstellungen ---------- */
 let W = 1080, H = 1440;
-const DEFAULTS = { series: 'random', count: '4', lang: 'en', theme: 'mix', res: 'hd' };
-const S = Object.assign({}, DEFAULTS, load('ad-settings2', {}));
+const DEFAULTS = { series: 'random', count: '4', lang: 'en', theme: 'mix', res: '4k' };
+const S = Object.assign({}, DEFAULTS, load('ad-settings3', load('ad-settings2', {})));
+if (!load('ad-settings3', null)) S.res = '4k';
 let recent = load('ad-recent2', { series: [], use: {} });
 
 /* ---------- Outfits bauen ---------- */
@@ -326,11 +336,15 @@ function planPost(series, n, lang) {
     for (let k = 0; o && last && o.ex === last.ex && k < 4; k++) { Object.values(o.items).forEach(p => p && used.delete(p.id)); o = buildOutfit(cfg, used, last); }
     if (!o) break; outfits.push(o); last = o;
   }
-  const title = pick(cfg.titles), bg = S.theme !== 'mix' ? S.theme : wpick([['navy', 5], ['cream', 3], ['charcoal', 1.5]]);
+  const title = pick(cfg.titles), cols = outfits.flatMap(o => [o.items.outer.color, o.items.inner && o.items.inner.color, o.items.pants.color]).filter(Boolean);
+  const bgOK = k => cols.filter(c => BGS[k].avoid.includes(c)).length <= cols.length * .2;
+  const bg = S.theme !== 'mix' && BGS[S.theme] ? S.theme : wpick(Object.entries(BGS).filter(([k]) => bgOK(k) && k !== recent.bg).map(([k, b]) => [k, b.w]));
+  recent.bg = bg;
   const slides = outfits.map((o, i) => ({ layout: 'outfit', idx: i + 1, o, title: i === 0 ? T(title, lang) : null, bg, seed: Math.random().toString(36).slice(2), lang }));
-  const brands = [...new Set(outfits.flatMap(o => [o.items.outer.brand]))];
-  const tags = ['#oldmoney', ...cfg.tags, '#mensfashion', ...brands.slice(0, 1).map(b => '#' + b.toLowerCase().replace(/[^a-z]/g, ''))].filter((t, i, a) => a.indexOf(t) === i).slice(0, 5);
-  const desc = `${T(title, lang)}\n${CAPTION_END[lang].replace(/, 3 oder 4|, 3 or 4/, outfits.length > 2 ? (lang === 'de' ? ', 3' + (outfits.length > 3 ? ' oder 4' : '') : ', 3' + (outfits.length > 3 ? ' or 4' : '')) : '')}\n\n${tags.join(' ')}`;
+  const tags = TAGS.map(g => pick(g));
+  if (rnd() < .5) tags[4] = pick(cfg.tags);
+  let cta = pick(CTAS[lang]); if (cta === recent.cta) cta = pick(CTAS[lang]); recent.cta = cta;
+  const desc = `${T(title, lang)}\n${cta}\n${QUESTION[lang](outfits.length)}\n\n${tags.join(' ')}`;
   recent.series = [series, ...recent.series.filter(x => x !== series)].slice(0, 3);
   const now = Date.now(); outfits.forEach(o => Object.values(o.items).forEach(p => { if (p) recent.use[p.id] = now; }));
   save('ad-recent2', recent);
@@ -340,7 +354,7 @@ function planPost(series, n, lang) {
 /* ---------- Bilder laden ---------- */
 const imgCache = new Map();
 function loadImg(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
-const srcOf = p => p.blobUrl || (W > 1200 ? p.file : p.hd);
+const srcOf = p => p.blobUrl || (W > 1200 ? (p.k2 || p.file) : p.hd);
 async function getArt(p) {
   const key = srcOf(p);
   if (imgCache.has(key)) return imgCache.get(key);
@@ -367,10 +381,18 @@ async function getArt(p) {
 }
 
 /* ---------- Hintergründe (Teppich wie bei Flatlay-Fotos) ---------- */
+// Böden: Teppich (Bouclé) und ganz cleane Filz-/Woll-Böden. avoid = Farben, die darauf untergehen
 const BGS = {
-  navy: { base: '#13284c', hi: [60, 98, 160], lo: [6, 16, 36] },
-  charcoal: { base: '#2a2c30', hi: [95, 98, 105], lo: [12, 12, 14] },
-  cream: { base: '#e8e0d0', hi: [255, 252, 244], lo: [176, 164, 140] },
+  navy:     { label: 'Navy-Teppich', base: '#13284c', hi: [60, 98, 160], lo: [6, 16, 36], w: 4, avoid: [] },
+  charcoal: { label: 'Anthrazit-Teppich', base: '#2a2c30', hi: [95, 98, 105], lo: [12, 12, 14], w: 1.5, avoid: ['black', 'charcoal'] },
+  cream:    { label: 'Creme-Teppich', base: '#e8e0d0', hi: [255, 252, 244], lo: [176, 164, 140], w: 1.5, avoid: ['white', 'cream'] },
+  forest:   { label: 'Dunkelgrün', base: '#1d3328', hi: [70, 110, 88], lo: [8, 20, 14], w: 2, avoid: [], clean: true },
+  sand:     { label: 'Sand', base: '#cbb796', hi: [240, 226, 200], lo: [150, 128, 96], w: 2, avoid: ['cream'], clean: true },
+  stone:    { label: 'Steingrau', base: '#a19e98', hi: [205, 202, 196], lo: [110, 107, 102], w: 1.5, avoid: ['grey', 'lightgrey'], clean: true },
+  ink:      { label: 'Tiefschwarz', base: '#141516', hi: [70, 72, 76], lo: [0, 0, 0], w: 1, avoid: ['black', 'charcoal'], clean: true },
+  mocha:    { label: 'Schoko', base: '#3a2a21', hi: [120, 92, 74], lo: [20, 12, 8], w: 1.5, avoid: [], clean: true },
+  wool:     { label: 'Wollweiß', base: '#eeeae3', hi: [255, 255, 255], lo: [196, 190, 180], w: 1.5, avoid: ['white', 'cream', 'lightgrey'], clean: true },
+  slate:    { label: 'Taubenblau', base: '#4a5a70', hi: [130, 148, 172], lo: [26, 34, 46], w: 1.5, avoid: ['navy'], clean: true },
 };
 const bgCache = {};
 function background(ctx, key) {
@@ -379,13 +401,24 @@ function background(ctx, key) {
     const b = BGS[key] || BGS.navy, c = document.createElement('canvas'); c.width = W; c.height = H;
     const x = c.getContext('2d'), r = seedRnd('rug' + key), s = W / 1080;
     x.fillStyle = b.base; x.fillRect(0, 0, W, H);
-    // Bouclé-Struktur: viele kleine Schlaufen in hell und dunkel
-    const n = Math.round(W * H / 90);
-    for (let i = 0; i < n; i++) {
-      const light = r() < .5, col = light ? b.hi : b.lo, a = .12 + r() * .28;
-      x.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${a})`; x.lineWidth = (0.8 + r() * 1.6) * s;
-      const px = r() * W, py = r() * H, rad = (1.5 + r() * 3.5) * s, st = r() * 6.28;
-      x.beginPath(); x.arc(px, py, rad, st, st + 2 + r() * 3); x.stroke();
+    if (b.clean) {
+      // clean: feiner Filz – sehr kleine, weiche Fasern, kaum Kontrast
+      const n = Math.round(W * H / 40);
+      for (let i = 0; i < n; i++) {
+        const col = r() < .5 ? b.hi : b.lo, a = .05 + r() * .1;
+        x.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${a})`; x.lineWidth = (0.5 + r() * .8) * s;
+        const px = r() * W, py = r() * H, l = (1 + r() * 2.5) * s, an = r() * 6.28;
+        x.beginPath(); x.moveTo(px, py); x.lineTo(px + Math.cos(an) * l, py + Math.sin(an) * l); x.stroke();
+      }
+    } else {
+      // Bouclé-Struktur: viele kleine Schlaufen in hell und dunkel
+      const n = Math.round(W * H / 90);
+      for (let i = 0; i < n; i++) {
+        const light = r() < .5, col = light ? b.hi : b.lo, a = .12 + r() * .28;
+        x.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${a})`; x.lineWidth = (0.8 + r() * 1.6) * s;
+        const px = r() * W, py = r() * H, rad = (1.5 + r() * 3.5) * s, st = r() * 6.28;
+        x.beginPath(); x.arc(px, py, rad, st, st + 2 + r() * 3); x.stroke();
+      }
     }
     // weiches Licht von oben links, Rand etwas dunkler
     const g = x.createRadialGradient(W * .35, H * .3, W * .1, W * .5, H * .55, H * .85);
@@ -629,7 +662,7 @@ async function startUpload(file) {
 
 /* ---------- Einstellungen ---------- */
 function bindSettings() {
-  const persist = () => save('ad-settings2', S);
+  const persist = () => save('ad-settings3', S);
   const types = [['random', 'Zufall', 'wechselt jedes Mal'], ...Object.entries(SERIES).map(([id, s]) => [id, s.label, s.ex])];
   $('#types').innerHTML = types.map(([id, l, ex]) => `<button type="button" class="type" data-v="${id}">${esc(l)}<small>${esc(ex)}</small></button>`).join('');
   const syncTypes = () => document.querySelectorAll('#types .type').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === S.series)));
@@ -639,7 +672,11 @@ function bindSettings() {
     const el = $(id), sync = () => el.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === S[key])));
     el.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S[key] = b.dataset.v; sync(); persist(); newFeed(); }); sync();
   };
-  seg('#sCount', 'count'); seg('#sLang', 'lang'); seg('#sTheme', 'theme'); seg('#sRes', 'res');
+  seg('#sCount', 'count'); seg('#sLang', 'lang'); seg('#sRes', 'res');
+  const th = $('#sTheme');
+  th.innerHTML = [['mix', 'Gemischt', '#555'], ...Object.entries(BGS).map(([k, b]) => [k, b.label, b.base])].map(([k, l, c]) => `<button type="button" class="type bgchip" data-v="${k}"><i style="background:${c}"></i>${esc(l)}</button>`).join('');
+  const syncTh = () => th.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === S.theme)));
+  th.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.theme = b.dataset.v; syncTh(); persist(); newFeed(); }); syncTh();
   $('#btnGen').addEventListener('click', newFeed);
   $('#btnMore').addEventListener('click', () => addDrafts(FEED_N));
   $('#btnSaveAll').addEventListener('click', saveAllPhotos);
