@@ -170,7 +170,7 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
    dazu wechselnd Uhr / Parfum / Mütze. Farben, Uhr und Duft passen immer zusammen.
    Teile: teile.json (freigestellt, 4K in teile/, kleiner in teile-hd/) + eigene Uploads.
    ============================================================ */
-const BUILD = '2026-11-22 h';
+const BUILD = '2026-11-22 i';
 const $ = s => document.querySelector(s);
 const rnd = Math.random;
 const pick = a => a[Math.floor(rnd() * a.length)];
@@ -299,10 +299,7 @@ const SERIES = {
     extras: [['ws', 4], ['s', 3], ['hs', 1]], white: 0.15, quietish: true, tags: ['#outfitideas', '#mensfashion'] },
 };
 // Call-to-Action über den Hashtags – soll Leute in die Bio bringen
-const CTAS = {
-  en: ['Link in bio 🔗', 'Clothes like this → link in bio', 'Shop now → link in bio', 'Get the look → link in bio', 'All pieces → link in bio 🤍', 'Shop these pieces → link in bio', 'Only 1 of each → link in bio', 'Link in bio before it’s gone ⏳', 'Designer for less → link in bio', 'Your next fit → link in bio'],
-  de: ['Link in Bio 🔗', 'Solche Teile → Link in Bio', 'Jetzt shoppen → Link in Bio', 'Hol dir den Look → Link in Bio', 'Alle Teile → Link in Bio 🤍', 'Nur 1× da → Link in Bio', 'Link in Bio, bevor’s weg ist ⏳', 'Designer günstiger → Link in Bio'],
-};
+const CTAS = { en: ['Shop now – link in bio', 'Authentic vintage clothes. Link in bio.', 'All pieces available now – link in bio', 'Shop in my bio 🔗', 'Clothes like this in bio', 'Original pieces, top condition – link in bio', 'Vintage designer, available now in bio', '100% authentic. Shop in bio.', 'Available now – link in bio', 'Shop the look – link in bio'], de: ['Shop now – link in bio', 'Authentic vintage clothes. Link in bio.', 'All pieces available now – link in bio', 'Shop in my bio 🔗', 'Clothes like this in bio', 'Original pieces, top condition – link in bio', 'Vintage designer, available now in bio', '100% authentic. Shop in bio.', 'Available now – link in bio', 'Shop the look – link in bio'] };
 // Hashtags: #fyp immer, der Rest wechselt
 const TAGS = [['#fyp'], ['#viral', '#viral', '#foryou', '#foryoupage', '#trending'], ['#oldmoney', '#oldmoney', '#oldmoneystyle', '#oldmoneyaesthetic', '#quietluxury'], ['#grisch', '#grisch', '#grischstyle', '#grischoutfit'], ['#outfitideas', '#outfitinspo', '#mensoutfit', '#mensfashion', '#outfitoftheday']];
 
@@ -395,7 +392,7 @@ function planPost(series, n, lang) {
   const tags = TAGS.map(g => pick(g));
   if (rnd() < .5) tags[4] = pick(cfg.tags);
   let cta = pick(CTAS[lang]); if (cta === recent.cta) cta = pick(CTAS[lang]); recent.cta = cta;
-  const desc = `${T(title, lang)}\n${cta}\n\n${tags.join(' ')}`;
+  const desc = `${cta}\n\n${tags.join(' ')}`;
   recent.series = [series, ...recent.series.filter(x => x !== series)].slice(0, 3);
   const now = Date.now(); outfits.forEach(o => Object.values(o.items).forEach(p => { if (p) recent.use[p.id] = now; }));
   save('ad-recent2', recent);
