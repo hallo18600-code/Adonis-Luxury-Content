@@ -68,9 +68,10 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
 .note { font-size: 13px; color: var(--muted); margin: 0; }
 .grid-ph { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); }
 .ph { position: relative; display: grid; gap: 4px; min-width: 0; border: 0; padding: 0; background: none; text-align: left; font-weight: 500; min-height: 0; color: var(--fg); }
-.ph img { width: 100%; aspect-ratio: 3 / 4; object-fit: contain; border-radius: 9px; display: block; background: #f2ece1; }
+.ph img { width: 100%; aspect-ratio: 1; object-fit: contain; border-radius: 9px; display: block; background: #1d2a44; padding: 6px; }
 .ph .name { font-size: 12px; line-height: 1.3; color: var(--muted); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .ph .name b { color: var(--fg); }
+.cathead { grid-column: 1 / -1; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
 .ph.off img { opacity: .3; filter: grayscale(1); }
 .ph.off::after { content: "aus"; position: absolute; top: 6px; left: 6px; font-size: 11px; font-weight: 800; background: var(--danger); color: #1a0402; padding: 1px 7px; border-radius: 6px; }
 .ph .del { position: absolute; top: 5px; right: 5px; min-height: 24px; padding: 2px 8px; font-size: 12px; border-radius: 7px; background: rgba(0,0,0,.72); border-color: rgba(255,255,255,.15); }
@@ -139,39 +140,40 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
   <details id="dItems">
     <summary>Teile <span class="count" id="itemCount">0</span></summary>
     <div class="body">
-      <p class="note">Die Teile kommen aus dem Shop. Antippen schaltet ein Teil aus oder wieder an (z.&nbsp;B. wenn es verkauft ist).</p>
+      <p class="note">Alle freigestellten Teile. Antippen schaltet ein Teil aus oder wieder an.</p>
       <div class="grid-ph" id="itemGrid"></div>
       <div class="row"><label class="btn upload">Eigenes Teil hinzufügen<input type="file" id="upItem" accept="image/*"></label></div>
       <div id="formSlot"></div>
       <div class="status" id="itemStatus"></div>
-      <p class="note">Am besten freigestellte PNGs (ohne Hintergrund). Fotos mit Hintergrund werden als Karte gezeigt.</p>
+      <p class="note">Nur freigestellte PNGs (ohne Hintergrund) hochladen.</p>
     </div>
   </details>
 
   <details>
     <summary>Optionen</summary>
     <div class="body">
-      <div class="opt"><span>Slides pro Post</span><div class="seg" id="sCount"><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button><button type="button" data-v="6">6</button></div></div>
+      <div class="opt"><span>Outfits pro Post</span><div class="seg" id="sCount"><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button></div></div>
       <div class="opt"><span>Sprache auf den Slides</span><div class="seg" id="sLang"><button type="button" data-v="de">Deutsch</button><button type="button" data-v="en">English</button></div></div>
-      <div class="opt"><span>Look</span><div class="seg" id="sTheme"><button type="button" data-v="mix">Gemischt</button><button type="button" data-v="cream">Creme</button><button type="button" data-v="navy">Navy</button><button type="button" data-v="stone">Stein</button></div></div>
+      <div class="opt"><span>Look</span><div class="seg" id="sTheme"><button type="button" data-v="mix">Gemischt</button><button type="button" data-v="navy">Navy-Teppich</button><button type="button" data-v="cream">Creme</button><button type="button" data-v="charcoal">Anthrazit</button></div></div>
       <div class="opt"><span>Auflösung</span><div class="seg" id="sRes"><button type="button" data-v="hd">HD 1080 × 1440</button><button type="button" data-v="4k">4K 2160 × 2880</button></div></div>
-      <label class="row" style="font-size:14px"><input type="checkbox" id="sPrice" style="width:18px;height:18px;accent-color:var(--accent)"> Preise auf den Slides zeigen</label>
     </div>
   </details>
 </div>
 
 <script>
 /* ============================================================
-   ADONIS Slide-Studio
-   Gleiche Technik wie das Forma-Studio (Feed mit Entwürfen, Zeichnen auf Canvas,
-   „Alle in Fotos sichern“ über das Teilen-Menü), aber für Kleidung:
-   Teile kommen aus products.json (Export aus dem Shopify-Shop) + eigene Uploads.
+   ADONIS Slide-Studio – Outfit-Generator
+   Gleiche Technik wie das Forma-Studio (Feed, Canvas, „Alle in Fotos sichern“).
+   Jede Slide = ein Outfit als Flatlay: Oberteil(e) + Hose + Schuhe,
+   dazu wechselnd Uhr / Parfum / Mütze. Farben, Uhr und Duft passen immer zusammen.
+   Teile: teile.json (freigestellt, 4K in teile/, kleiner in teile-hd/) + eigene Uploads.
    ============================================================ */
-const BUILD = '2026-11-21 b';
+const BUILD = '2026-11-22 a';
 const $ = s => document.querySelector(s);
 const rnd = Math.random;
 const pick = a => a[Math.floor(rnd() * a.length)];
 const shuffle = a => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const wpick = list => { const tot = list.reduce((s, x) => s + x[1], 0); let r = rnd() * tot; for (const x of list) { if ((r -= x[1]) <= 0) return x[0]; } return list[list.length - 1][0]; };
 const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
 const load = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } };
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -179,412 +181,291 @@ const seedRnd = str => { let h = 2166136261; for (const c of String(str)) h = Ma
   return () => { h += 0x6D2B79F5; let t = h; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; };
 
 /* ---------- Teile ---------- */
-// Kategorie aus dem Produkttyp: top = Polo/Shirt, knit = Strick/Sweat/Hoodie, outer = Jacke
-const CAT = { 'Poloshirt': 'top', 'T-Shirt': 'top', 'Hemd': 'top', 'Sweater': 'knit', 'Sweatshirt': 'knit', 'Quarterzip': 'knit', 'Hoodie': 'knit', 'Cardigan': 'knit', 'Jacke': 'outer', 'Mantel': 'outer', 'Weste': 'outer', 'Hose': 'bottom', 'Chino': 'bottom', 'Schuhe': 'shoes' };
-const TYPES = ['Poloshirt', 'T-Shirt', 'Hemd', 'Sweater', 'Sweatshirt', 'Quarterzip', 'Hoodie', 'Cardigan', 'Jacke', 'Mantel', 'Weste', 'Hose', 'Schuhe'];
-const TYPE_EN = { 'Poloshirt': 'polo', 'T-Shirt': 't-shirt', 'Hemd': 'shirt', 'Sweater': 'sweater', 'Sweatshirt': 'sweatshirt', 'Quarterzip': 'quarter-zip', 'Hoodie': 'hoodie', 'Cardigan': 'cardigan', 'Jacke': 'jacket', 'Mantel': 'coat', 'Weste': 'vest', 'Hose': 'trousers', 'Schuhe': 'shoes' };
-const catOf = it => CAT[it.type] || (/cardigan/i.test(it.name) ? 'knit' : 'top');
-let shopItems = [], ownItems = [];
-let off = new Set(load('ad-off', []));
-const allItems = () => [...shopItems, ...ownItems];
-const usable = () => allItems().filter(it => !off.has(it.id) && it.src);
+const CATS = { outer_w: 'Winterjacke', outer_l: 'Leichte Jacke', vest: 'Weste', hoodie: 'Hoodie', sweat: 'Sweatshirt', knit: 'Pulli / Strick', polo: 'Polo', shirt: 'Hemd', pants: 'Hose', shoes: 'Schuhe', hat: 'Mütze', watch: 'Uhr', scent: 'Parfum' };
+const COLORS = { navy: 'Navy', black: 'Schwarz', charcoal: 'Anthrazit', grey: 'Grau', lightgrey: 'Hellgrau', white: 'Weiß', cream: 'Creme', lightblue: 'Hellblau', denim: 'Jeans-Blau', blue: 'Blau (Uhr)', green: 'Grün (Uhr)', gold: 'Gold (Duft)' };
+let parts = [], ownParts = [];
+let off = new Set(load('ad-off2', []));
+const allParts = () => [...parts, ...ownParts];
+const active = () => allParts().filter(p => !off.has(p.id));
+
+/* Farben, die zusammen gehen (klassische Old-Money-Kombis). Navy + Schwarz absichtlich nicht. */
+const MATCH = {
+  navy: ['navy', 'white', 'cream', 'grey', 'lightgrey', 'lightblue', 'denim', 'charcoal'],
+  black: ['black', 'white', 'cream', 'grey', 'lightgrey', 'charcoal', 'denim'],
+  charcoal: ['charcoal', 'black', 'grey', 'lightgrey', 'white', 'cream', 'denim', 'navy'],
+  grey: ['grey', 'lightgrey', 'navy', 'black', 'charcoal', 'white', 'cream', 'denim', 'lightblue'],
+  lightgrey: ['lightgrey', 'grey', 'navy', 'black', 'charcoal', 'white', 'denim', 'lightblue'],
+  white: ['white', 'navy', 'black', 'grey', 'lightgrey', 'charcoal', 'cream', 'lightblue', 'denim'],
+  cream: ['cream', 'navy', 'black', 'charcoal', 'grey', 'white', 'denim'],
+  lightblue: ['lightblue', 'navy', 'white', 'cream', 'grey', 'lightgrey', 'denim'],
+  denim: ['denim', 'navy', 'black', 'charcoal', 'grey', 'lightgrey', 'white', 'cream', 'lightblue'],
+};
+const goes = (a, b) => !a || !b || (MATCH[a] || []).includes(b);
+const goesAll = (c, list) => list.every(x => goes(c, x) && goes(x, c));
+// Uhr-Zifferblatt und Duft-Flasche → zu welchen Outfit-Farben sie passen
+const ACC = {
+  blue: ['navy', 'lightblue', 'white', 'grey', 'lightgrey', 'cream'],
+  black: ['black', 'charcoal', 'grey', 'lightgrey', 'white', 'cream'],
+  green: ['cream', 'navy', 'white', 'grey', 'lightgrey'],
+  navy: ['navy', 'lightblue', 'white', 'grey', 'lightgrey', 'cream'],
+  gold: ['black', 'charcoal', 'cream', 'white'],
+  cream: ['navy', 'cream', 'black', 'grey', 'charcoal'],
+  charcoal: ['black', 'charcoal', 'grey', 'lightgrey', 'white'],
+};
+const accFits = (acc, colors) => colors.every(c => (ACC[acc.color] || MATCH[acc.color] || []).includes(c));
+
+/* ---------- Content-Arten (vom Nutzer ausgewählt) ---------- */
+const L = (de, en) => ({ de, en });
+const T = (x, lang) => typeof x === 'string' ? x : x[lang];
+// tops: [äußere Schicht, innere Schicht?] mit Gewicht. extras: Kombis aus w=Uhr, s=Parfum, h=Mütze mit Gewicht.
+const SERIES = {
+  winter: { label: 'Winter', ex: 'Outfit ideas for winter',
+    titles: [L('Outfit-Ideen für den Winter', 'Outfit ideas for winter'), L('Winter-Outfits', 'Winter outfits'), L('Was ich im Winter trage', 'What I wear in winter')],
+    tops: [[['outer_w'], 4], [['outer_w', 'knit'], 3], [['outer_w', 'hoodie'], 2], [['outer_l', 'knit'], 2], [['vest', 'hoodie'], 1.5], [['vest', 'knit'], 1.5], [['knit'], 1]],
+    extras: [['hw', 3], ['h', 2], ['w', 2], ['ws', 1.5], ['hws', 1.5], ['', 1], ['s', 1]], white: 0, tags: ['#winteroutfit', '#outfitideas'] },
+  omwinter: { label: 'Old Money Winter', ex: 'Old money outfits for winter', quiet: true,
+    titles: [L('Old-Money-Outfits für den Winter', 'Old money outfits for winter'), L('Old Money im Winter', 'Old money winter outfits')],
+    tops: [[['outer_w', 'knit'], 4], [['outer_l', 'knit'], 3], [['knit', 'shirt'], 2], [['vest', 'knit'], 2], [['knit'], 2], [['outer_w'], 1]],
+    extras: [['hw', 3], ['w', 3], ['ws', 2], ['hws', 1.5], ['s', 1], ['', 1]], white: 0, tags: ['#oldmoneystyle', '#winteroutfit'] },
+  fall: { label: 'Herbst', ex: 'Fall outfits that always work',
+    titles: [L('Herbst-Outfits, die immer funktionieren', 'Fall outfits that always work'), L('Herbst-Outfits', 'Fall outfit ideas')],
+    tops: [[['outer_l'], 3], [['outer_l', 'knit'], 2], [['knit'], 3], [['knit', 'shirt'], 1.5], [['vest', 'knit'], 1.5], [['hoodie'], 1.5], [['sweat'], 1.5], [['shirt'], 1]],
+    extras: [['w', 3], ['ws', 2], ['s', 2], ['', 2], ['hw', 1]], white: 0.1, tags: ['#falloutfit', '#outfitideas'] },
+  date: { label: 'Erstes Date', ex: 'First date outfits',
+    titles: [L('Outfits fürs erste Date', 'First date outfits'), L('Was du zum ersten Date anziehst', 'What to wear on a first date')],
+    tops: [[['knit'], 3], [['knit', 'shirt'], 2], [['polo'], 2], [['shirt'], 2], [['outer_l', 'knit'], 2], [['outer_l', 'polo'], 1]],
+    extras: [['ws', 4], ['s', 3], ['w', 2]], white: 0.2, quietish: true, tags: ['#firstdate', '#datenight'] },
+  xmas: { label: 'Weihnachtsessen', ex: 'Christmas dinner outfits',
+    titles: [L('Outfits fürs Weihnachtsessen', 'Christmas dinner outfits'), L('Was du an Heiligabend trägst', 'What to wear to Christmas dinner')],
+    tops: [[['knit'], 4], [['knit', 'shirt'], 3], [['shirt'], 1.5], [['outer_w', 'knit'], 1.5]],
+    extras: [['ws', 4], ['w', 2], ['s', 2], ['', 0.5]], white: 0, quietish: true, prefer: ['p12', 'p09', 'p16', 'p11', 'p13'], tags: ['#christmasoutfit', '#christmas'] },
+  nye: { label: 'Silvester', ex: 'New Year’s Eve outfits',
+    titles: [L('Silvester-Outfits', 'New Year’s Eve outfits'), L('Was du an Silvester trägst', 'What to wear on New Year’s Eve')],
+    tops: [[['knit'], 3], [['outer_w', 'knit'], 2], [['outer_l', 'knit'], 2], [['polo'], 1.5], [['outer_w', 'polo'], 1.5], [['shirt'], 1]],
+    extras: [['ws', 5], ['w', 2], ['s', 1.5]], white: 0, dark: true, tags: ['#newyearseve', '#nye'] },
+  parents: { label: 'Ihre Eltern', ex: 'Meeting her parents', quiet: true,
+    titles: [L('Wenn du ihre Eltern triffst', 'Meeting her parents'), L('Outfits für das Treffen mit ihren Eltern', 'What to wear to meet her parents')],
+    tops: [[['knit'], 3], [['knit', 'shirt'], 3], [['shirt'], 2], [['polo'], 1.5], [['outer_l', 'knit'], 1.5]],
+    extras: [['w', 4], ['ws', 2], ['', 1.5], ['s', 1]], white: 0.15, tags: ['#meettheparents', '#oldmoneystyle'] },
+  uni: { label: 'Uni / Schule', ex: 'Uni outfits',
+    titles: [L('Outfits für die Uni', 'Uni outfits'), L('Outfits für die Schule', 'School outfits'), L('Was ich in der Uni trage', 'What I wear to uni')],
+    tops: [[['hoodie'], 2.5], [['sweat'], 2], [['knit'], 2], [['outer_w'], 2], [['vest', 'hoodie'], 2], [['outer_l', 'hoodie'], 1.5], [['outer_w', 'hoodie'], 1.5], [['polo'], 1]],
+    extras: [['', 3], ['w', 2], ['h', 2], ['hw', 1.5], ['s', 1]], white: 0, tags: ['#unioutfit', '#schooloutfit'] },
+  oldmoney: { label: 'Old Money', ex: 'Old money outfits', quiet: true,
+    titles: [L('Old-Money-Outfits', 'Old money outfits'), L('So ziehst du dich Old Money an', 'How to dress old money')],
+    tops: [[['knit', 'shirt'], 3], [['knit'], 3], [['shirt'], 2], [['polo'], 2], [['outer_l', 'knit'], 2], [['outer_l', 'polo'], 1]],
+    extras: [['w', 3], ['ws', 3], ['s', 1.5], ['', 1]], white: 0.3, tags: ['#oldmoneystyle', '#oldmoneyaesthetic'] },
+  shewants: { label: 'Was sie will', ex: 'Outfits she wants you to wear',
+    titles: [L('Outfits, die sie an dir sehen will', 'Outfits she wants you to wear'), L('Zieh das an und sie merkt es', 'Wear this and she’ll notice')],
+    tops: [[['knit'], 3], [['knit', 'shirt'], 2], [['outer_l', 'knit'], 2], [['shirt'], 1.5], [['polo'], 1.5], [['outer_w', 'knit'], 1]],
+    extras: [['ws', 4], ['s', 3], ['hs', 1]], white: 0.15, quietish: true, tags: ['#outfitideas', '#mensfashion'] },
+};
+const CAPTION_END = { de: 'Welches Outfit ist deins? 1, 2, 3 oder 4?', en: 'Which one would you wear? 1, 2, 3 or 4?' };
 
 /* ---------- Einstellungen ---------- */
 let W = 1080, H = 1440;
-const DEFAULTS = { series: 'random', count: '5', lang: 'de', theme: 'mix', res: 'hd', price: true };
-const S = Object.assign({}, DEFAULTS, load('ad-settings', {}));
-let recent = load('ad-recent', { series: [], use: {}, hooks: [] });
+const DEFAULTS = { series: 'random', count: '4', lang: 'en', theme: 'mix', res: 'hd' };
+const S = Object.assign({}, DEFAULTS, load('ad-settings2', {}));
+let recent = load('ad-recent2', { series: [], use: {} });
 
-/* ---------- Looks ---------- */
-const THEMES = {
-  cream: { bg: '#f2ece1', bg2: '#e6dccb', ink: '#14213d', sub: '#6b6457', accent: '#a8864a', line: 'rgba(20,33,61,.18)', dark: false },
-  navy:  { bg: '#13233f', bg2: '#0b1629', ink: '#f2ece1', sub: '#a9b2c3', accent: '#c9a96a', line: 'rgba(242,236,225,.2)', dark: true },
-  stone: { bg: '#e2ded6', bg2: '#cfc9bd', ink: '#1d1d1b', sub: '#5f5a52', accent: '#7a5c3a', line: 'rgba(29,29,27,.18)', dark: false },
-};
-const pickTheme = () => S.theme !== 'mix' && THEMES[S.theme] ? S.theme : pick(['cream', 'cream', 'navy', 'stone']);
-
-/* ---------- Texte ---------- */
-const L = (de, en) => ({ de, en });
-const T = (x, lang) => typeof x === 'string' ? x : x[lang];
-const fmtPrice = (p, lang) => lang === 'de' ? p.toFixed(2).replace('.', ',').replace(',00', '') + ' €' : '€' + p.toFixed(2).replace('.00', '');
-const season = () => { const m = new Date().getMonth(); return m >= 10 || m <= 1 ? L('Winter', 'winter') : m >= 8 ? L('Herbst', 'fall') : m >= 5 ? L('Sommer', 'summer') : L('Frühling', 'spring'); };
-const RULES = [
-  L('Logos klein. Qualität groß.', 'Small logos. Big quality.'),
-  L('Navy, Grau, Creme – mehr braucht es nicht.', 'Navy, grey, cream – that’s all you need.'),
-  L('Ein gutes Teil schlägt fünf billige.', 'One good piece beats five cheap ones.'),
-  L('Strick über den Schultern geht immer.', 'A sweater over the shoulders always works.'),
-  L('Passform vor Marke.', 'Fit before brand.'),
-  L('Secondhand ist kein Kompromiss. Es ist Stil.', 'Secondhand isn’t a compromise. It’s style.'),
-  L('Kauf, was in 10 Jahren noch gut aussieht.', 'Buy what still looks good in 10 years.'),
-  L('Polo unter Strick – der leiseste Flex.', 'Polo under a knit – the quietest flex.'),
-  L('Lieber zeitlos als im Trend.', 'Timeless over trendy.'),
-];
-const CTA = [
-  { top: L('Alle Teile', 'Every piece'), title: L('Link in Bio', 'Link in bio'), sub: L('Einzelstücke – wenn weg, dann weg.', 'One of one – once it’s gone, it’s gone.') },
-  { top: L('Echte Marken. Secondhand.', 'Real brands. Secondhand.'), title: L('ADONIS LUXURY', 'ADONIS LUXURY'), sub: L('Jedes Teil gibt es nur einmal · Link in Bio', 'Every piece is one of one · link in bio') },
-  { top: L('Gefällt dir ein Teil?', 'Like a piece?'), title: L('Link in Bio', 'Link in bio'), sub: L('Folge für mehr Old Money ', 'Follow for more old money ') },
-];
-
-/* Formate: jedes plant seine Slides selbst (Titel-Slide, Teile, Abschluss) */
-const SERIES = {
-  drop:    { label: 'Neu im Shop', ex: 'Neu im Shop · 1 Teil pro Slide', tags: ['#newin', '#secondhand'] },
-  under:   { label: 'Unter X €', ex: 'Old Money unter 50 €', tags: ['#oldmoneystyle', '#budgetfashion'] },
-  outfit:  { label: 'Outfit-Ideen', ex: 'Old-Money-Outfit für den Winter', tags: ['#outfitideas', '#oldmoneyoutfit'] },
-  brand:   { label: 'Marken-Fokus', ex: 'Ralph Lauren, aber secondhand', tags: ['#secondhand', '#designer'] },
-  duo:     { label: 'Welches?', ex: 'A oder B – schreib’s in die Kommentare', tags: ['#thisorthat', '#oldmoneystyle'] },
-  rules:   { label: 'Old-Money-Regeln', ex: 'Regel 1: Logos klein, Qualität groß', tags: ['#oldmoneyaesthetic', '#quietluxury'] },
-  grid:    { label: 'Kollektion', ex: '4 Teile auf einer Slide', tags: ['#quietluxury', '#vintage'] },
-  cond:    { label: 'Wie neu', ex: 'Secondhand, aber Zustand 10/10', tags: ['#secondhand', '#preloved'] },
-};
-const brandTag = b => '#' + b.toLowerCase().replace(/[^a-z]/g, '');
-
-/* ---------- Auswahl der Teile ---------- */
-const useT = it => (recent.use || {})[it.id] || 0;
-// selten benutzte Teile zuerst, etwas Zufall dazu
-function choose(pool, n, used) {
-  let p = pool.filter(it => !used.has(it.id));
-  if (p.length < n) p = [...p, ...pool.filter(it => used.has(it.id))];
-  p = shuffle(p).sort((a, b) => useT(a) - useT(b) + (rnd() - .5) * 2e11);
-  const out = [], brands = {};
-  for (const it of p) { if (out.length >= n) break; if ((brands[it.brand] || 0) >= Math.ceil(n * .7) && p.length > n) continue; out.push(it); brands[it.brand] = (brands[it.brand] || 0) + 1; }
-  for (const it of p) { if (out.length >= n) break; if (!out.includes(it)) out.push(it); }
-  out.forEach(it => used.add(it.id));
-  return out;
+/* ---------- Outfits bauen ---------- */
+const useT = p => (recent.use || {})[p.id] || 0;
+// unbenutzte und lange nicht benutzte Teile bevorzugen
+function choose(cands, used) {
+  if (!cands.length) return null;
+  const fresh = cands.filter(p => !used.has(p.id)), pool = fresh.length ? fresh : cands;
+  return pool.map(p => [p, useT(p) + rnd() * 3e9]).sort((a, b) => a[1] - b[1])[0][0];
 }
-function outfitOf(pool, used) {
-  const by = c => pool.filter(it => catOf(it) === c);
-  const tops = by('top'), knits = by('knit'), outers = by('outer');
-  const sets = [];
-  if (outers.length && knits.length) sets.push(['outer', 'knit']);
-  if (outers.length && tops.length) sets.push(['outer', 'top']);
-  if (knits.length && tops.length) sets.push(['knit', 'top'], ['knit', 'top']);
-  if (outers.length && knits.length && tops.length) sets.push(['outer', 'knit', 'top']);
-  if (!sets.length) return null;
-  const s = pick(sets);
-  return s.map(c => choose(by(c), 1, used)[0]);
-}
-
-/* ---------- Planung ---------- */
-function planSlides(series, n, lang) {
-  const pool = usable(), used = new Set(), mid = n - 2, slides = [];
-  const cover = (t, items) => slides.push({ layout: 'cover', t, items: items || [] });
-  const end = () => slides.push({ layout: 'cta', t: pick(CTA), items: [] });
-  const sea = season();
-  let hook = '';
-  if (series === 'drop') {
-    const items = choose(pool, mid, used);
-    cover({ top: L('ADONIS LUXURY', 'ADONIS LUXURY'), title: pick([L('Neu im Shop', 'Just dropped'), L('Gerade reingekommen', 'New in'), L('Diese Woche neu', 'New this week')]), sub: L(`${items.length} Einzelstücke`, `${items.length} one-of-one pieces`) }, items.slice(0, 3));
-    items.forEach((it, i) => slides.push({ layout: 'piece', idx: i + 1, items: [it] }));
-  } else if (series === 'under') {
-    const caps = [40, 50, 60, 80].filter(c => pool.filter(it => it.price <= c).length >= mid);
-    const cap = caps.length ? pick(caps.slice(0, 2)) : Math.ceil(Math.max(...pool.map(i => i.price)) / 10) * 10;
-    const items = choose(pool.filter(it => it.price <= cap), mid, used);
-    cover(pick([
-      { top: L('Old Money', 'Old money'), title: L(`unter ${cap} €`, `under €${cap}`), sub: L('Echte Marken. Secondhand.', 'Real brands. Secondhand.') },
-      { top: L('Der Look', 'The look'), title: L(`für unter ${cap} €`, `for under €${cap}`), sub: L('Ohne Fake. Nur echte Marken.', 'No fakes. Only real brands.') },
-      { top: L('Quiet Luxury', 'Quiet luxury'), title: L(`Budget: ${cap} €`, `Budget: €${cap}`), sub: L('So geht’s', 'Here’s how') },
-    ]), items.slice(0, 3));
-    items.forEach((it, i) => slides.push({ layout: 'piece', idx: i + 1, items: [it], forcePrice: true }));
-  } else if (series === 'outfit') {
-    const outs = []; for (let k = 0; k < mid; k++) { const o = outfitOf(pool, used); if (o) outs.push(o.filter(Boolean)); }
-    cover({ top: L('Old-Money-Outfits', 'Old money outfits'), title: L(`für den ${T(sea, 'de')}`, `for ${T(sea, 'en')}`), sub: L('Speichern für später', 'Save for later') }, outs[0] || []);
-    outs.forEach((o, i) => slides.push({ layout: 'outfit', idx: i + 1, items: o }));
-  } else if (series === 'brand') {
-    const counts = {}; pool.forEach(it => counts[it.brand] = (counts[it.brand] || 0) + 1);
-    const ok = Object.keys(counts).filter(b => counts[b] >= Math.min(3, mid));
-    const b = ok.length ? pick(ok) : pick(Object.keys(counts));
-    const items = choose(pool.filter(it => it.brand === b), mid, used);
-    const min = Math.min(...items.map(i => i.price));
-    cover(pick([
-      { top: L(b, b), title: L('aber secondhand', 'but secondhand'), sub: L(`ab ${fmtPrice(min, 'de')}`, `from ${fmtPrice(min, 'en')}`) },
-      { top: L('Du willst', 'You want'), title: L(b, b), sub: L('ohne den vollen Preis?', 'without the full price?') },
-    ]), items.slice(0, 3));
-    items.forEach((it, i) => slides.push({ layout: 'piece', idx: i + 1, items: [it] }));
-    slides.brand = b;
-  } else if (series === 'duo') {
-    const k = Math.max(1, mid);
-    cover(pick([
-      { top: L('Ehrlich', 'Be honest'), title: L('Welches nimmst du?', 'Which one?'), sub: L('A oder B – ab in die Kommentare', 'A or B – tell me in the comments') },
-      { top: L('Du darfst nur eins', 'You can only pick one'), title: L('A oder B?', 'A or B?'), sub: L('Schreib’s in die Kommentare', 'Tell me in the comments') },
-    ]), []);
-    for (let i = 0; i < k; i++) {
-      const c = pick(['top', 'knit', 'outer', 'knit']);
-      let p = pool.filter(it => catOf(it) === c); if (p.length < 2) p = pool;
-      slides.push({ layout: 'duo', idx: i + 1, items: choose(p, 2, used) });
+function buildOutfit(cfg, used, last) {
+  const pool = active();
+  const quietOK = p => !(cfg.quiet && p.loud) && !(cfg.quietish && p.loud && rnd() < .7);
+  const darkOK = p => !cfg.dark || ['black', 'charcoal', 'navy', 'grey', 'denim'].includes(p.color) || ['shirt', 'polo'].includes(p.cat);
+  for (let tries = 0; tries < 60; tries++) {
+    const shape = wpick(cfg.tops);
+    if (last && tries < 20 && shape.join() === last.shape.join()) continue;
+    const of = c => pool.filter(p => p.cat === c && quietOK(p) && darkOK(p));
+    const prefer = cfg.prefer ? of(shape[0]).filter(p => cfg.prefer.includes(p.id) && !used.has(p.id)) : [];
+    const outer = choose(prefer.length && rnd() < .6 ? prefer : of(shape[0]), used); if (!outer) continue;
+    let inner = null;
+    if (shape[1]) {
+      // innere Schicht: passende, aber andere Farbe (Kontrast) – Ton-in-Ton nur manchmal
+      const c = of(shape[1]).filter(p => goes(outer.color, p.color) && (p.color !== outer.color || rnd() < .25));
+      inner = choose(c, used); if (!inner) continue;
     }
-    slides[0].items = slides[1] ? slides[1].items : [];
-  } else if (series === 'rules') {
-    const rs = shuffle(RULES).slice(0, mid);
-    cover({ top: L('ADONIS LUXURY', 'ADONIS LUXURY'), title: L('Old-Money-Regeln', 'Old money rules'), sub: L(`die ${rs.length} wichtigsten`, `the ${rs.length} that matter`) }, []);
-    rs.forEach((r, i) => slides.push({ layout: 'rule', idx: i + 1, rule: r, items: choose(pool, 1, used) }));
-    slides[0].items = slides.slice(1, 4).flatMap(s => s.items);
-  } else if (series === 'grid') {
-    const groups = []; for (let k = 0; k < mid; k++) groups.push(choose(pool, 4, used));
-    const titles = [L('Quiet Luxury', 'Quiet luxury'), L(`${T(sea, 'de')}-Essentials`, `${T(sea, 'en')} essentials`), L('Die Basics', 'The basics'), L('Zeitlos', 'Timeless')];
-    cover({ top: L('ADONIS LUXURY', 'ADONIS LUXURY'), title: pick(titles), sub: L('Einzelstücke · Secondhand', 'One of one · secondhand') }, groups[0].slice(0, 3));
-    groups.forEach((g, i) => slides.push({ layout: 'grid4', idx: i + 1, items: g }));
-  } else if (series === 'cond') {
-    const good = pool.filter(it => (it.cond || 0) >= 9);
-    const items = choose(good.length >= mid ? good : pool, mid, used);
-    cover(pick([
-      { top: L('Secondhand?', 'Secondhand?'), title: L('Sieht man nicht.', 'You can’t tell.'), sub: L('Jedes Teil geprüft und bewertet', 'Every piece checked and rated') },
-      { top: L('Getragen?', 'Pre-owned?'), title: L('Wie neu.', 'Like new.'), sub: L('Zustand auf jeder Slide', 'Condition on every slide') },
-      { top: L('Designer secondhand', 'Designer secondhand'), title: L('Zustand 9/10 und besser', 'Condition 9/10 and up'), sub: L('Jedes Teil geprüft', 'Every piece checked') },
-    ]), items.slice(0, 3));
-    items.forEach((it, i) => slides.push({ layout: 'piece', idx: i + 1, items: [it], showCond: true }));
+    const tops = [outer, inner].filter(Boolean), colors = tops.map(p => p.color);
+    const wantWhite = rnd() < (cfg.white || 0) && tops.every(p => ['navy', 'lightblue', 'black', 'grey', 'lightgrey', 'cream'].includes(p.color));
+    const pants = choose(pool.filter(p => p.cat === 'pants' && (wantWhite ? p.color === 'white' : p.color !== 'white') && goesAll(p.color, colors)), used); if (!pants) continue;
+    const base = [...colors, pants.color];
+    // Schuhe: zur äußeren Farbe passend, gleiche Farbe bevorzugt
+    const shoeC = pool.filter(p => p.cat === 'shoes' && goesAll(p.color, base));
+    const same = shoeC.filter(p => p.color === outer.color || (p.color === 'charcoal' && ['black', 'grey', 'lightgrey'].includes(outer.color)));
+    const shoes = choose(same.length && rnd() < .7 ? same : shoeC, used); if (!shoes) continue;
+    const ex = wpick(cfg.extras), clothes = [...base.filter(c => c !== 'denim'), shoes.color].filter(Boolean);
+    const acc = cat => choose(pool.filter(p => p.cat === cat && accFits(p, clothes.length ? clothes : ['navy'])), used);
+    const watch = ex.includes('w') ? acc('watch') : null, scent = ex.includes('s') ? acc('scent') : null;
+    const hat = ex.includes('h') ? choose(pool.filter(p => p.cat === 'hat' && goesAll(p.color, clothes) && quietOK(p)), used) : null;
+    if ((ex.includes('w') && !watch) || (ex.includes('s') && !scent)) { if (tries < 40) continue; }
+    const items = { outer, inner, pants, shoes, watch, scent, hat };
+    Object.values(items).forEach(p => p && used.add(p.id));
+    return { shape, ex, items };
   }
-  end();
-  return slides;
+  return null;
 }
 function pickSeries() {
   if (S.series !== 'random' && SERIES[S.series]) return S.series;
-  let deck = load('ad-deck', []).filter(id => SERIES[id]);
+  let deck = load('ad-deck2', []).filter(id => SERIES[id]);
   if (!deck.length) deck = shuffle(Object.keys(SERIES).filter(id => !recent.series.includes(id))).concat(shuffle(recent.series.filter(id => SERIES[id])));
-  const id = deck.shift(); save('ad-deck', deck); return id;
+  const id = deck.shift(); save('ad-deck2', deck); return id;
 }
 function planPost(series, n, lang) {
-  const slides = planSlides(series, n, lang).map(sl => ({ ...sl, lang, theme: null }));
-  const th = pickTheme(); slides.forEach(sl => sl.theme = th);
-  const hook = slides[0].t ? [T(slides[0].t.top, lang), T(slides[0].t.title, lang)].filter(Boolean).join(' ') : '';
-  const brands = [...new Set(slides.flatMap(s => s.items.map(i => i.brand)))];
-  const tags = ['#oldmoney', ...SERIES[series].tags, ...brands.slice(0, 1).map(brandTag), '#fyp'].filter((t, i, a) => a.indexOf(t) === i).slice(0, 5);
-  const line = lang === 'de' ? 'Einzelstücke – Link in Bio 🤍' : 'One of one – link in bio 🤍';
-  const desc = `${hook}\n${line}\n\n${tags.join(' ')}`;
+  const cfg = SERIES[series], used = new Set(), outfits = [];
+  let last = null;
+  for (let i = 0; i < n; i++) {
+    let o = buildOutfit(cfg, used, last);
+    // Extras sollen von Slide zu Slide wechseln
+    for (let k = 0; o && last && o.ex === last.ex && k < 4; k++) { Object.values(o.items).forEach(p => p && used.delete(p.id)); o = buildOutfit(cfg, used, last); }
+    if (!o) break; outfits.push(o); last = o;
+  }
+  const title = pick(cfg.titles), bg = S.theme !== 'mix' ? S.theme : wpick([['navy', 5], ['cream', 3], ['charcoal', 1.5]]);
+  const slides = outfits.map((o, i) => ({ layout: 'outfit', idx: i + 1, o, title: i === 0 ? T(title, lang) : null, bg, seed: Math.random().toString(36).slice(2), lang }));
+  const brands = [...new Set(outfits.flatMap(o => [o.items.outer.brand]))];
+  const tags = ['#oldmoney', ...cfg.tags, '#mensfashion', ...brands.slice(0, 1).map(b => '#' + b.toLowerCase().replace(/[^a-z]/g, ''))].filter((t, i, a) => a.indexOf(t) === i).slice(0, 5);
+  const desc = `${T(title, lang)}\n${CAPTION_END[lang].replace(/, 3 oder 4|, 3 or 4/, outfits.length > 2 ? (lang === 'de' ? ', 3' + (outfits.length > 3 ? ' oder 4' : '') : ', 3' + (outfits.length > 3 ? ' or 4' : '')) : '')}\n\n${tags.join(' ')}`;
   recent.series = [series, ...recent.series.filter(x => x !== series)].slice(0, 3);
-  const now = Date.now(); slides.forEach(s => s.items.forEach(it => recent.use[it.id] = now));
-  save('ad-recent', recent);
+  const now = Date.now(); outfits.forEach(o => Object.values(o.items).forEach(p => { if (p) recent.use[p.id] = now; }));
+  save('ad-recent2', recent);
   return { slides, desc };
 }
 
 /* ---------- Bilder laden ---------- */
-// Shopify-Bilder in passender Größe holen. Freigestellt (durchsichtig)? → mit Schatten frei stellen, sonst als Karte.
 const imgCache = new Map();
-const sizedSrc = (src, w) => /cdn\.shopify\.com/.test(src) ? src + (src.includes('?') ? '&' : '?') + 'width=' + w : src;
-function loadImg(src, cors) { return new Promise((res, rej) => { const i = new Image(); if (cors) i.crossOrigin = 'anonymous'; i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
-async function getArt(it) {
-  const key = it.src + '|' + (W > 1200 ? 'L' : 'S');
+function loadImg(src) { return new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }); }
+const srcOf = p => p.blobUrl || (W > 1200 ? p.file : p.hd);
+async function getArt(p) {
+  const key = srcOf(p);
   if (imgCache.has(key)) return imgCache.get(key);
-  const p = (async () => {
+  const pr = (async () => {
     let img = null;
-    for (let k = 0; k < 2 && !img; k++) { try { img = await loadImg(sizedSrc(it.src, W > 1200 ? 2000 : 1200), !it.src.startsWith('blob:')); } catch (e) { await new Promise(r => setTimeout(r, 300)); } }
+    for (let k = 0; k < 2 && !img; k++) { try { img = await loadImg(key); } catch (e) { await new Promise(r => setTimeout(r, 300)); } }
     if (!img) return null;
-    // Freistellung erkennen und Ränder ohne Inhalt abschneiden
+    // Ränder ohne Inhalt abschneiden
     const iw = img.naturalWidth, ih = img.naturalHeight, s = Math.min(1, 200 / Math.max(iw, ih));
     const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(iw * s)); c.height = Math.max(1, Math.round(ih * s));
     const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(img, 0, 0, c.width, c.height);
-    let cut = false, box = [0, 0, iw, ih];
+    let box = [0, 0, iw, ih];
     try {
-      const d = x.getImageData(0, 0, c.width, c.height).data, w = c.width, h = c.height;
-      const a = (px, py) => d[(py * w + px) * 4 + 3];
-      cut = [[0, 0], [w - 1, 0], [0, h - 1], [w - 1, h - 1], [w >> 1, 0], [0, h >> 1]].filter(([px, py]) => a(px, py) < 20).length >= 4;
-      if (cut) {
-        let x0 = w, y0 = h, x1 = 0, y1 = 0;
-        for (let py = 0; py < h; py++) for (let px = 0; px < w; px++) if (a(px, py) > 40) { if (px < x0) x0 = px; if (px > x1) x1 = px; if (py < y0) y0 = py; if (py > y1) y1 = py; }
-        if (x1 > x0 && y1 > y0) box = [x0 / s, y0 / s, (x1 - x0 + 1) / s, (y1 - y0 + 1) / s];
-      }
-    } catch (e) { throw new Error('cors'); }   // Bild ohne Freigabe für Canvas: Speichern würde scheitern
-    return { img, cut, box };
+      const d = x.getImageData(0, 0, c.width, c.height).data, w = c.width, h = c.height; let x0 = w, y0 = h, x1 = 0, y1 = 0;
+      for (let py = 0; py < h; py++) for (let px = 0; px < w; px++) if (d[(py * w + px) * 4 + 3] > 40) { if (px < x0) x0 = px; if (px > x1) x1 = px; if (py < y0) y0 = py; if (py > y1) y1 = py; }
+      if (x1 > x0 && y1 > y0) box = [x0 / s, y0 / s, (x1 - x0 + 1) / s, (y1 - y0 + 1) / s];
+    } catch (e) {}
+    return { img, box };
   })();
-  imgCache.set(key, p);
-  p.catch(() => imgCache.delete(key));
-  return p;
+  imgCache.set(key, pr); pr.catch(() => imgCache.delete(key));
+  // Speicher sparen: nicht mehr als ~40 Bilder behalten
+  if (imgCache.size > 40) imgCache.delete(imgCache.keys().next().value);
+  return pr;
+}
+
+/* ---------- Hintergründe (Teppich wie bei Flatlay-Fotos) ---------- */
+const BGS = {
+  navy: { base: '#13284c', hi: [60, 98, 160], lo: [6, 16, 36] },
+  charcoal: { base: '#2a2c30', hi: [95, 98, 105], lo: [12, 12, 14] },
+  cream: { base: '#e8e0d0', hi: [255, 252, 244], lo: [176, 164, 140] },
+};
+const bgCache = {};
+function background(ctx, key) {
+  const k = key + W;
+  if (!bgCache[k]) {
+    const b = BGS[key] || BGS.navy, c = document.createElement('canvas'); c.width = W; c.height = H;
+    const x = c.getContext('2d'), r = seedRnd('rug' + key), s = W / 1080;
+    x.fillStyle = b.base; x.fillRect(0, 0, W, H);
+    // Bouclé-Struktur: viele kleine Schlaufen in hell und dunkel
+    const n = Math.round(W * H / 90);
+    for (let i = 0; i < n; i++) {
+      const light = r() < .5, col = light ? b.hi : b.lo, a = .12 + r() * .28;
+      x.strokeStyle = `rgba(${col[0]},${col[1]},${col[2]},${a})`; x.lineWidth = (0.8 + r() * 1.6) * s;
+      const px = r() * W, py = r() * H, rad = (1.5 + r() * 3.5) * s, st = r() * 6.28;
+      x.beginPath(); x.arc(px, py, rad, st, st + 2 + r() * 3); x.stroke();
+    }
+    // weiches Licht von oben links, Rand etwas dunkler
+    const g = x.createRadialGradient(W * .35, H * .3, W * .1, W * .5, H * .55, H * .85);
+    g.addColorStop(0, 'rgba(255,255,255,.07)'); g.addColorStop(1, 'rgba(0,0,0,.22)');
+    x.fillStyle = g; x.fillRect(0, 0, W, H);
+    bgCache[k] = c;
+  }
+  ctx.drawImage(bgCache[k], 0, 0);
 }
 
 /* ---------- Zeichnen ---------- */
-const serif = s => `400 ${s}px "DM Serif Display", Georgia, "Times New Roman", serif`;
-const cinzel = s => `700 ${s}px Cinzel, Georgia, serif`;
-const sans = (s, w = 600) => `${w} ${s}px Figtree, "Helvetica Neue", Arial, sans-serif`;
-const u = v => v * W / 1080;
-function spaced(ctx, text, x, y, sp, align = 'center') {
-  const chars = [...text], ws = chars.map(c => ctx.measureText(c).width), total = ws.reduce((a, b) => a + b, 0) + sp * (chars.length - 1);
-  let cx = align === 'center' ? x - total / 2 : align === 'right' ? x - total : x;
-  ctx.save(); ctx.textAlign = 'left'; chars.forEach((c, i) => { ctx.fillText(c, cx, y); cx += ws[i] + sp; }); ctx.restore(); return total;
+// Teil frei liegend mit weichem Schatten (wie flach auf den Teppich gelegt)
+function lay(ctx, art, x, y, w, h, rot = 0, anchor = 'c') {
+  if (!art) return null;
+  const [bx, by, bw, bh] = art.box, s = Math.min(w / bw, h / bh), dw = bw * s, dh = bh * s;
+  const cx = x + (anchor.includes('l') ? dw / 2 : anchor.includes('r') ? w - dw / 2 : w / 2);
+  const cy = y + (anchor.includes('t') ? dh / 2 : anchor.includes('b') ? h - dh / 2 : h / 2);
+  ctx.save(); ctx.translate(cx, cy); ctx.rotate(rot);
+  ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = W * .03; ctx.shadowOffsetX = W * .008; ctx.shadowOffsetY = W * .014;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(art.img, bx, by, bw, bh, -dw / 2, -dh / 2, dw, dh);
+  ctx.restore();
+  return { cx, cy, dw, dh };
 }
-function fitFont(ctx, text, font, size, max, min = .4) { let s = size; ctx.font = font(s); while (ctx.measureText(text).width > max && s > size * min) { s *= .95; ctx.font = font(s); } return s; }
-function wrapLines(ctx, text, max) { const out = []; let line = ''; for (const w of text.split(/\s+/)) { const t = line ? line + ' ' + w : w; if (ctx.measureText(t).width > max && line) { out.push(line); line = w; } else line = t; } if (line) out.push(line); return out; }
-function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
-const noiseCache = {};
-function background(ctx, th, seed) {
-  const g = ctx.createRadialGradient(W * .5, H * .38, W * .1, W * .5, H * .5, H * .85);
-  g.addColorStop(0, th.bg); g.addColorStop(1, th.bg2);
-  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-  // feines Papierkorn
-  const key = th.dark ? 'd' : 'l';
-  if (!noiseCache[key]) { const c = document.createElement('canvas'); c.width = c.height = 160; const x = c.getContext('2d'), r = seedRnd('grain' + key);
-    for (let i = 0; i < 2600; i++) { x.fillStyle = th.dark ? `rgba(255,255,255,${r() * .05})` : `rgba(60,40,20,${r() * .06})`; x.fillRect(r() * 160, r() * 160, 1.2, 1.2); } noiseCache[key] = c; }
-  ctx.save(); ctx.fillStyle = ctx.createPattern(noiseCache[key], 'repeat'); ctx.scale(W / 1080, W / 1080); ctx.fillRect(0, 0, 1080, H * 1080 / W); ctx.restore();
-}
-function wordmark(ctx, th, y, size = 30) {
-  ctx.save(); ctx.fillStyle = th.ink; ctx.textBaseline = 'middle'; ctx.font = cinzel(u(size));
-  const w = spaced(ctx, 'ADONIS', W / 2, y, u(size * .45));
-  ctx.strokeStyle = th.accent; ctx.lineWidth = u(1.5);
-  ctx.beginPath(); ctx.moveTo(W / 2 - w / 2 - u(70), y); ctx.lineTo(W / 2 - w / 2 - u(22), y); ctx.moveTo(W / 2 + w / 2 + u(22), y); ctx.lineTo(W / 2 + w / 2 + u(70), y); ctx.stroke();
-  ctx.font = sans(u(size * .42), 700); ctx.fillStyle = th.sub; spaced(ctx, 'LUXURY', W / 2, y + u(size * 1.05), u(size * .3));
+const FONT = s => `800 ${s}px "TikTok Sans", Figtree, "Helvetica Neue", Arial, sans-serif`;
+function wrapAt(ctx, text, max) { const out = []; let line = ''; for (const w of text.split(/\s+/)) { const t = line ? line + ' ' + w : w; if (ctx.measureText(t).width > max && line) { out.push(line); line = w; } else line = t; } if (line) out.push(line); return out; }
+function wrapEven(ctx, text, max) { const base = wrapAt(ctx, text, max); if (base.length < 2) return base; let lo = max * .4, hi = max; for (let k = 0; k < 14; k++) { const m = (lo + hi) / 2; if (wrapAt(ctx, text, m).length > base.length) lo = m; else hi = m; } return wrapAt(ctx, text, hi); }
+// Text wie beim Forma-Studio: TikTok Sans, weiß mit schwarzem Rand
+function drawCaption(ctx, text, y) {
+  let size = W * .098; ctx.font = FONT(size); let lines = wrapEven(ctx, text, W * .86);
+  while (lines.length > 3 && size > W * .06) { size *= .92; ctx.font = FONT(size); lines = wrapEven(ctx, text, W * .84); }
+  const lh = size * 1.1, top = y - (lines.length - 1) * lh / 2;
+  ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round'; ctx.miterLimit = 2;
+  lines.forEach((l, i) => { const ly = top + i * lh; ctx.lineWidth = size * .17; ctx.strokeStyle = '#000'; ctx.strokeText(l, W / 2, ly); ctx.fillStyle = '#fff'; ctx.fillText(l, W / 2, ly); });
   ctx.restore();
 }
-// Teil in eine Box zeichnen: freigestellt mit weichem Bodenschatten, sonst als abgerundete Karte
-function drawItem(ctx, art, th, x, y, w, h, opt = {}) {
-  if (!art) { ctx.save(); roundRect(ctx, x + w * .1, y + h * .1, w * .8, h * .8, u(18)); ctx.fillStyle = th.line; ctx.fill(); ctx.restore(); return; }
-  const { img, cut, box } = art;
-  ctx.save(); ctx.imageSmoothingQuality = 'high';
-  if (cut) {
-    const [bx, by, bw, bh] = box, s = Math.min(w / bw, h / bh) * (opt.scale || 1), dw = bw * s, dh = bh * s;
-    const dx = x + (w - dw) / 2, dy = opt.bottom ? y + h - dh : y + (h - dh) / 2;
-    // Bodenschatten
-    const sg = ctx.createRadialGradient(dx + dw / 2, dy + dh, 0, dx + dw / 2, dy + dh, dw * .55);
-    sg.addColorStop(0, th.dark ? 'rgba(0,0,0,.45)' : 'rgba(40,30,15,.22)'); sg.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.save(); ctx.translate(0, dy + dh); ctx.scale(1, .12); ctx.fillStyle = sg; ctx.fillRect(dx - dw * .1, -dw * .6, dw * 1.2, dw * 1.2); ctx.restore();
-    if (opt.rot) { ctx.translate(dx + dw / 2, dy + dh / 2); ctx.rotate(opt.rot); ctx.translate(-(dx + dw / 2), -(dy + dh / 2)); }
-    ctx.shadowColor = th.dark ? 'rgba(0,0,0,.5)' : 'rgba(40,30,15,.25)'; ctx.shadowBlur = u(28); ctx.shadowOffsetY = u(10);
-    ctx.drawImage(img, bx, by, bw, bh, dx, dy, dw, dh);
+function render(ctx, sl, arts) {
+  const A = p => p ? arts.get(p) : null, it = sl.o.items, r = seedRnd(sl.seed), j = (a) => (r() - .5) * a;
+  background(ctx, sl.bg);
+  const flip = r() < .5; // Spiegeln: Hose mal links, mal rechts
+  const X = (x, w) => flip ? W - x - w : x, R = v => flip ? -v : v;
+  // 1) Oberteile oben
+  if (it.inner) {
+    lay(ctx, A(it.inner), X(W * -.01, W * .6), H * .06, W * .6, H * .4, R(-.07 + j(.04)));
+    lay(ctx, A(it.outer), X(W * .33, W * .67), H * .015, W * .67, H * .46, R(.04 + j(.04)));
   } else {
-    const iw = img.naturalWidth, ih = img.naturalHeight, r = 3 / 4;
-    let cw = w, ch = cw / r; if (ch > h) { ch = h; cw = ch * r; }
-    const cx = x + (w - cw) / 2, cy = y + (h - ch) / 2;
-    ctx.shadowColor = 'rgba(0,0,0,.3)'; ctx.shadowBlur = u(30); ctx.shadowOffsetY = u(12);
-    roundRect(ctx, cx, cy, cw, ch, u(22)); ctx.fillStyle = '#fff'; ctx.fill();
-    ctx.shadowColor = 'transparent'; ctx.clip();
-    const s = Math.max(cw / iw, ch / ih); ctx.drawImage(img, cx + (cw - iw * s) / 2, cy + (ch - ih * s) / 2, iw * s, ih * s);
+    lay(ctx, A(it.outer), X(W * .05 + j(W * .04), W * .9), H * .02, W * .9, H * .47, R(j(.08)));
   }
-  ctx.restore();
-}
-function chip(ctx, th, text, x, y, size, filled) {
-  ctx.save(); ctx.font = sans(size, 700); const w = ctx.measureText(text).width + size * 1.4, h = size * 2;
-  roundRect(ctx, x - w / 2, y - h / 2, w, h, h / 2);
-  if (filled) { ctx.fillStyle = th.ink; ctx.fill(); ctx.fillStyle = th.bg; } else { ctx.strokeStyle = th.line; ctx.lineWidth = u(2); ctx.stroke(); ctx.fillStyle = th.ink; }
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(text, x, y + size * .05); ctx.restore(); return w;
-}
-function chips(ctx, th, list, y, size) {
-  ctx.font = sans(size, 700); const gap = u(14), ws = list.map(t => ctx.measureText(t.text).width + size * 1.4);
-  let x = W / 2 - (ws.reduce((a, b) => a + b, 0) + gap * (list.length - 1)) / 2;
-  list.forEach((t, i) => { chip(ctx, th, t.text, x + ws[i] / 2, y, size, t.filled); x += ws[i] + gap; });
-}
-function headline(ctx, th, t, lang, cy, maxW = W * .84) {
-  const top = t.top && T(t.top, lang), title = T(t.title, lang), sub = t.sub && T(t.sub, lang);
-  ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  let size = u(118); ctx.font = serif(size); let lines = wrapLines(ctx, title, maxW);
-  while ((lines.length > 2 || lines.some(l => ctx.measureText(l).width > maxW)) && size > u(60)) { size *= .93; ctx.font = serif(size); lines = wrapLines(ctx, title, maxW); }
-  const lh = size * 1.02, topS = u(30), subS = u(34);
-  const hgt = (top ? topS * 2.2 : 0) + lines.length * lh + (sub ? subS * 2.1 : 0);
-  let y = cy - hgt / 2;
-  if (top) { ctx.font = cinzel(topS); ctx.fillStyle = th.accent; fitFont(ctx, top.toUpperCase(), cinzel, topS, maxW); spaced(ctx, top.toUpperCase(), W / 2, y + topS * .6, topS * .28); y += topS * 2.2; }
-  ctx.font = serif(size); ctx.fillStyle = th.ink; lines.forEach(l => { ctx.fillText(l, W / 2, y + lh / 2); y += lh; });
-  if (sub) { ctx.font = sans(subS, 500); ctx.fillStyle = th.sub; fitFont(ctx, sub, s => sans(s, 500), subS, maxW); ctx.fillText(sub, W / 2, y + subS * 1.3); }
-  ctx.restore();
-}
-function itemText(ctx, th, it, lang, y, sl) {
-  ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  ctx.fillStyle = th.accent; ctx.font = cinzel(u(34)); fitFont(ctx, it.brand.toUpperCase(), cinzel, u(34), W * .8); spaced(ctx, it.brand.toUpperCase(), W / 2, y, u(9));
-  const name = lang === 'en' ? (TYPE_EN[it.type] ? it.brand + ' ' + TYPE_EN[it.type] : it.name).replace(it.brand + ' ', '') : it.name;
-  ctx.fillStyle = th.ink; fitFont(ctx, name, serif, u(76), W * .84); ctx.fillText(name, W / 2, y + u(78));
-  ctx.restore();
-  const list = [];
-  if (it.size) list.push({ text: (lang === 'de' ? 'Größe ' : 'Size ') + it.size });
-  if (it.cond && (sl.showCond || rnd() < .5)) list.push({ text: (lang === 'de' ? 'Zustand ' : 'Condition ') + it.cond + '/10' });
-  if (S.price || sl.forcePrice) list.push({ text: fmtPrice(it.price, lang), filled: true });
-  if (list.length) chips(ctx, th, list, y + u(168), u(30));
-}
-async function render(ctx, sl, arts) {
-  const th = THEMES[sl.theme] || THEMES.cream, lang = sl.lang, A = it => arts.get(it);
-  background(ctx, th, sl.idx);
-  if (sl.layout === 'cover') {
-    const its = sl.items.slice(0, 3);
-    if (its.length) {
-      // Teile fächern unten auf, Überschrift oben
-      const slots = its.length === 1 ? [[.2, .44, .6, .5, 0]] : its.length === 2 ? [[.04, .46, .52, .42, -.05], [.44, .48, .52, .42, .05]]
-        : [[0, .5, .42, .38, -.08], [.58, .5, .42, .38, .08], [.25, .45, .5, .45, 0]];
-      slots.forEach(([x, y, w, h, r], i) => drawItem(ctx, A(its[i]), th, W * x, H * y, W * w, H * h, { rot: r }));
-      headline(ctx, th, sl.t, lang, H * .25);
-    } else headline(ctx, th, sl.t, lang, H * .46);
-    wordmark(ctx, th, H * .95, 24);
-  } else if (sl.layout === 'piece') {
-    const it = sl.items[0];
-    ctx.save(); ctx.fillStyle = th.sub; ctx.font = cinzel(u(26)); ctx.textBaseline = 'middle';
-    spaced(ctx, String(sl.idx).padStart(2, '0'), u(70), u(80), u(6), 'left'); ctx.restore();
-    drawItem(ctx, A(it), th, W * .1, H * .07, W * .8, H * .6);
-    itemText(ctx, th, it, lang, H * .74, sl);
-    wordmark(ctx, th, H * .945, 22);
-  } else if (sl.layout === 'outfit') {
-    const its = sl.items, n = its.length;
-    ctx.save(); ctx.fillStyle = th.accent; ctx.font = cinzel(u(30)); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    spaced(ctx, (lang === 'de' ? 'LOOK ' : 'LOOK ') + String(sl.idx).padStart(2, '0'), W / 2, H * .07, u(10)); ctx.restore();
-    const slots = n >= 3 ? [[.02, .12, .56, .46], [.48, .14, .5, .38], [.3, .47, .44, .32]] : [[.03, .13, .55, .58], [.44, .2, .53, .52]];
-    its.forEach((it, i) => drawItem(ctx, A(it), th, W * slots[i][0], H * slots[i][1], W * slots[i][2], H * slots[i][3], { rot: (i % 2 ? .04 : -.03) }));
-    // Liste der Teile
-    let y = H * .82 - (n - 1) * u(30);
-    ctx.save(); ctx.textBaseline = 'middle';
-    its.forEach(it => {
-      ctx.font = cinzel(u(26)); ctx.fillStyle = th.accent; ctx.textAlign = 'left'; ctx.fillText(it.brand.toUpperCase(), W * .1, y);
-      ctx.font = sans(u(32), 600); ctx.fillStyle = th.ink; const bw = ctx.measureText(it.brand.toUpperCase()).width;
-      ctx.font = cinzel(u(26)); const bw2 = ctx.measureText(it.brand.toUpperCase()).width;
-      ctx.font = sans(u(32), 600); ctx.fillText(lang === 'en' ? TYPE_EN[it.type] || it.type : it.type, W * .1 + bw2 + u(16), y + u(1));
-      if (S.price) { ctx.textAlign = 'right'; ctx.fillText(fmtPrice(it.price, lang), W * .9, y + u(1)); }
-      ctx.strokeStyle = th.line; ctx.lineWidth = u(1.5); ctx.beginPath(); ctx.moveTo(W * .1, y + u(30)); ctx.lineTo(W * .9, y + u(30)); ctx.stroke();
-      y += u(62);
-    });
-    ctx.restore();
-    wordmark(ctx, th, H * .955, 20);
-  } else if (sl.layout === 'duo') {
-    const [a, b] = sl.items;
-    ctx.save(); ctx.strokeStyle = th.line; ctx.lineWidth = u(2); ctx.beginPath(); ctx.moveTo(W / 2, H * .12); ctx.lineTo(W / 2, H * .78); ctx.stroke(); ctx.restore();
-    [[a, 0, 'A'], [b, 1, 'B']].forEach(([it, k, letter]) => {
-      if (!it) return; const x0 = k * W / 2;
-      drawItem(ctx, A(it), th, x0 + W * .03, H * .16, W * .44, H * .56);
-      ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.font = serif(u(110)); ctx.fillStyle = th.accent; ctx.fillText(letter, x0 + W / 4, H * .1);
-      ctx.font = cinzel(u(26)); ctx.fillStyle = th.ink; fitFont(ctx, it.brand.toUpperCase(), cinzel, u(26), W * .42); ctx.fillText(it.brand.toUpperCase(), x0 + W / 4, H * .79);
-      ctx.font = sans(u(30), 600); ctx.fillStyle = th.sub; ctx.fillText((lang === 'en' ? TYPE_EN[it.type] || it.type : it.type) + (S.price ? ' · ' + fmtPrice(it.price, lang) : ''), x0 + W / 4, H * .83);
-      ctx.restore();
-    });
-    ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = serif(u(54)); ctx.fillStyle = th.ink;
-    ctx.fillText(lang === 'de' ? 'A oder B?' : 'A or B?', W / 2, H * .895); ctx.restore();
-    wordmark(ctx, th, H * .955, 18);
-  } else if (sl.layout === 'rule') {
-    ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.fillStyle = th.accent; ctx.font = cinzel(u(32)); spaced(ctx, (lang === 'de' ? 'REGEL ' : 'RULE ') + ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'][sl.idx - 1], W / 2, H * .12, u(10));
-    let size = u(84); ctx.font = serif(size); let lines = wrapLines(ctx, T(sl.rule, lang), W * .8);
-    while (lines.length > 3 && size > u(56)) { size *= .93; ctx.font = serif(size); lines = wrapLines(ctx, T(sl.rule, lang), W * .8); }
-    ctx.fillStyle = th.ink; const lh = size * 1.08, y0 = H * .27 - (lines.length - 1) * lh / 2;
-    lines.forEach((l, i) => ctx.fillText(l, W / 2, y0 + i * lh));
-    ctx.restore();
-    if (sl.items[0]) {
-      drawItem(ctx, A(sl.items[0]), th, W * .2, H * .42, W * .6, H * .44);
-      ctx.save(); ctx.textAlign = 'center'; ctx.font = sans(u(28), 600); ctx.fillStyle = th.sub;
-      ctx.fillText(sl.items[0].brand + ' · ' + (lang === 'en' ? TYPE_EN[sl.items[0].type] || sl.items[0].type : sl.items[0].type), W / 2, H * .895); ctx.restore();
-    }
-    wordmark(ctx, th, H * .955, 18);
-  } else if (sl.layout === 'grid4') {
-    const cw = W * .42, ch = H * .31, xs = [W * .07, W * .51], ys = [H * .065, H * .475];
-    sl.items.slice(0, 4).forEach((it, i) => {
-      const x = xs[i % 2], y = ys[i >> 1];
-      drawItem(ctx, A(it), th, x, y, cw, ch);
-      ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.font = cinzel(u(24)); ctx.fillStyle = th.accent; fitFont(ctx, it.brand.toUpperCase(), cinzel, u(24), cw); ctx.fillText(it.brand.toUpperCase(), x + cw / 2, y + ch + u(34));
-      ctx.font = sans(u(27), 600); ctx.fillStyle = th.ink; ctx.fillText((lang === 'en' ? TYPE_EN[it.type] || it.type : it.type) + (S.price ? ' · ' + fmtPrice(it.price, lang) : ''), x + cw / 2, y + ch + u(72));
-      ctx.restore();
-    });
-    wordmark(ctx, th, H * .945, 22);
-  } else if (sl.layout === 'cta') {
-    ctx.save(); ctx.strokeStyle = th.accent; ctx.lineWidth = u(2); roundRect(ctx, W * .07, H * .06, W * .86, H * .88, u(6)); ctx.stroke();
-    ctx.lineWidth = u(1); roundRect(ctx, W * .085, H * .072, W * .83, H * .856, u(4)); ctx.stroke(); ctx.restore();
-    headline(ctx, th, sl.t, lang, H * .45);
-    wordmark(ctx, th, H * .78, 34);
+  // 2) Hose schräg darunter
+  lay(ctx, A(it.pants), X(W * .04, W * .5), H * .40, W * .5, H * .58, R(-.16 + j(.08)));
+  // 3) Schuhe unten auf der anderen Seite
+  lay(ctx, A(it.shoes), X(W * .5, W * .48), H * .68, W * .48, H * .28, R(-.08 + j(.1)));
+  // 4) Mütze oben in der Ecke
+  if (it.hat) lay(ctx, A(it.hat), X(W * -.01, W * .27), H * .005, W * .27, H * .16, R(-.2 + j(.1)));
+  // 5) Uhr und Parfum liegen auf dem Oberteil / neben der Hose
+  const accs = [it.scent, it.watch].filter(Boolean);
+  if (accs.length === 2) {
+    lay(ctx, A(it.scent), X(W * .78, W * .2), H * .42, W * .2, H * .2, R(.05 + j(.08)));
+    lay(ctx, A(it.watch), X(W * .57, W * .2), H * .44, W * .2, H * .22, R(.12 + j(.1)));
+  } else if (accs.length === 1) {
+    const isW = !!it.watch;
+    lay(ctx, A(accs[0]), X(W * .66, W * .24), H * .42, W * .24, H * (isW ? .24 : .22), R((isW ? .12 : .05) + j(.08)));
   }
+  if (sl.title) drawCaption(ctx, sl.title, H * .5);
 }
 async function drawSlides(slides) {
   const arts = new Map(); let failed = 0;
-  await Promise.all([...new Set(slides.flatMap(sl => sl.items))].map(async it => { try { arts.set(it, await getArt(it)); } catch (e) { arts.set(it, null); failed++; } }));
+  const ps = [...new Set(slides.flatMap(sl => Object.values(sl.o.items).filter(Boolean)))];
+  await Promise.all(ps.map(async p => { try { const a = await getArt(p); arts.set(p, a); if (!a) failed++; } catch (e) { arts.set(p, null); failed++; } }));
   const canvas = document.createElement('canvas'); canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d'), blobs = [];
   for (const sl of slides) {
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H);
-    await render(ctx, sl, arts);
+    render(ctx, sl, arts);
     let blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', .93));
     if (!blob) { const d = atob(canvas.toDataURL('image/jpeg', .9).split(',')[1]), u8 = new Uint8Array(d.length); for (let k = 0; k < d.length; k++) u8[k] = d.charCodeAt(k); blob = new Blob([u8], { type: 'image/jpeg' }); }
     blobs.push(blob); await new Promise(r => setTimeout(r, 0));
   }
   canvas.width = canvas.height = 1;
-  if (failed) showWarn(`${failed} Bild${failed > 1 ? 'er' : ''} konnte${failed > 1 ? 'n' : ''} nicht geladen werden (Platzhalter). Internet prüfen oder das Teil unter „Teile“ ausschalten.`);
+  if (failed) showWarn(`${failed} Bild${failed > 1 ? 'er' : ''} konnte${failed > 1 ? 'n' : ''} nicht geladen werden. Internet prüfen.`);
   return blobs;
 }
 
@@ -598,7 +479,7 @@ function newDraft() {
   return { id: Math.random().toString(36).slice(2, 9), series, desc: P.desc, slides: P.slides, W: S.res === '4k' ? 2160 : 1080, H: S.res === '4k' ? 2880 : 1440, blobs: [], urls: [], files: null, saved: false };
 }
 function addDrafts(k) {
-  if (usable().length < 4) { showWarn('Zu wenige Teile aktiv – mindestens 4 nötig. Unter „Teile“ welche einschalten oder hinzufügen.'); return; }
+  { const c = k => active().filter(p => p.cat === k).length; if (!c('pants') || !c('shoes') || active().filter(p => ['outer_w','outer_l','vest','hoodie','sweat','knit','polo','shirt'].includes(p.cat)).length < 2) { showWarn('Zu wenige Teile aktiv – mindestens Hose, Schuhe und 2 Oberteile nötig.'); return; } }
   showWarn(''); for (let i = 0; i < k; i++) feed.push(newDraft()); renderFeed(); pump();
 }
 function newFeed() { feedGen++; feed.forEach(d => d.urls.forEach(x => x && URL.revokeObjectURL(x))); feed = []; priority = null; closeViewer(); addDrafts(FEED_N); }
@@ -685,7 +566,7 @@ function closeViewer() { $('#ov').hidden = true; document.body.style.overflow = 
 /* ---------- Teile verwalten ---------- */
 const STORE = (() => {
   let dbp = null;
-  const open = () => dbp || (dbp = new Promise((res, rej) => { const r = indexedDB.open('adonis-studio', 1); r.onupgradeneeded = () => r.result.createObjectStore('items'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }));
+  const open = () => dbp || (dbp = new Promise((res, rej) => { const r = indexedDB.open('adonis-studio-parts', 1); r.onupgradeneeded = () => r.result.createObjectStore('items'); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }));
   const tx = async (mode, fn) => { const db = await open(); return new Promise((res, rej) => { const t = db.transaction('items', mode), o = t.objectStore('items'); fn(o); t.oncomplete = res; t.onerror = () => rej(t.error); }); };
   return {
     put: (k, v) => tx('readwrite', o => o.put(v, k)).catch(() => {}),
@@ -694,22 +575,25 @@ const STORE = (() => {
   };
 })();
 function renderItems() {
-  const grid = $('#itemGrid');
-  grid.replaceChildren(...allItems().map(it => {
-    const b = document.createElement('button'); b.type = 'button'; b.className = 'ph' + (off.has(it.id) ? ' off' : '');
-    b.setAttribute('aria-pressed', String(!off.has(it.id))); b.setAttribute('aria-label', `${it.brand} ${it.name} ${off.has(it.id) ? 'einschalten' : 'ausschalten'}`);
-    const img = document.createElement('img'); img.loading = 'lazy'; img.alt = ''; img.src = sizedSrc(it.src, 300);
-    const nm = document.createElement('div'); nm.className = 'name'; nm.innerHTML = `<b>${esc(it.brand)}</b> ${esc(it.name)} · ${esc(fmtPrice(it.price, 'de'))}`;
+  const order = Object.keys(CATS), list = allParts().slice().sort((a, b) => order.indexOf(a.cat) - order.indexOf(b.cat));
+  const out = []; let lastCat = null;
+  for (const p of list) {
+    if (p.cat !== lastCat) { const h = document.createElement('div'); h.className = 'cathead'; h.textContent = CATS[p.cat] || p.cat; out.push(h); lastCat = p.cat; }
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'ph' + (off.has(p.id) ? ' off' : '');
+    b.setAttribute('aria-pressed', String(!off.has(p.id))); b.setAttribute('aria-label', `${p.brand} ${p.name} ${off.has(p.id) ? 'einschalten' : 'ausschalten'}`);
+    const img = document.createElement('img'); img.loading = 'lazy'; img.alt = ''; img.src = p.blobUrl || p.hd;
+    const nm = document.createElement('div'); nm.className = 'name'; nm.innerHTML = `<b>${esc(p.brand)}</b> · ${esc(COLORS[p.color] || p.color)}`;
     b.append(img, nm);
-    b.onclick = () => { off.has(it.id) ? off.delete(it.id) : off.add(it.id); save('ad-off', [...off]); renderItems(); };
-    if (it.own) {
+    b.onclick = () => { off.has(p.id) ? off.delete(p.id) : off.add(p.id); save('ad-off2', [...off]); renderItems(); };
+    if (p.own) {
       const del = document.createElement('span'); del.className = 'btn del'; del.textContent = '×'; del.setAttribute('role', 'button'); del.setAttribute('aria-label', 'Teil löschen');
-      del.onclick = async e => { e.stopPropagation(); if (!confirm('Dieses Teil löschen?')) return; await STORE.del(it.id); ownItems = ownItems.filter(x => x !== it); renderItems(); };
+      del.onclick = async e => { e.stopPropagation(); if (!confirm('Dieses Teil löschen?')) return; await STORE.del(p.id); ownParts = ownParts.filter(x => x !== p); renderItems(); };
       b.append(del);
     }
-    return b;
-  }));
-  $('#itemCount').textContent = `${usable().length} aktiv · ${shopItems.length} aus dem Shop${ownItems.length ? ` · ${ownItems.length} eigene` : ''}`;
+    out.push(b);
+  }
+  $('#itemGrid').replaceChildren(...out);
+  $('#itemCount').textContent = `${active().length} von ${allParts().length} aktiv`;
 }
 async function resizeBlob(file, max) {
   const url = URL.createObjectURL(file);
@@ -717,38 +601,35 @@ async function resizeBlob(file, max) {
     const img = await loadImg(url), s = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
     const c = document.createElement('canvas'); c.width = Math.round(img.naturalWidth * s); c.height = Math.round(img.naturalHeight * s);
     const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(img, 0, 0, c.width, c.height);
-    return await new Promise(r => c.toBlob(r, file.type === 'image/png' || file.type === 'image/webp' ? 'image/png' : 'image/jpeg', .92));
+    return await new Promise(r => c.toBlob(r, 'image/png'));
   } finally { URL.revokeObjectURL(url); }
 }
 async function startUpload(file) {
-  const st = $('#itemStatus'); setStatus(st, 'Bereite Foto vor…');
-  let blob; try { blob = await resizeBlob(file, 2000); } catch (e) { setStatus(st, 'Das Bild ließ sich nicht öffnen. Versuche ein PNG oder JPG.', 'err'); return; }
+  const st = $('#itemStatus'); setStatus(st, 'Bereite Bild vor…');
+  let blob; try { blob = await resizeBlob(file, 2400); } catch (e) { setStatus(st, 'Das Bild ließ sich nicht öffnen. Versuche ein PNG.', 'err'); return; }
   setStatus(st, '');
-  const src = URL.createObjectURL(blob), brands = [...new Set(shopItems.map(i => i.brand))];
+  const src = URL.createObjectURL(blob), brands = [...new Set(parts.map(i => i.brand))];
   const f = document.createElement('div'); f.className = 'form';
   f.innerHTML = `<img alt="" src="${src}">
-    <label>Marke<input id="fBrand" list="brandList" value="Ralph Lauren"><datalist id="brandList">${brands.map(b => `<option value="${esc(b)}">`).join('')}</datalist></label>
-    <label>Art<select id="fType">${TYPES.map(t => `<option>${t}</option>`).join('')}</select></label>
-    <label class="full">Name<input id="fName" placeholder="z. B. Poloshirt – Navy"></label>
-    <label>Preis (€)<input id="fPrice" inputmode="decimal" placeholder="49,99"></label>
-    <label>Größe<input id="fSize" placeholder="M"></label>
-    <label>Zustand (1–10)<input id="fCond" inputmode="numeric" placeholder="9"></label>
+    <label>Marke<input id="fBrand" list="brandList" placeholder="Ralph Lauren"><datalist id="brandList">${brands.map(b => `<option value="${esc(b)}">`).join('')}</datalist></label>
+    <label>Art<select id="fCat">${Object.entries(CATS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select></label>
+    <label>Farbe<select id="fColor">${Object.entries(COLORS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select></label>
+    <label>Großes Logo?<select id="fLoud"><option value="0">Nein (Old Money)</option><option value="1">Ja</option></select></label>
     <div class="row full"><button type="button" id="fSave" class="primary" style="width:auto;flex:1">Speichern</button><button type="button" id="fCancel">Abbrechen</button></div>`;
   $('#formSlot').replaceChildren(f);
   f.querySelector('#fCancel').onclick = () => { URL.revokeObjectURL(src); f.remove(); };
   f.querySelector('#fSave').onclick = async () => {
     const v = id => f.querySelector(id).value.trim();
-    const price = parseFloat(v('#fPrice').replace(',', '.'));
-    if (!v('#fBrand') || !(price > 0)) { setStatus(st, 'Bitte Marke und Preis eintragen.', 'err'); return; }
-    const it = { id: 'own-' + Date.now(), brand: v('#fBrand'), type: v('#fType'), name: v('#fName') || v('#fType'), price, size: v('#fSize') || null, cond: parseInt(v('#fCond')) || null, own: true };
-    await STORE.put(it.id, { ...it, blob, createdAt: Date.now() });
-    ownItems.unshift({ ...it, src }); f.remove(); renderItems(); setStatus(st, 'Teil hinzugefügt.', 'ok');
+    if (!v('#fBrand')) { setStatus(st, 'Bitte die Marke eintragen.', 'err'); return; }
+    const p = { id: 'own-' + Date.now(), brand: v('#fBrand'), cat: v('#fCat'), color: v('#fColor'), loud: v('#fLoud') === '1', name: v('#fBrand'), own: true };
+    await STORE.put(p.id, { ...p, blob, createdAt: Date.now() });
+    ownParts.unshift({ ...p, blobUrl: src }); f.remove(); renderItems(); setStatus(st, 'Teil hinzugefügt.', 'ok');
   };
 }
 
 /* ---------- Einstellungen ---------- */
 function bindSettings() {
-  const persist = () => save('ad-settings', S);
+  const persist = () => save('ad-settings2', S);
   const types = [['random', 'Zufall', 'wechselt jedes Mal'], ...Object.entries(SERIES).map(([id, s]) => [id, s.label, s.ex])];
   $('#types').innerHTML = types.map(([id, l, ex]) => `<button type="button" class="type" data-v="${id}">${esc(l)}<small>${esc(ex)}</small></button>`).join('');
   const syncTypes = () => document.querySelectorAll('#types .type').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === S.series)));
@@ -759,7 +640,6 @@ function bindSettings() {
     el.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S[key] = b.dataset.v; sync(); persist(); newFeed(); }); sync();
   };
   seg('#sCount', 'count'); seg('#sLang', 'lang'); seg('#sTheme', 'theme'); seg('#sRes', 'res');
-  const pr = $('#sPrice'); pr.checked = !!S.price; pr.addEventListener('change', () => { S.price = pr.checked; persist(); newFeed(); });
   $('#btnGen').addEventListener('click', newFeed);
   $('#btnMore').addEventListener('click', () => addDrafts(FEED_N));
   $('#btnSaveAll').addEventListener('click', saveAllPhotos);
@@ -786,13 +666,11 @@ async function init() {
   $('#ver').textContent = 'Version ' + BUILD; checkUpdate();
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') checkUpdate(); });
   bindSettings();
-  await (document.fonts ? Promise.all(['400 40px "DM Serif Display"', '700 40px Cinzel', '600 40px Figtree', '700 40px Figtree', '500 40px Figtree'].map(f => document.fonts.load(f).catch(() => {}))) : null);
-  try {
-    const data = await (await fetch('products.json', { cache: 'no-store' })).json();
-    shopItems = data.products.filter(p => p.img && p.img.length).map(p => ({ ...p, src: p.img[0] }));
-  } catch (e) { shopItems = []; showWarn('Shop-Teile konnten nicht geladen werden.'); }
+  await (document.fonts ? Promise.all(['800 40px "TikTok Sans"', '700 40px Figtree'].map(f => document.fonts.load(f).catch(() => {}))) : null);
+  try { parts = await (await fetch('teile.json', { cache: 'no-store' })).json(); }
+  catch (e) { parts = []; showWarn('Teile konnten nicht geladen werden.'); }
   const own = await STORE.all();
-  ownItems = own.map(([id, v]) => ({ ...v, id, src: URL.createObjectURL(v.blob) })).sort((a, b) => b.createdAt - a.createdAt);
+  ownParts = own.map(([id, v]) => ({ ...v, id, blobUrl: URL.createObjectURL(v.blob) })).sort((a, b) => b.createdAt - a.createdAt);
   renderItems();
   newFeed();
 }
