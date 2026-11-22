@@ -189,7 +189,7 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
    dazu wechselnd Uhr / Parfum / Mütze. Farben, Uhr und Duft passen immer zusammen.
    Teile: teile.json (freigestellt, 4K in teile/, kleiner in teile-hd/) + eigene Uploads.
    ============================================================ */
-const BUILD = '2026-11-22 m';
+const BUILD = '2026-11-22 n';
 const $ = s => document.querySelector(s);
 const rnd = Math.random;
 const pick = a => a[Math.floor(rnd() * a.length)];
@@ -312,7 +312,7 @@ const SERIES = {
     titles: [L('Emo vs. Road Man vs. Grisch', 'emo vs road man vs grisch')],
     tops: [[['knit'], 3], [['knit', 'shirt'], 2.5], [['outer_w', 'knit'], 1.5], [['polo'], 1.5], [['outer_l', 'knit'], 1]],
     extras: [['ws', 3], ['w', 3], ['hw', 1], ['s', 1]], white: 0.15, quietish: true, tags: ['#grisch', '#grischstyle'] },
-  bateman: { label: 'Winter Fits (Bateman)', ex: 'Winter fits · Intro', intro: ['bateman'], bg: 'intro_white',
+  bateman: { label: 'Winter Fits (Bateman)', ex: 'Winter fits · 2 Intro-Bilder', intro: ['bateman', 'wf_chainsaw'], bg: 'intro_white',
     titles: [L('winter fits', 'winter fits')],
     tops: [[['outer_w'], 3], [['outer_w', 'knit'], 3], [['outer_w', 'hoodie'], 1.5], [['knit'], 2], [['vest', 'knit'], 1.5]],
     extras: [['hw', 3], ['ws', 2], ['w', 2], ['h', 1.5], ['hws', 1]], white: 0, tags: ['#winteroutfit', '#winterfits'] },
@@ -332,6 +332,10 @@ const SERIES = {
     titles: [L('Winter-Outfits für dich', 'winter fits for you')],
     tops: [[['knit'], 3], [['outer_w', 'knit'], 2], [['knit', 'shirt'], 2], [['outer_w'], 1], [['hoodie'], 1]],
     extras: [['ws', 3], ['w', 3], ['hw', 1.5], ['s', 1]], white: 0.2, tags: ['#winteroutfit', '#archivefashion'] },
+  winterred: { label: 'Winter Fits (Rot)', ex: 'Bateman im Schnee · 4 Intro-Bilder', intro: ['wf_red1', 'wf_red2', 'wf_red3', 'wf_red4'], bg: 'intro_red', quietish: true,
+    titles: [L('Winter-Outfits', 'winter fits')],
+    tops: [[['outer_w'], 3], [['outer_w', 'knit'], 3], [['knit'], 2.5], [['knit', 'shirt'], 2], [['outer_l', 'knit'], 1.5], [['vest', 'knit'], 1]],
+    extras: [['ws', 3], ['w', 3], ['hw', 2], ['s', 1]], white: 0.2, tags: ['#winteroutfit', '#winterfits'] },
   niche: { label: 'Niche Outfits', ex: 'Intro · Dunkelgrün', intro: ['niche'], bg: 'intro_niche', quietish: true,
     titles: [L('Niche Outfits', 'niche outfits')],
     tops: [[['knit'], 3], [['knit', 'shirt'], 2.5], [['outer_l', 'knit'], 2], [['shirt'], 1.5], [['polo'], 1], [['outer_w', 'knit'], 1]],
@@ -501,6 +505,7 @@ const BGS = {
   intro_grey:    { label: 'Grau', color: '#a9aea9', hidden: true, avoid: ['grey', 'lightgrey'] },
   intro_autumn:  { label: 'Navy', color: '#161f2e', hidden: true, avoid: ['navy', 'black', 'charcoal'] },
   intro_niche:   { label: 'Grün', color: '#1c2419', hidden: true, avoid: ['black', 'charcoal', 'navy'] },
+  intro_red:     { label: 'Rot', color: '#601b0b', hidden: true, avoid: ['navy', 'black', 'charcoal'] },
   intro_navy:    { label: 'Navy', color: '#252b38', hidden: true, avoid: ['navy', 'black', 'charcoal'] },
 };
 // Luxus-Hintergründe: lum = Helligkeit (0–255)
