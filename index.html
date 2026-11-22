@@ -170,7 +170,7 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
    dazu wechselnd Uhr / Parfum / Mütze. Farben, Uhr und Duft passen immer zusammen.
    Teile: teile.json (freigestellt, 4K in teile/, kleiner in teile-hd/) + eigene Uploads.
    ============================================================ */
-const BUILD = '2026-11-22 f';
+const BUILD = '2026-11-22 g';
 const $ = s => document.querySelector(s);
 const rnd = Math.random;
 const pick = a => a[Math.floor(rnd() * a.length)];
@@ -222,7 +222,7 @@ const T = (x, lang) => typeof x === 'string' ? x : x[lang];
 // tops: [äußere Schicht, innere Schicht?] mit Gewicht. extras: Kombis aus w=Uhr, s=Parfum, h=Mütze mit Gewicht.
 const SERIES = {
   winter: { label: 'Winter', ex: 'Outfit ideas for winter',
-    titles: [L('Outfit-Ideen für den Winter', 'Outfit ideas for winter'), L('Winter-Outfits', 'Winter outfits'), L('Was ich im Winter trage', 'What I wear in winter')],
+    titles: [L('winter fits', 'winter fits'), L('Outfit-Ideen für den Winter', 'Outfit ideas for winter'), L('Winter-Outfits', 'Winter outfits'), L('Was ich im Winter trage', 'What I wear in winter')],
     tops: [[['outer_w'], 4], [['outer_w', 'knit'], 3], [['outer_w', 'hoodie'], 2], [['outer_l', 'knit'], 2], [['vest', 'hoodie'], 1.5], [['vest', 'knit'], 1.5], [['knit'], 1]],
     extras: [['hw', 3], ['h', 2], ['w', 2], ['ws', 1.5], ['hws', 1.5], ['', 1], ['s', 1]], white: 0, tags: ['#winteroutfit', '#outfitideas'] },
   omwinter: { label: 'Old Money Winter', ex: 'Old money outfits for winter', quiet: true,
