@@ -73,6 +73,11 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
 .ph .name b { color: var(--fg); }
 .bgchip { width: auto; min-height: 44px; display: inline-flex; flex-direction: row; align-items: center; gap: 8px; padding: 8px 12px; }
 .bgchip i { width: 18px; height: 18px; border-radius: 5px; border: 1px solid var(--line); display: inline-block; }
+.ov p.legal-short { font-size: 12.5px; color: var(--warn); }
+.legal-short a { color: inherit; font-weight: 700; }
+.legal ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.legal p, .legal li { font-size: 13.5px; color: var(--muted); margin: 0; }
+.legal b { color: var(--fg); }
 .cathead { grid-column: 1 / -1; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
 .ph.off img { opacity: .3; filter: grayscale(1); }
 .ph.off::after { content: "aus"; position: absolute; top: 6px; left: 6px; font-size: 11px; font-weight: 800; background: var(--danger); color: #1a0402; padding: 1px 7px; border-radius: 6px; }
@@ -133,6 +138,7 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
         <div class="pair"><button id="btnCopy" type="button">Text kopieren</button><button id="btnNext" type="button">Nächster ›</button></div>
         <p class="status" id="saveStatus"></p>
       </div>
+      <p class="legal-short">⚠️ Posten nur als Werbung für Adonis Luxury. Die letzte Folie (Shop now) nicht rausschneiden. <a href="#dTerms" id="lnkTerms">Bedingungen</a></p>
       <p class="desc" id="desc"></p>
       <div id="ovList" style="display:grid;gap:14px"></div>
       <p>Falls nichts passiert: jedes Bild <b>lange gedrückt halten</b> → <b>„Zu Fotos hinzufügen“</b>.</p>
@@ -160,6 +166,20 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
       <div class="opt"><span>Auflösung</span><div class="seg" id="sRes"><button type="button" data-v="hd">HD 1080 × 1440</button><button type="button" data-v="4k">4K 2160 × 2880</button></div></div>
     </div>
   </details>
+  <details id="dTerms">
+    <summary>Nutzungsbedingungen</summary>
+    <div class="body legal">
+      <p><b>Die Slides aus diesem Studio dürfen nur zur Werbung für Adonis Luxury gepostet werden.</b></p>
+      <p>Wer Slides von hier postet, erklärt sich mit diesen Bedingungen einverstanden:</p>
+      <ul>
+        <li>Jeder Post muss erkennbar für Adonis Luxury werben, mit der Shop-now-Folie am Ende und dem Hinweis auf den Link in der Bio.</li>
+        <li>Die Shop-now-Folie und das Adonis-Logo dürfen nicht herausgeschnitten, überdeckt, verändert oder gelöscht werden – auch nicht nachträglich.</li>
+        <li>Der Post muss als Werbung gekennzeichnet sein (z.&nbsp;B. „Werbung“ oder TikToks Werbe-Kennzeichnung), wenn er nicht vom eigenen Adonis-Account kommt.</li>
+        <li>Eine Nutzung für andere Shops, Marken oder Produkte und ein Weitergeben der Slides an Dritte ist nicht erlaubt.</li>
+      </ul>
+      <p>Die Slides, das Logo und das Studio sind urheberrechtlich geschützt. Bei Verstößen erlischt das Nutzungsrecht sofort. Adonis Luxury behält sich rechtliche Schritte vor, insbesondere Löschung, Unterlassung und Schadensersatz.</p>
+    </div>
+  </details>
 </div>
 
 <script>
@@ -170,7 +190,7 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
    dazu wechselnd Uhr / Parfum / Mütze. Farben, Uhr und Duft passen immer zusammen.
    Teile: teile.json (freigestellt, 4K in teile/, kleiner in teile-hd/) + eigene Uploads.
    ============================================================ */
-const BUILD = '2026-11-22 i';
+const BUILD = '2026-11-22 j';
 const $ = s => document.querySelector(s);
 const rnd = Math.random;
 const pick = a => a[Math.floor(rnd() * a.length)];
@@ -776,6 +796,7 @@ function bindSettings() {
   $('#btnSaveAll').addEventListener('click', saveAllPhotos);
   $('#btnNext').addEventListener('click', () => { const i = feed.indexOf(openDraft); if (i >= 0 && feed[i + 1]) openViewer(feed[i + 1]); });
   $('#ovClose').addEventListener('click', closeViewer);
+  $('#lnkTerms').addEventListener('click', e => { e.preventDefault(); closeViewer(); const d = $('#dTerms'); d.open = true; d.scrollIntoView({ behavior: 'smooth' }); });
   $('#btnCopy').addEventListener('click', async () => {
     const b = $('#btnCopy');
     try { await navigator.clipboard.writeText(openDraft.desc); b.textContent = 'Kopiert'; }
