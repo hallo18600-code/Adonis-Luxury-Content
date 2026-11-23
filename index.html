@@ -449,15 +449,11 @@ function planPost(series, n, lang) {
 /* ---------- Abschluss-Folie (Shop now · Link in Bio) ----------
    Foto-Karten: cave (dunkel), dubai (Abend), stmoritz (hell). Clean-Karten: Farbe vom Boden davor + Logo. */
 const hexLum = h => { const n = parseInt(h.slice(1), 16); return ((n >> 16) * .299 + ((n >> 8) & 255) * .587 + (n & 255) * .114) / 255; };
-const SHOP_CATS = ['outer_w', 'outer_l', 'vest', 'hoodie', 'sweat', 'knit', 'polo', 'shirt', 'pants', 'shoes', 'hat'];
+// Echte Handy-Screenshots vom Shop (assets/shop_*.jpg). Neue Produkt-Screenshots einfach als shop_grid2.jpg, shop_grid3.jpg … ablegen und hier eintragen.
+const SHOP_GRIDS = ['shop_grid1'];
 function pickEnd(cfg, bg, bgs, outfits = []) {
   // Handy-Folie (nur bei Luxus-Hintergründen, ca. jede 2.): „Link In Bio!“ + 2 iPhones mit dem Shop und Teilen aus diesem Post
-  if (bgs && rnd() < .5) {
-    const seen = new Set(), items = [];
-    for (const k of ['outer', 'inner', 'pants', 'shoes', 'hat']) for (const o of shuffle(outfits)) { const p = o.items[k]; if (p && SHOP_CATS.includes(p.cat) && !seen.has(p.id) && items.length < 4) { seen.add(p.id); items.push(p); break; } }
-    for (const o of outfits) for (const p of Object.values(o.items)) if (p && SHOP_CATS.includes(p.cat) && !seen.has(p.id) && items.length < 4) { seen.add(p.id); items.push(p); }
-    if (items.length >= 4) return { phones: 'london', hero: bgs[0], items: shuffle(items), time: `${pick([19, 20, 21])}:${String(Math.floor(rnd() * 60)).padStart(2, '0')}` };
-  }
+  if (bgs && rnd() < .5) return { phones: 'london', grid: pick(SHOP_GRIDS), time: `${pick([19, 20, 21])}:${String(Math.floor(rnd() * 60)).padStart(2, '0')}` };
   if (cfg.lux) { const last = bgs[bgs.length - 1].slice(4), lum = LUX[last].lum / 255; return { photo: wpick(lum > .5 ? [['stmoritz', 3], ['dubai', 1]] : [['dubai', 2], ['cave', 2], ['stmoritz', .5]]) }; }
   return { same: true };   // gleicher Boden / gleiches Bild wie die Outfit-Folien davor
 }
@@ -585,16 +581,6 @@ function drawCaption(ctx, text, y) {
 const SHOP_URL = 'adonis-lxry.myshopify.com';
 function rrect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x, y, w, h, r) : ctx.rect(x, y, w, h); }
 const UIF = (wt, s) => `${wt} ${s}px Figtree, "Helvetica Neue", Arial, sans-serif`;
-const niceName = p => { const b = (p.brand || '').toLowerCase(); let n = p.name || ''; if (b && n.toLowerCase().startsWith(b)) n = n.slice(b.length); return n.trim().replace(/\b\w/g, c => c.toUpperCase()); };
-function uiIcons(ctx, x, y, w, h, ink) {
-  // ☰ 🔍 … 👤 👜  (einfache Linien-Icons wie im Shop-Header)
-  const u = h * .22, cy = y + h / 2; ctx.save(); ctx.strokeStyle = ink; ctx.lineWidth = u * .16; ctx.lineCap = 'round';
-  let ix = x + w * .07; for (let k = -1; k <= 1; k++) { ctx.beginPath(); ctx.moveTo(ix - u * .55, cy + k * u * .42); ctx.lineTo(ix + u * .55, cy + k * u * .42); ctx.stroke(); }
-  ix = x + w * .18; ctx.beginPath(); ctx.arc(ix - u * .1, cy - u * .1, u * .42, 0, 7); ctx.stroke(); ctx.beginPath(); ctx.moveTo(ix + u * .2, cy + u * .2); ctx.lineTo(ix + u * .55, cy + u * .55); ctx.stroke();
-  ix = x + w * .82; ctx.beginPath(); ctx.arc(ix, cy - u * .28, u * .28, 0, 7); ctx.stroke(); ctx.beginPath(); ctx.arc(ix, cy + u * .62, u * .6, Math.PI * 1.15, Math.PI * 1.85); ctx.stroke();
-  ix = x + w * .93; rrect(ctx, ix - u * .5, cy - u * .2, u, u * .8, u * .14); ctx.stroke(); ctx.beginPath(); ctx.arc(ix, cy - u * .2, u * .26, Math.PI, 0); ctx.stroke();
-  ctx.restore();
-}
 function drawPhone(ctx, x, y, w, h, screen) {
   const r = w * .16, bz = w * .028;
   ctx.save();
@@ -642,86 +628,35 @@ function phoneChrome(ctx, sx, sy, sw, sh, e, dark) {
   ctx.restore();
   return top;
 }
-function shopHeader(ctx, sx, y, sw, hh, ink, bg) {
-  if (bg) { ctx.fillStyle = bg; ctx.fillRect(sx, y, sw, hh); }
-  uiIcons(ctx, sx, y, sw, hh, ink);
-  ctx.save(); ctx.fillStyle = ink; ctx.font = UIF(700, hh * .34); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('Adonis Luxury', sx + sw / 2, y + hh / 2); ctx.restore();
+function shotScreen(ctx, shot, e) {
+  return (sx, sy, sw, sh) => {
+    ctx.fillStyle = '#fff'; ctx.fillRect(sx, sy, sw, sh);
+    if (shot) { const s = sw / shot.naturalWidth; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(shot, sx, sy, sw, shot.naturalHeight * s); }
+    // Original-Statusleiste („◀ Fotos“) überdecken, eigene drüber
+    ctx.fillStyle = '#fff'; ctx.fillRect(sx, sy, sw, sw * .12);
+    phoneChrome(ctx, sx, sy, sw, sh, e, false);
+  };
 }
-function heroLogo(ctx, cx, cy, size) {
-  if (!lockupImg) return;
-  const sh = lockupImg.naturalHeight * .605, s = size / sh, w = lockupImg.naturalWidth * s, h = size;
-  const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(w)); c.height = Math.max(1, Math.round(h));
-  const x = c.getContext('2d'); x.drawImage(lockupImg, 0, 0, lockupImg.naturalWidth, sh, 0, 0, c.width, c.height); x.globalCompositeOperation = 'source-in'; x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height);
-  ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = size * .05; ctx.drawImage(c, cx - w / 2, cy - h / 2); ctx.restore();
-}
-function renderPhones(ctx, e, img, arts, hero) {
+function renderPhones(ctx, e, img, shots) {
   if (img) cover(ctx, img); else { ctx.fillStyle = '#9a9aa0'; ctx.fillRect(0, 0, W, H); }
   // leichter Schnee
-  const r = seedRnd(e.time + e.items.map(p => p.id).join()); ctx.save();
+  const r = seedRnd(e.time + e.grid); ctx.save();
   for (let k = 0; k < 260; k++) { const z = r(), rad = W * (.001 + z * z * .003); ctx.globalAlpha = .25 + z * .55; ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(r() * W, r() * H, rad, 0, 7); ctx.fill(); }
   ctx.restore();
-  // Untere Hälfte leicht abdunkeln, damit die Handys herausstechen
   const g = ctx.createLinearGradient(0, H * .35, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.35)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   // „Link In Bio!“
   ctx.save(); let fs = W * .155; ctx.font = `400 ${fs}px "DM Serif Display", Georgia, serif`;
   while (ctx.measureText('Link In Bio!').width > W * .86) { fs *= .95; ctx.font = `400 ${fs}px "DM Serif Display", Georgia, serif`; }
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = W * .03; ctx.shadowOffsetY = W * .008;
-  ctx.fillStyle = '#fff'; ctx.fillText('Link In Bio!', W / 2, H * .29); ctx.restore();
-  const pw = W * .37, ph = pw * 2.05, py = H * .44;
-  // Linkes Handy: Startseite
-  drawPhone(ctx, W * .065, py, pw, ph, (sx, sy, sw, sh) => {
-    const u = sw / 100;
-    if (hero) { const s = Math.max(sw / hero.naturalWidth, sh / hero.naturalHeight), w = hero.naturalWidth * s, h = hero.naturalHeight * s; ctx.drawImage(hero, sx + (sw - w) / 2, sy + (sh - h) / 2, w, h); } else { ctx.fillStyle = '#2a2a2e'; ctx.fillRect(sx, sy, sw, sh); }
-    ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.fillRect(sx, sy, sw, sh);
-    const st = sy + u * 15;
-    ctx.fillStyle = '#fff'; ctx.fillRect(sx, sy, sw, st - sy);
-    ctx.fillStyle = '#111'; ctx.fillRect(sx, st, sw, u * 7);
-    ctx.save(); ctx.fillStyle = '#fff'; ctx.font = UIF(600, u * 3.3); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('KOSTENLOSER VERSAND AB 100 €', sx + sw / 2, st + u * 3.5); ctx.restore();
-    shopHeader(ctx, sx, st + u * 7, sw, u * 13, '#fff', null);
-    phoneChrome(ctx, sx, sy, sw, sh, e, false);
-    heroLogo(ctx, sx + sw / 2, sy + sh * .5, sw * .5);
-    ctx.save(); ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = u * 2;
-    ctx.font = UIF(700, u * 8.2); ctx.fillText('Adonis Luxury', sx + sw / 2, sy + sh * .7);
-    ctx.font = UIF(500, u * 3.9); ctx.fillText('Authentische Vintage-Designerstücke', sx + sw / 2, sy + sh * .7 + u * 7.5);
-    ctx.shadowBlur = 0; rrect(ctx, sx + sw * .3, sy + sh * .7 + u * 12.5, sw * .4, u * 8, u * 4); ctx.fillStyle = '#fff'; ctx.fill();
-    ctx.fillStyle = '#111'; ctx.font = UIF(700, u * 3.6); ctx.fillText('JETZT SHOPPEN', sx + sw / 2, sy + sh * .7 + u * 16.5); ctx.restore();
-  });
-  // Rechtes Handy: Produktraster mit Teilen aus diesem Post
-  drawPhone(ctx, W - W * .065 - pw, py, pw, ph, (sx, sy, sw, sh) => {
-    const u = sw / 100; ctx.fillStyle = '#fff'; ctx.fillRect(sx, sy, sw, sh);
-    const st = sy + u * 15;
-    shopHeader(ctx, sx, st, sw, u * 13, '#111', '#fff');
-    // kleines Banner
-    const bt = st + u * 13, bh = u * 30;
-    ctx.save(); ctx.beginPath(); ctx.rect(sx, bt, sw, bh); ctx.clip();
-    if (hero) { const s = Math.max(sw / hero.naturalWidth, bh / hero.naturalHeight), w = hero.naturalWidth * s, h = hero.naturalHeight * s; ctx.drawImage(hero, sx + (sw - w) / 2, bt + (bh - h) / 2, w, h); }
-    ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.fillRect(sx, bt, sw, bh);
-    ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = u * 1.5;
-    ctx.font = UIF(700, u * 7); ctx.fillText('Adonis Luxury', sx + sw / 2, bt + bh * .45); ctx.font = UIF(500, u * 3.4); ctx.fillText('Old Money · Vintage · Original', sx + sw / 2, bt + bh * .45 + u * 6.5);
-    ctx.restore();
-    // Kategorien
-    const ct = bt + bh + u * 6.5;
-    ctx.save(); ctx.fillStyle = '#222'; ctx.font = UIF(600, u * 3.3); ctx.textBaseline = 'middle'; ctx.textAlign = 'center';
-    ['JACKEN', 'STRICK', 'POLOS', 'HOSEN'].forEach((t, k) => ctx.fillText(t, sx + sw * (.14 + k * .24), ct)); ctx.restore();
-    // 2×2 Produkte
-    const gx = sx + u * 4, gw = (sw - u * 12) / 2, gy = ct + u * 6, th = gw * 1.02;
-    e.items.slice(0, 4).forEach((p, k) => {
-      const cx = gx + (k % 2) * (gw + u * 4), cy = gy + Math.floor(k / 2) * (th + u * 16);
-      rrect(ctx, cx, cy, gw, th, u * 3); ctx.fillStyle = '#f3f2ef'; ctx.fill();
-      const a = arts && arts.get(p);
-      if (a) { const [bx, by, bw, bh2] = a.box, s = Math.min(gw * .82 / bw, th * .82 / bh2); ctx.save(); ctx.imageSmoothingQuality = 'high'; ctx.shadowColor = 'rgba(0,0,0,.18)'; ctx.shadowBlur = u * 1.5; ctx.shadowOffsetY = u * .6; ctx.drawImage(a.img, bx, by, bw, bh2, cx + (gw - bw * s) / 2, cy + (th - bh2 * s) / 2, bw * s, bh2 * s); ctx.restore(); }
-      ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#111';
-      ctx.font = UIF(700, u * 3.4); ctx.fillText((p.brand || '').toUpperCase(), cx + gw / 2, cy + th + u * 4.2);
-      ctx.fillStyle = '#555'; ctx.font = UIF(500, u * 3); let n = niceName(p); while (ctx.measureText(n).width > gw * .96 && n.length > 4) n = n.slice(0, -2).trim() + '…';
-      ctx.fillText(n.replace(/……$/, '…'), cx + gw / 2, cy + th + u * 8.6); ctx.restore();
-    });
-    phoneChrome(ctx, sx, sy, sw, sh, e, false);
-  });
+  ctx.fillStyle = '#fff'; ctx.fillText('Link In Bio!', W / 2, H * .245); ctx.restore();
+  const pw = W * .37, ph = pw * 2.1, py = H * .385;
+  drawPhone(ctx, W * .05, py, pw, ph, shotScreen(ctx, shots.home, e));
+  drawPhone(ctx, W - W * .05 - pw, py, pw, ph, shotScreen(ctx, shots.grid, e));
 }
 function bgLum(key) { if (key.startsWith('lux:')) return (LUX[key.slice(4)] || { lum: 128 }).lum / 255; const b = BGS[key] || {}; return hexLum(b.color || b.base || '#888888'); }
 function renderEnd(ctx, sl, img, arts, hero) {
   const e = sl.end;
-  if (e.phones) { renderPhones(ctx, e, img, arts, hero); return; }
+  if (e.phones) { renderPhones(ctx, e, img, hero || {}); return; }
   if (e.photo) { if (img) cover(ctx, img); return; }
   const lum = bgLum(sl.bg), dark = lum < .55;
   // gleicher Hintergrund wie davor
@@ -774,7 +709,7 @@ function render(ctx, sl, arts, bgImg) {
 }
 async function drawSlides(slides) {
   const arts = new Map(); let failed = 0;
-  const ps = [...new Set(slides.filter(sl => sl.o).flatMap(sl => Object.values(sl.o.items).filter(Boolean)).concat(slides.flatMap(sl => sl.end && sl.end.items || [])))];
+  const ps = [...new Set(slides.filter(sl => sl.o).flatMap(sl => Object.values(sl.o.items).filter(Boolean)))];
   if (!lockupImg && slides.some(sl => sl.layout === 'end')) lockupImg = await loadImg('assets/lockup.png').catch(() => null);
   await Promise.all(ps.map(async p => { try { const a = await getArt(p); arts.set(p, a); if (!a) failed++; } catch (e) { arts.set(p, null); failed++; } }));
   const canvas = document.createElement('canvas'); canvas.width = W; canvas.height = H;
@@ -782,7 +717,7 @@ async function drawSlides(slides) {
   for (const sl of slides) {
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H);
     const bgI = sl.layout === 'intro' ? await loadAsset(assetSrc('intro_' + sl.img)) : sl.layout === 'end' ? (sl.end.phones ? await loadAsset(assetSrc('end_' + sl.end.phones)) : sl.end.photo ? await loadAsset(assetSrc('end_' + sl.end.photo)) : await loadBg(sl.bg)) : await loadBg(sl.bg);
-    if (sl.layout === 'end' && sl.end.phones) { sl._hero = await loadBg(sl.end.hero); if (document.fonts) await Promise.all(['400 80px "DM Serif Display"', '500 40px Figtree', '600 40px Figtree'].map(f => document.fonts.load(f).catch(() => {}))); }
+    if (sl.layout === 'end' && sl.end.phones) { const [home, grid] = await Promise.all([loadAsset('assets/shop_home.jpg'), loadAsset(`assets/${sl.end.grid}.jpg`)]); sl._hero = { home, grid }; if (document.fonts) await Promise.all(['400 80px "DM Serif Display"', '500 40px Figtree', '600 40px Figtree'].map(f => document.fonts.load(f).catch(() => {}))); }
     render(ctx, sl, arts, bgI);
     let blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', .93));
     if (!blob) { const d = atob(canvas.toDataURL('image/jpeg', .9).split(',')[1]), u8 = new Uint8Array(d.length); for (let k = 0; k < d.length; k++) u8[k] = d.charCodeAt(k); blob = new Blob([u8], { type: 'image/jpeg' }); }
