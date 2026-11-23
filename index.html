@@ -452,8 +452,9 @@ const hexLum = h => { const n = parseInt(h.slice(1), 16); return ((n >> 16) * .2
 // Echte Handy-Screenshots vom Shop (assets/shop_*.jpg). Neue Produkt-Screenshots einfach als shop_grid2.jpg, shop_grid3.jpg … ablegen und hier eintragen.
 const SHOP_GRIDS = ['shop_grid1'];
 function pickEnd(cfg, bg, bgs, outfits = []) {
-  // Handy-Folie (nur bei Luxus-Hintergründen, ca. jede 2.): „Link In Bio!“ + 2 iPhones mit dem Shop und Teilen aus diesem Post
-  if (bgs && rnd() < .5) return { phones: 'london', grid: pick(SHOP_GRIDS), time: `${pick([19, 20, 21])}:${String(Math.floor(rnd() * 60)).padStart(2, '0')}` };
+  // Abschluss immer die Handy-Folie: „Link In Bio!“ + 2 iPhones mit echten Shop-Screenshots.
+  // Luxus-Posts → London im Winter, alle anderen → derselbe Hintergrund wie die Outfit-Folien davor.
+  return { phones: bgs ? 'london' : 'same', grid: pick(SHOP_GRIDS), time: `${pick([19, 20, 21])}:${String(Math.floor(rnd() * 60)).padStart(2, '0')}` };
   if (cfg.lux) { const last = bgs[bgs.length - 1].slice(4), lum = LUX[last].lum / 255; return { photo: wpick(lum > .5 ? [['stmoritz', 3], ['dubai', 1]] : [['dubai', 2], ['cave', 2], ['stmoritz', .5]]) }; }
   return { same: true };   // gleicher Boden / gleiches Bild wie die Outfit-Folien davor
 }
@@ -637,18 +638,35 @@ function shotScreen(ctx, shot, e) {
     phoneChrome(ctx, sx, sy, sw, sh, e, false);
   };
 }
-function renderPhones(ctx, e, img, shots) {
-  if (img) cover(ctx, img); else { ctx.fillStyle = '#9a9aa0'; ctx.fillRect(0, 0, W, H); }
-  // leichter Schnee
-  const r = seedRnd(e.time + e.grid); ctx.save();
-  for (let k = 0; k < 260; k++) { const z = r(), rad = W * (.001 + z * z * .003); ctx.globalAlpha = .25 + z * .55; ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(r() * W, r() * H, rad, 0, 7); ctx.fill(); }
-  ctx.restore();
-  const g = ctx.createLinearGradient(0, H * .35, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.35)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+function renderPhones(ctx, e, img, shots, bgKey) {
+  if (e.phones === 'london') {
+    if (img) cover(ctx, img); else { ctx.fillStyle = '#9a9aa0'; ctx.fillRect(0, 0, W, H); }
+    // leichter Schnee
+    const r = seedRnd(e.time + e.grid); ctx.save();
+    for (let k = 0; k < 260; k++) { const z = r(), rad = W * (.001 + z * z * .003); ctx.globalAlpha = .25 + z * .55; ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(r() * W, r() * H, rad, 0, 7); ctx.fill(); }
+    ctx.restore();
+  } else if (bgKey && bgKey.startsWith('lux:')) { if (img) cover(ctx, img); }
+  else background(ctx, bgKey || 'flat_navy', img, .5);
+  // Schriftfarbe nach dem echten Hintergrund hinter dem Text: hell → Navy, dunkel → Weiß
+  let lum = .5;
+  try {
+    const d = ctx.getImageData(Math.round(W * .08), Math.round(H * .17), Math.round(W * .84), Math.round(H * .15)).data; let sum = 0, n = 0;
+    for (let i = 0; i < d.length; i += 4 * 37) { sum += (d[i] * .299 + d[i + 1] * .587 + d[i + 2] * .114) / 255; n++; }
+    lum = sum / n;
+  } catch (err) {}
+  const dark = lum < .5;
+  // ruhige Fläche hinter dem Text, damit er auch auf unruhigem Boden lesbar bleibt
+  const tg = ctx.createRadialGradient(W / 2, H * .245, W * .05, W / 2, H * .245, W * .62);
+  tg.addColorStop(0, dark ? 'rgba(0,0,0,.30)' : 'rgba(255,255,255,.34)'); tg.addColorStop(1, dark ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0)');
+  ctx.fillStyle = tg; ctx.fillRect(0, 0, W, H * .5);
+  if (e.phones === 'london' || dark) { const g = ctx.createLinearGradient(0, H * .35, 0, H); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(0,0,0,.35)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
   // „Link In Bio!“
   ctx.save(); let fs = W * .155; ctx.font = `400 ${fs}px "DM Serif Display", Georgia, serif`;
   while (ctx.measureText('Link In Bio!').width > W * .86) { fs *= .95; ctx.font = `400 ${fs}px "DM Serif Display", Georgia, serif`; }
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.shadowColor = 'rgba(0,0,0,.55)'; ctx.shadowBlur = W * .03; ctx.shadowOffsetY = W * .008;
-  ctx.fillStyle = '#fff'; ctx.fillText('Link In Bio!', W / 2, H * .245); ctx.restore();
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  if (dark) { ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = W * .03; ctx.shadowOffsetY = W * .008; ctx.fillStyle = '#fff'; }
+  else { ctx.shadowColor = 'rgba(255,255,255,.55)'; ctx.shadowBlur = W * .025; ctx.fillStyle = '#121a30'; }
+  ctx.fillText('Link In Bio!', W / 2, H * .245); ctx.restore();
   const pw = W * .37, ph = pw * 2.1, py = H * .385;
   drawPhone(ctx, W * .05, py, pw, ph, shotScreen(ctx, shots.home, e));
   drawPhone(ctx, W - W * .05 - pw, py, pw, ph, shotScreen(ctx, shots.grid, e));
@@ -656,7 +674,7 @@ function renderPhones(ctx, e, img, shots) {
 function bgLum(key) { if (key.startsWith('lux:')) return (LUX[key.slice(4)] || { lum: 128 }).lum / 255; const b = BGS[key] || {}; return hexLum(b.color || b.base || '#888888'); }
 function renderEnd(ctx, sl, img, arts, hero) {
   const e = sl.end;
-  if (e.phones) { renderPhones(ctx, e, img, hero || {}); return; }
+  if (e.phones) { renderPhones(ctx, e, img, hero || {}, sl.bg); return; }
   if (e.photo) { if (img) cover(ctx, img); return; }
   const lum = bgLum(sl.bg), dark = lum < .55;
   // gleicher Hintergrund wie davor
@@ -716,7 +734,7 @@ async function drawSlides(slides) {
   const ctx = canvas.getContext('2d'), blobs = [];
   for (const sl of slides) {
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H);
-    const bgI = sl.layout === 'intro' ? await loadAsset(assetSrc('intro_' + sl.img)) : sl.layout === 'end' ? (sl.end.phones ? await loadAsset(assetSrc('end_' + sl.end.phones)) : sl.end.photo ? await loadAsset(assetSrc('end_' + sl.end.photo)) : await loadBg(sl.bg)) : await loadBg(sl.bg);
+    const bgI = sl.layout === 'intro' ? await loadAsset(assetSrc('intro_' + sl.img)) : sl.layout === 'end' ? (sl.end.phones ? (sl.end.phones === 'london' ? await loadAsset(assetSrc('end_london')) : await loadBg(sl.bg)) : sl.end.photo ? await loadAsset(assetSrc('end_' + sl.end.photo)) : await loadBg(sl.bg)) : await loadBg(sl.bg);
     if (sl.layout === 'end' && sl.end.phones) { const [home, grid] = await Promise.all([loadAsset('assets/shop_home.jpg'), loadAsset(`assets/${sl.end.grid}.jpg`)]); sl._hero = { home, grid }; if (document.fonts) await Promise.all(['400 80px "DM Serif Display"', '500 40px Figtree', '600 40px Figtree'].map(f => document.fonts.load(f).catch(() => {}))); }
     render(ctx, sl, arts, bgI);
     let blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', .93));

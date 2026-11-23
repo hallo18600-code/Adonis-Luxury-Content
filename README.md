@@ -15,7 +15,7 @@ Neu im Shop · Unter X € · Outfit-Ideen · Marken-Fokus · Welches? (A/B) · 
 
 Jeder Post: Titel-Slide → Teile → Abschluss-Slide („Link in Bio“). Drei Looks: Creme, Navy, Stein.
 
-Bei Luxus-Hintergründen kommt etwa jedes 2. Mal die Handy-Abschlussfolie: „Link In Bio!“ über London im Winter (`assets/end_london*.jpg`, Unsplash, freie Lizenz) mit zwei iPhones, auf denen echte Shop-Screenshots zu sehen sind (`assets/shop_home.jpg` = Startseite, `assets/shop_grid1.jpg` = Produkte). Neue Produkt-Screenshots als `shop_grid2.jpg` … ablegen und in `SHOP_GRIDS` in `index.html` eintragen.
+Letzte Folie ist immer die Handy-Folie: „Link In Bio!“ + zwei iPhones mit echten Shop-Screenshots (`assets/shop_home.jpg` = Startseite, `assets/shop_grid1.jpg` = Produkte). Luxus-Posts bekommen London im Winter als Hintergrund (`assets/end_london*.jpg`, Unsplash, freie Lizenz), alle anderen denselben Hintergrund wie die Outfit-Folien. Die Schriftfarbe richtet sich nach der Helligkeit hinter dem Text (hell → Navy, dunkel → Weiß). Neue Produkt-Screenshots als `shop_grid2.jpg` … ablegen und in `SHOP_GRIDS` in `index.html` eintragen.
 
 ## Teile
 
