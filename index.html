@@ -211,26 +211,27 @@ const active = () => allParts().filter(p => !off.has(p.id));
 
 /* Farben, die zusammen gehen (klassische Old-Money-Kombis). Navy + Schwarz absichtlich nicht. */
 const MATCH = {
-  navy: ['navy', 'white', 'cream', 'grey', 'lightgrey', 'lightblue', 'denim', 'charcoal'],
+  navy: ['navy', 'white', 'cream', 'grey', 'lightgrey', 'lightblue', 'denim', 'charcoal', 'blue'],
   black: ['black', 'white', 'cream', 'grey', 'lightgrey', 'charcoal', 'denim'],
   charcoal: ['charcoal', 'black', 'grey', 'lightgrey', 'white', 'cream', 'denim', 'navy'],
-  grey: ['grey', 'lightgrey', 'navy', 'black', 'charcoal', 'white', 'cream', 'denim', 'lightblue'],
-  lightgrey: ['lightgrey', 'grey', 'navy', 'black', 'charcoal', 'white', 'denim', 'lightblue'],
-  white: ['white', 'navy', 'black', 'grey', 'lightgrey', 'charcoal', 'cream', 'lightblue', 'denim'],
-  cream: ['cream', 'navy', 'black', 'charcoal', 'grey', 'white', 'denim'],
+  grey: ['grey', 'lightgrey', 'navy', 'black', 'charcoal', 'white', 'cream', 'denim', 'lightblue', 'blue'],
+  lightgrey: ['lightgrey', 'grey', 'navy', 'black', 'charcoal', 'white', 'denim', 'lightblue', 'blue'],
+  white: ['white', 'navy', 'black', 'grey', 'lightgrey', 'charcoal', 'cream', 'lightblue', 'denim', 'blue'],
+  cream: ['cream', 'navy', 'black', 'charcoal', 'grey', 'white', 'denim', 'blue'],
   lightblue: ['lightblue', 'navy', 'white', 'cream', 'grey', 'lightgrey', 'denim'],
-  denim: ['denim', 'navy', 'black', 'charcoal', 'grey', 'lightgrey', 'white', 'cream', 'lightblue'],
+  denim: ['denim', 'navy', 'black', 'charcoal', 'grey', 'lightgrey', 'white', 'cream', 'lightblue', 'blue'],
+  blue: ['blue', 'navy', 'white', 'cream', 'grey', 'lightgrey', 'denim'],
 };
 const goes = (a, b) => !a || !b || (MATCH[a] || []).includes(b);
 const goesAll = (c, list) => list.every(x => goes(c, x) && goes(x, c));
 // Uhr-Zifferblatt und Duft-Flasche → zu welchen Outfit-Farben sie passen
 const ACC = {
-  blue: ['navy', 'lightblue', 'white', 'grey', 'lightgrey', 'cream'],
+  blue: ['navy', 'lightblue', 'white', 'grey', 'lightgrey', 'cream', 'blue'],
   black: ['black', 'charcoal', 'grey', 'lightgrey', 'white', 'cream'],
   green: ['cream', 'navy', 'white', 'grey', 'lightgrey'],
-  navy: ['navy', 'lightblue', 'white', 'grey', 'lightgrey', 'cream'],
+  navy: ['navy', 'lightblue', 'white', 'grey', 'lightgrey', 'cream', 'blue'],
   gold: ['black', 'charcoal', 'cream', 'white'],
-  cream: ['navy', 'cream', 'black', 'grey', 'charcoal'],
+  cream: ['navy', 'cream', 'black', 'grey', 'charcoal', 'blue'],
   charcoal: ['black', 'charcoal', 'grey', 'lightgrey', 'white'],
 };
 const accFits = (acc, colors) => colors.every(c => (ACC[acc.color] || MATCH[acc.color] || []).includes(c));
@@ -475,9 +476,7 @@ const SHOP_GRIDS = ['shop_grid1'];
 function pickEnd(cfg, bg, bgs, outfits = []) {
   // Abschluss immer die Handy-Folie: „Link In Bio!“ + 2 iPhones mit echten Shop-Screenshots.
   // Luxus-Posts → London im Winter, alle anderen → derselbe Hintergrund wie die Outfit-Folien davor.
-  return { phones: bgs ? 'london' : 'same', grid: pick(SHOP_GRIDS), time: `${pick([19, 20, 21])}:${String(Math.floor(rnd() * 60)).padStart(2, '0')}` };
-  if (cfg.lux) { const last = bgs[bgs.length - 1].slice(4), lum = LUX[last].lum / 255; return { photo: wpick(lum > .5 ? [['stmoritz', 3], ['dubai', 1]] : [['dubai', 2], ['cave', 2], ['stmoritz', .5]]) }; }
-  return { same: true };   // gleicher Boden / gleiches Bild wie die Outfit-Folien davor
+  return { phones: cfg.lux ? 'london' : 'same', grid: pick(SHOP_GRIDS), time: `${pick([19, 20, 21])}:${String(Math.floor(rnd() * 60)).padStart(2, '0')}` };
 }
 
 /* ---------- Bilder laden ---------- */
@@ -539,7 +538,7 @@ const BGS = {
 const LUX = { palms: { lum: 134 }, riviera: { lum: 118 }, chateau: { lum: 111, winter: true }, stmoritz: { lum: 154, winter: true }, chalet: { lum: 107, winter: true },
   alpennacht: { lum: 58, winter: true }, wienschnee: { lum: 57, winter: true }, schneestrasse: { lum: 125, winter: true },
   leo: { lum: 90, hidden: true }, hw_elevator: { lum: 108, hidden: true }, hw_snow: { lum: 89, hidden: true }, hw_bath: { lum: 115, hidden: true }, winteryou: { lum: 35, hidden: true }, hw_night: { lum: 57, hidden: true } };
-const LUMC = { navy: .15, black: .08, charcoal: .2, grey: .5, lightgrey: .75, white: .95, cream: .9, lightblue: .8, denim: .3 };
+const LUMC = { blue: .35, navy: .15, black: .08, charcoal: .2, grey: .5, lightgrey: .75, white: .95, cream: .9, lightblue: .8, denim: .3 };
 const bgImgs = new Map();
 const bgSrc = key => { const hd = W > 1200 ? '' : '_hd'; if (key.startsWith('lux:')) return `bg/lux_${key.slice(4)}${hd}.jpg`; const b = BGS[key]; return b && b.img ? `bg/${b.img}${hd}.jpg` : null; };
 const assetSrc = name => `assets/${name}${W > 1200 ? '' : '_hd'}.jpg`;
