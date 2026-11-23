@@ -277,9 +277,21 @@ const SERIES = {
     tops: [[['knit', 'shirt'], 3], [['knit'], 3], [['shirt'], 2], [['polo'], 2], [['outer_l', 'knit'], 2], [['outer_l', 'polo'], 1]],
     extras: [['w', 3], ['ws', 3], ['s', 1.5], ['', 1]], white: 0.3, tags: ['#oldmoneystyle', '#oldmoneyaesthetic'] },
   luxus: { label: 'Luxus-Hintergrund', ex: 'Villen, Autos, Schnee', lux: true,
-    titles: [L('Old-Money-Outfits', 'Old money outfits')],
+    titles: [L('Old-Money-Outfits', 'Old money outfits'), L('So zieht sich Old Money an', 'How old money dresses'), L('Quiet-Luxury-Outfits für Männer', 'Quiet luxury outfits for men'),
+      L('Outfits für das Leben, das du willst', 'Outfits for the life you want'), L('Zieh dich an, als hättest du es schon geschafft', 'Dress like you already made it'),
+      L('Outfits, die nach Geld aussehen', 'Outfits that look expensive'), L('Rich-Kid-Outfits', 'Rich kid outfits'), L('Gentleman-Outfits', 'Gentleman outfits'),
+      L('So zieht sich ein Erbe an', 'How an heir dresses'), L('Outfits für dein zukünftiges Ich', 'Outfits for your future self'),
+      L('So kleidet sich der Sohn vom Chef', 'How the boss’s son dresses'), L('Old Money, aber modern', 'Old money, but modern'),
+      L('Outfits für Männer mit Geschmack', 'Outfits for men with taste'), L('Teuer aussehen, ohne Logos', 'Look expensive without logos')],
     tops: [[['knit'], 3], [['knit', 'shirt'], 2], [['outer_w', 'knit'], 2], [['outer_l', 'knit'], 2], [['polo'], 1.5], [['shirt'], 1.5], [['outer_w'], 1.5]],
     extras: [['ws', 3], ['w', 2], ['s', 1.5], ['hw', 1]], white: 0.2, quietish: true, tags: ['#luxurylifestyle', '#oldmoneyaesthetic'] },
+  winternacht: { label: 'Winternacht', ex: 'Schnee & Lichter · ohne Intro', lux: true, luxPool: 'winter',
+    titles: [L('Winter-Outfits', 'winter fits'), L('Outfits für kalte Winternächte', 'Outfits for cold winter nights'), L('Was ich anziehe, wenn es schneit', 'What I wear when it snows'),
+      L('Outfits für den ersten Schnee', 'Outfits for the first snow'), L('Winter-Outfits, die immer funktionieren', 'Winter outfits that always work'),
+      L('Old Money im Schnee', 'Old money in the snow'), L('Outfits für den Winterurlaub', 'Winter getaway outfits'), L('Weihnachtsmarkt-Outfits', 'Christmas market outfits'),
+      L('Dezember-Outfits', 'December fits'), L('Warm bleiben und trotzdem gut aussehen', 'Stay warm, still look good'), L('Der perfekte Winter-Kleiderschrank', 'The perfect winter wardrobe')],
+    tops: [[['outer_w'], 3], [['outer_w', 'knit'], 3.5], [['outer_l', 'knit'], 2], [['knit'], 2], [['vest', 'knit'], 1.5], [['outer_w', 'hoodie'], 1]],
+    extras: [['hw', 3], ['ws', 3], ['w', 2], ['h', 1.5], ['hws', 1]], white: 0.1, quietish: true, tags: ['#winteroutfit', '#winteraesthetic'] },
   pure: { label: 'Nur Outfits', ex: 'ohne Text, nur Bilder', notitle: true,
     titles: [L('Outfit-Inspo', 'Outfit inspo'), L('Outfits', 'Fit check'), L('Old-Money-Outfits', 'Old money fits')],
     tops: [[['outer_w'], 2], [['outer_w', 'knit'], 2], [['outer_l', 'knit'], 2], [['knit'], 3], [['knit', 'shirt'], 2], [['polo'], 1.5], [['hoodie'], 1], [['vest', 'knit'], 1]],
@@ -288,11 +300,11 @@ const SERIES = {
     titles: [L('y2k vs. Streetwear vs. Grisch', 'y2k vs streetwear vs grisch')],
     tops: [[['knit'], 3], [['knit', 'shirt'], 2], [['outer_w', 'knit'], 2], [['polo'], 1.5], [['outer_l', 'polo'], 1], [['outer_w'], 1.5]],
     extras: [['ws', 3], ['w', 3], ['hw', 1], ['s', 1]], white: 0, tags: ['#grisch', '#grischstyle'] },
-  wolf: { label: 'Wolf of Wall Street', ex: 'The perfect winter closet', intro: ['wolf'], bg: 'intro_grey', quietish: true,
+  wolf: { label: 'Wolf of Wall Street', ex: 'The perfect winter closet', intro: ['wolf'], lux: true, luxPool: 'winter', quietish: true,
     titles: [L('Der perfekte Winter-Kleiderschrank', 'The perfect winter closet')],
     tops: [[['outer_w', 'knit'], 3], [['outer_w'], 2], [['knit'], 2], [['knit', 'shirt'], 2], [['outer_l', 'knit'], 2], [['vest', 'knit'], 1]],
     extras: [['ws', 3], ['w', 3], ['hw', 1], ['s', 1]], white: 0, tags: ['#wolfofwallstreet', '#winteroutfit'] },
-  bond: { label: 'James Bond', ex: 'How I would dress', intro: ['bond'], bg: 'intro_white', quietish: true,
+  bond: { label: 'James Bond', ex: 'How I would dress', intro: ['bond'], lux: true, luxPool: 'winter', quietish: true,
     titles: [L('So würde ich mich anziehen', 'How I would dress')],
     tops: [[['outer_w'], 2], [['outer_w', 'knit'], 2], [['outer_l', 'knit'], 2], [['knit'], 2], [['knit', 'shirt'], 2], [['shirt'], 1]],
     extras: [['ws', 4], ['w', 3], ['s', 1]], white: 0, dark: true, tags: ['#jamesbond', '#gentleman'] },
@@ -312,7 +324,7 @@ const SERIES = {
     titles: [L('Emo vs. Road Man vs. Grisch', 'emo vs road man vs grisch')],
     tops: [[['knit'], 3], [['knit', 'shirt'], 2.5], [['outer_w', 'knit'], 1.5], [['polo'], 1.5], [['outer_l', 'knit'], 1]],
     extras: [['ws', 3], ['w', 3], ['hw', 1], ['s', 1]], white: 0.15, quietish: true, tags: ['#grisch', '#grischstyle'] },
-  bateman: { label: 'Winter Fits (Bateman)', ex: 'Winter fits · 2 Intro-Bilder', intro: ['bateman', 'wf_chainsaw'], bg: 'intro_white',
+  bateman: { label: 'Winter Fits (Bateman)', ex: 'Winter fits · 2 Intro-Bilder', intro: ['bateman', 'wf_chainsaw'], lux: true, luxPool: 'winter',
     titles: [L('winter fits', 'winter fits')],
     tops: [[['outer_w'], 3], [['outer_w', 'knit'], 3], [['outer_w', 'hoodie'], 1.5], [['knit'], 2], [['vest', 'knit'], 1.5]],
     extras: [['hw', 3], ['ws', 2], ['w', 2], ['h', 1.5], ['hws', 1]], white: 0, tags: ['#winteroutfit', '#winterfits'] },
@@ -332,7 +344,7 @@ const SERIES = {
     titles: [L('Winter-Outfits für dich', 'winter fits for you')],
     tops: [[['knit'], 3], [['outer_w', 'knit'], 2], [['knit', 'shirt'], 2], [['outer_w'], 1], [['hoodie'], 1]],
     extras: [['ws', 3], ['w', 3], ['hw', 1.5], ['s', 1]], white: 0.2, tags: ['#winteroutfit', '#archivefashion'] },
-  winterred: { label: 'Winter Fits (Rot)', ex: 'Bateman im Schnee · 4 Intro-Bilder', intro: ['wf_red1', 'wf_red2', 'wf_red3', 'wf_red4'], bg: 'intro_red', quietish: true,
+  winterred: { label: 'Winter Fits (Rot)', ex: 'Bateman im Schnee · 4 Intro-Bilder', intro: ['wf_red1', 'wf_red2', 'wf_red3', 'wf_red4'], lux: true, luxPool: 'winter', quietish: true,
     titles: [L('Winter-Outfits', 'winter fits')],
     tops: [[['outer_w'], 3], [['outer_w', 'knit'], 3], [['knit'], 2.5], [['knit', 'shirt'], 2], [['outer_l', 'knit'], 1.5], [['vest', 'knit'], 1]],
     extras: [['ws', 3], ['w', 3], ['hw', 2], ['s', 1]], white: 0.2, tags: ['#winteroutfit', '#winterfits'] },
@@ -422,9 +434,18 @@ function planPost(series, n, lang) {
   let bg = null, bgs = null;
   if (cfg.lux) {
     // jede Slide ein anderes Luxus-Bild; dunkle Outfits bekommen die hellsten Bilder
-    const order = Object.keys(LUX).filter(k => !LUX[k].hidden).sort((a, b) => LUX[b].lum - LUX[a].lum), left = shuffle(order);
+    const pool = Object.keys(LUX).filter(k => !LUX[k].hidden && (cfg.luxPool !== 'winter' || LUX[k].winter));
+    // die neuen Winternacht-Bilder zuerst verwenden, dann die übrigen
+    const fresh = ['alpennacht', 'wienschnee', 'schneestrasse'].filter(k => pool.includes(k));
+    let left = cfg.luxPool === 'winter' ? shuffle(fresh).concat(shuffle(pool.filter(k => !fresh.includes(k)))) : shuffle(pool);
     const tone = o => { const l = [o.items.outer, o.items.inner, o.items.pants].filter(Boolean).map(p => LUMC[p.color] ?? .5); return l.reduce((x, y) => x + y, 0) / l.length; };
-    bgs = outfits.map(o => { left.sort((a, b) => tone(o) < .45 ? LUX[b].lum - LUX[a].lum + (rnd() - .5) * 40 : LUX[a].lum - LUX[b].lum + (rnd() - .5) * 40); return 'lux:' + left.shift(); });
+    bgs = outfits.map((o, i) => {
+      if (!left.length) left = shuffle(pool);
+      // bei Winter-Formaten: neue Bilder bevorzugt (nur innerhalb der ersten 3 sortieren), sonst nach Helligkeit passend zum Outfit
+      const n = cfg.luxPool === 'winter' && i < fresh.length ? Math.min(fresh.length - i, left.length) : left.length;
+      const head = left.slice(0, n).sort((a, b) => tone(o) < .45 ? LUX[b].lum - LUX[a].lum + (rnd() - .5) * 40 : LUX[a].lum - LUX[b].lum + (rnd() - .5) * 40);
+      left = head.concat(left.slice(n)); return 'lux:' + left.shift();
+    });
   } else if (cfg.fromIntro) {
     bgs = outfits.map(() => 'lux:' + introKey);
   } else if (cfg.bg) {
@@ -514,7 +535,9 @@ const BGS = {
   intro_navy:    { label: 'Navy', color: '#252b38', hidden: true, avoid: ['navy', 'black', 'charcoal'] },
 };
 // Luxus-Hintergründe: lum = Helligkeit (0–255)
-const LUX = { palms: { lum: 134 }, riviera: { lum: 118 }, chateau: { lum: 111 }, stmoritz: { lum: 154 }, chalet: { lum: 107 },
+// winter: true = Schnee/Winternacht-Bilder (für Winter-Formate nach dem Intro und das Format „Winternacht“)
+const LUX = { palms: { lum: 134 }, riviera: { lum: 118 }, chateau: { lum: 111, winter: true }, stmoritz: { lum: 154, winter: true }, chalet: { lum: 107, winter: true },
+  alpennacht: { lum: 58, winter: true }, wienschnee: { lum: 57, winter: true }, schneestrasse: { lum: 125, winter: true },
   leo: { lum: 90, hidden: true }, hw_elevator: { lum: 108, hidden: true }, hw_snow: { lum: 89, hidden: true }, hw_bath: { lum: 115, hidden: true }, winteryou: { lum: 35, hidden: true }, hw_night: { lum: 57, hidden: true } };
 const LUMC = { navy: .15, black: .08, charcoal: .2, grey: .5, lightgrey: .75, white: .95, cream: .9, lightblue: .8, denim: .3 };
 const bgImgs = new Map();

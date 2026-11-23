@@ -11,7 +11,7 @@ TikTok-Slideshows für Adonis Luxury, direkt im Handy-Browser. Gebaut nach dem V
 
 ## Formate
 
-Neu im Shop · Unter X € · Outfit-Ideen · Marken-Fokus · Welches? (A/B) · Old-Money-Regeln · Kollektion (4er-Raster) · Wie neu (Zustand)
+Winternacht (Schnee & Lichter, ohne Intro) · Neu im Shop · Unter X € · Outfit-Ideen · Marken-Fokus · Welches? (A/B) · Old-Money-Regeln · Kollektion (4er-Raster) · Wie neu (Zustand)
 
 Jeder Post: Titel-Slide → Teile → Abschluss-Slide („Link in Bio“). Drei Looks: Creme, Navy, Stein.
 
@@ -27,3 +27,6 @@ Letzte Folie ist immer die Handy-Folie: „Link In Bio!“ + zwei iPhones mit ec
 ## Technik
 
 Eine Datei (`index.html`), kein Build. Slides werden auf Canvas gezeichnet (1080×1440 oder 4K). Freigestellte PNGs bekommen Schatten, Fotos mit Hintergrund werden als Karte gezeigt. Schriften lokal in `fonts/` (Open Font License).
+
+
+Winter-Formate mit Intro (Winter Fits Rot, Bateman, Wolf of Wall Street, James Bond): erste Folie = Intro, danach Winternacht-Hintergründe (`bg/lux_alpennacht`, `lux_wienschnee`, `lux_schneestrasse` + Schnee-Bilder). In `LUX` steuert `winter: true`, welche Bilder dazugehören.
