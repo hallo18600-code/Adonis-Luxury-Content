@@ -15,6 +15,8 @@ Neu im Shop · Unter X € · Outfit-Ideen · Marken-Fokus · Welches? (A/B) · 
 
 Jeder Post: Titel-Slide → Teile → Abschluss-Slide („Link in Bio“). Drei Looks: Creme, Navy, Stein.
 
+Bei Luxus-Hintergründen kommt etwa jedes 2. Mal die Handy-Abschlussfolie: „Link In Bio!“ über London im Winter (`assets/end_london*.jpg`, Foto von Unsplash, freie Lizenz) mit zwei iPhones – links die Shop-Startseite, rechts ein Produktraster mit 4 Teilen aus genau diesem Post.
+
 ## Teile
 
 - `products.json` ist ein Export der aktiven Shop-Produkte (Marke, Name, Art, Preis, Größe, Zustand, Bilder). Bilder kommen direkt vom Shopify-CDN.
