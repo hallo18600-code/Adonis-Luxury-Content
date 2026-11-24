@@ -26,7 +26,7 @@ Letzte Folie ist immer die Handy-Folie: „Link In Bio!“ + zwei iPhones mit ec
 
 ## Technik
 
-Eine Datei (`index.html`), kein Build. Slides werden auf Canvas gezeichnet (1080×1440 oder 4K). Freigestellte PNGs bekommen Schatten, Fotos mit Hintergrund werden als Karte gezeigt. Schriften lokal in `fonts/` (Open Font License).
+Eine Datei (`index.html`), kein Build. Slides werden auf Canvas gezeichnet (TikTok-Vollbild 9:16: 1080×1920 bzw. 4K 2160×3840). Intro- und Abschlussbilder (3:4 mit Text) werden in voller Breite unten bündig gesetzt und oben mit ihrer Randfarbe aufgefüllt – nichts wird abgeschnitten. Freigestellte PNGs bekommen Schatten, Fotos mit Hintergrund werden als Karte gezeigt. Schriften lokal in `fonts/` (Open Font License).
 
 
 Winter-Formate mit Intro (Winter Fits Rot, Bateman, Wolf of Wall Street, James Bond): erste Folie = Intro, danach Winternacht-Hintergründe (`bg/lux_alpennacht`, `lux_wienschnee`, `lux_schneestrasse` + Schnee-Bilder). In `LUX` steuert `winter: true`, welche Bilder dazugehören.

@@ -53,7 +53,7 @@ button:disabled { opacity: .5; cursor: default; }
 .warnline { font-size: 13px; color: var(--warn); margin: -6px 0 0; }
 .feed { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 @media (min-width: 640px) { .feed { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-.tile { position: relative; border: 0; padding: 0; background: var(--raise); border-radius: 12px; overflow: hidden; aspect-ratio: 3 / 4; display: block; width: 100%; min-height: 0; }
+.tile { position: relative; border: 0; padding: 0; background: var(--raise); border-radius: 12px; overflow: hidden; aspect-ratio: 9 / 16; display: block; width: 100%; min-height: 0; }
 .tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .tile .lab { position: absolute; left: 6px; top: 6px; font-size: 11px; font-weight: 700; background: rgba(0,0,0,.68); color: #fff; padding: 2px 7px; border-radius: 6px; max-width: calc(100% - 12px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tile .ok { position: absolute; right: 6px; bottom: 6px; font-size: 11px; font-weight: 800; background: var(--accent); color: var(--accent-ink); padding: 2px 7px; border-radius: 6px; }
@@ -109,7 +109,7 @@ summary .count { color: var(--muted); font-weight: 600; font-size: 13px; margin-
 .ov p { margin: 0; color: var(--muted); font-size: 14px; }
 .ov img { width: 100%; height: auto; border-radius: 10px; display: block; -webkit-touch-callout: default; -webkit-user-select: auto; user-select: auto; }
 .ov .lbl { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: -8px; }
-.coverbusy { margin: 0 auto; width: min(100%, 360px); aspect-ratio: 3 / 4; display: grid; place-items: center; border-radius: 10px; border: 1px dashed var(--line); color: var(--muted); font-size: 14px; }
+.coverbusy { margin: 0 auto; width: min(100%, 360px); aspect-ratio: 9 / 16; display: grid; place-items: center; border-radius: 10px; border: 1px dashed var(--line); color: var(--muted); font-size: 14px; }
 </style>
 </head><body>
 <div class="wrap">
@@ -364,7 +364,7 @@ const CTAS = { en: ['Shop now – link in bio', 'Authentic vintage clothes. Link
 const TAGS = [['#fyp'], ['#viral', '#viral', '#foryou', '#foryoupage', '#trending'], ['#oldmoney', '#oldmoney', '#oldmoneystyle', '#oldmoneyaesthetic', '#quietluxury'], ['#grisch', '#grisch', '#grischstyle', '#grischoutfit'], ['#outfitideas', '#outfitinspo', '#mensoutfit', '#mensfashion', '#outfitoftheday']];
 
 /* ---------- Einstellungen ---------- */
-let W = 1080, H = 1440;
+let W = 1080, H = 1920;   // TikTok-Vollbild 9:16
 const DEFAULTS = { series: 'random', count: '4', lang: 'en', theme: 'mix', res: '4k' };
 const S = Object.assign({}, DEFAULTS, load('ad-settings3', load('ad-settings2', {})));
 S.res = '4k';
@@ -553,6 +553,29 @@ function loadBg(key) {
   return bgImgs.get(src);
 }
 function cover(ctx, img) { const s = Math.max(W / img.naturalWidth, H / img.naturalHeight), w = img.naturalWidth * s, h = img.naturalHeight * s; ctx.drawImage(img, (W - w) / 2, (H - h) / 2, w, h); }
+// 3:4-Bilder mit eingebranntem Text (Intro, Abschluss): volle Breite, nichts abschneiden;
+// oben mit der Randfarbe des Bildes auffüllen → randlos 9:16
+function fitFull(ctx, img) {
+  const iw = img.naturalWidth, ih = img.naturalHeight, s = W / iw, dh = ih * s;
+  if (dh >= H - 2) { cover(ctx, img); return; }
+  // Rand oben: Farben der äußersten Bildzeile, geglättet und nach außen gezogen (keine Schlieren, kein Geister-Text)
+  const y = Math.round(H - dh), e = Math.max(2, Math.round(ih * .015));
+  const band = (sy, dy, bh) => {
+    const a = document.createElement('canvas'); a.width = 96; a.height = 2; const ax = a.getContext('2d'); ax.imageSmoothingQuality = 'high'; ax.drawImage(img, 0, sy, iw, e, 0, 0, 96, 2);
+    const b = document.createElement('canvas'); b.width = 6; b.height = 8; const bx = b.getContext('2d'); bx.imageSmoothingQuality = 'high'; bx.drawImage(a, 0, 0, 96, 2, 1, 0, 4, 8);
+    bx.drawImage(b, 1, 0, 1, 8, 0, 0, 1, 8); bx.drawImage(b, 4, 0, 1, 8, 5, 0, 1, 8);   // Randspalten auffüllen
+    ctx.imageSmoothingQuality = 'high'; ctx.drawImage(b, 0, 2, 6, 4, -W / 4, dy, W * 1.5, bh);
+  };
+  const f = dh * .045;
+  ctx.save(); band(0, 0, y + f + 2);
+  // scharfes Bild unten bündig (Personen laufen wie bei viralen Posts bis zum Rand), oben weich auslaufend
+  const c = document.createElement('canvas'); c.width = W; c.height = Math.round(dh); const cx = c.getContext('2d');
+  cx.imageSmoothingQuality = 'high'; cx.drawImage(img, 0, 0, W, dh);
+  const g = cx.createLinearGradient(0, 0, 0, dh);
+  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(f / dh, '#000'); g.addColorStop(1, '#000');
+  cx.globalCompositeOperation = 'destination-in'; cx.fillStyle = g; cx.fillRect(0, 0, W, dh);
+  ctx.drawImage(c, 0, y); ctx.restore();
+}
 function background(ctx, key, img, outfitLum) {
   if (key.startsWith('lux:')) {
     if (img) cover(ctx, img); else { ctx.fillStyle = '#777'; ctx.fillRect(0, 0, W, H); }
@@ -688,8 +711,8 @@ function renderPhones(ctx, e, img, shots, bgKey) {
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   if (dark) { ctx.shadowColor = 'rgba(0,0,0,.6)'; ctx.shadowBlur = W * .03; ctx.shadowOffsetY = W * .008; ctx.fillStyle = '#fff'; }
   else { ctx.shadowColor = 'rgba(255,255,255,.55)'; ctx.shadowBlur = W * .025; ctx.fillStyle = '#121a30'; }
-  ctx.fillText('Link In Bio!', W / 2, H * .245); ctx.restore();
-  const pw = W * .37, ph = pw * 2.1, py = H * .385;
+  ctx.fillText('Link In Bio!', W / 2, H * .235); ctx.restore();
+  const pw = W * .4, ph = pw * 2.1, py = H * .355;
   drawPhone(ctx, W * .05, py, pw, ph, shotScreen(ctx, shots.home, e));
   drawPhone(ctx, W - W * .05 - pw, py, pw, ph, shotScreen(ctx, shots.grid, e));
 }
@@ -697,7 +720,7 @@ function bgLum(key) { if (key.startsWith('lux:')) return (LUX[key.slice(4)] || {
 function renderEnd(ctx, sl, img, arts, hero) {
   const e = sl.end;
   if (e.phones) { renderPhones(ctx, e, img, hero || {}, sl.bg); return; }
-  if (e.photo) { if (img) cover(ctx, img); return; }
+  if (e.photo) { if (img) fitFull(ctx, img); return; }
   const lum = bgLum(sl.bg), dark = lum < .55;
   // gleicher Hintergrund wie davor
   if (sl.bg.startsWith('lux:')) { if (img) cover(ctx, img); }
@@ -715,37 +738,39 @@ function renderEnd(ctx, sl, img, arts, hero) {
   ctx.drawImage(c, (W - c.width) / 2, H * .5 - c.height / 2 + H * .01); ctx.restore();
 }
 function render(ctx, sl, arts, bgImg) {
-  if (sl.layout === 'intro') { if (bgImg) cover(ctx, bgImg); return; }
+  if (sl.layout === 'intro') { if (bgImg) fitFull(ctx, bgImg); return; }
   if (sl.layout === 'end') { renderEnd(ctx, sl, bgImg, arts, sl._hero); return; }
   const A = p => p ? arts.get(p) : null, it = sl.o.items, r = seedRnd(sl.seed), j = (a) => (r() - .5) * a;
   lay.strong = sl.bg.startsWith('lux:');
   const lums = [it.outer, it.inner, it.pants].filter(Boolean).map(p => LUMC[p.color] ?? .5);
   background(ctx, sl.bg, bgImg, lums.reduce((x, y) => x + y, 0) / lums.length);
+  // Outfit-Bereich im 9:16-Format: oben Platz für TikTok-Suche, unten für Caption/Buttons
+  const T = H * .075, HH = H * .78, Y = v => T + HH * v;
   const flip = r() < .5; // Spiegeln: Hose mal links, mal rechts
   const X = (x, w) => flip ? W - x - w : x, R = v => flip ? -v : v;
   // 1) Oberteile oben
   if (it.inner) {
-    lay(ctx, A(it.inner), X(W * -.01, W * .6), H * .06, W * .6, H * .4, R(-.07 + j(.04)));
-    lay(ctx, A(it.outer), X(W * .33, W * .67), H * .015, W * .67, H * .46, R(.04 + j(.04)));
+    lay(ctx, A(it.inner), X(W * -.01, W * .6), Y(.06), W * .6, HH * .4, R(-.07 + j(.04)));
+    lay(ctx, A(it.outer), X(W * .33, W * .67), Y(.015), W * .67, HH * .46, R(.04 + j(.04)));
   } else {
-    lay(ctx, A(it.outer), X(W * .05 + j(W * .04), W * .9), H * .02, W * .9, H * .47, R(j(.08)));
+    lay(ctx, A(it.outer), X(W * .05 + j(W * .04), W * .9), Y(.02), W * .9, HH * .47, R(j(.08)));
   }
   // 2) Hose schräg darunter
-  lay(ctx, A(it.pants), X(W * .04, W * .5), H * .40, W * .5, H * .58, R(-.16 + j(.08)));
+  lay(ctx, A(it.pants), X(W * .04, W * .5), Y(.40), W * .5, HH * .58, R(-.16 + j(.08)));
   // 3) Schuhe unten auf der anderen Seite
-  lay(ctx, A(it.shoes), X(W * .5, W * .48), H * .68, W * .48, H * .28, R(-.08 + j(.1)));
+  lay(ctx, A(it.shoes), X(W * .5, W * .48), Y(.68), W * .48, HH * .28, R(-.08 + j(.1)));
   // 4) Mütze oben in der Ecke
-  if (it.hat) lay(ctx, A(it.hat), X(W * -.01, W * .27), H * .005, W * .27, H * .16, R(-.2 + j(.1)));
+  if (it.hat) lay(ctx, A(it.hat), X(W * -.01, W * .27), Y(.005), W * .27, HH * .16, R(-.2 + j(.1)));
   // 5) Uhr und Parfum liegen auf dem Oberteil / neben der Hose
   const accs = [it.scent, it.watch].filter(Boolean);
   if (accs.length === 2) {
-    lay(ctx, A(it.scent), X(W * .78, W * .2), H * .42, W * .2, H * .2, R(.05 + j(.08)));
-    lay(ctx, A(it.watch), X(W * .57, W * .2), H * .44, W * .2, H * .22, R(.12 + j(.1)));
+    lay(ctx, A(it.scent), X(W * .78, W * .2), Y(.42), W * .2, HH * .2, R(.05 + j(.08)));
+    lay(ctx, A(it.watch), X(W * .57, W * .2), Y(.44), W * .2, HH * .22, R(.12 + j(.1)));
   } else if (accs.length === 1) {
     const isW = !!it.watch;
-    lay(ctx, A(accs[0]), X(W * .66, W * .24), H * .42, W * .24, H * (isW ? .24 : .22), R((isW ? .12 : .05) + j(.08)));
+    lay(ctx, A(accs[0]), X(W * .66, W * .24), Y(.42), W * .24, HH * (isW ? .24 : .22), R((isW ? .12 : .05) + j(.08)));
   }
-  if (sl.title) drawCaption(ctx, sl.title, H * .5);
+  if (sl.title) drawCaption(ctx, sl.title, Y(.5));
 }
 async function drawSlides(slides) {
   const arts = new Map(); let failed = 0;
@@ -775,7 +800,7 @@ const isFull = d => d.slides.length > 0 && d.blobs.length === d.slides.length &&
 function showWarn(t) { const w = $('#warn'); w.hidden = !t; w.textContent = t || ''; }
 function newDraft() {
   const series = pickSeries(), n = +S.count, P = planPost(series, n, S.lang);
-  return { id: Math.random().toString(36).slice(2, 9), series, desc: P.desc, slides: P.slides, W: S.res === '4k' ? 2160 : 1080, H: S.res === '4k' ? 2880 : 1440, blobs: [], urls: [], files: null, saved: false };
+  return { id: Math.random().toString(36).slice(2, 9), series, desc: P.desc, slides: P.slides, W: S.res === '4k' ? 2160 : 1080, H: S.res === '4k' ? 3840 : 1920, blobs: [], urls: [], files: null, saved: false };
 }
 function addDrafts(k) {
   { const c = k => active().filter(p => p.cat === k).length; if (!c('pants') || !c('shoes') || active().filter(p => ['outer_w','outer_l','vest','hoodie','sweat','knit','polo','shirt'].includes(p.cat)).length < 2) { showWarn('Zu wenige Teile aktiv – mindestens Hose, Schuhe und 2 Oberteile nötig.'); return; } }
