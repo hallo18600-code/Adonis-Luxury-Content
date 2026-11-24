@@ -784,8 +784,8 @@ async function drawSlides(slides) {
     const bgI = sl.layout === 'intro' ? await loadAsset(assetSrc('intro_' + sl.img)) : sl.layout === 'end' ? (sl.end.phones ? (sl.end.phones === 'london' ? await loadAsset(assetSrc('end_london')) : await loadBg(sl.bg)) : sl.end.photo ? await loadAsset(assetSrc('end_' + sl.end.photo)) : await loadBg(sl.bg)) : await loadBg(sl.bg);
     if (sl.layout === 'end' && sl.end.phones) { const [home, grid] = await Promise.all([loadAsset('assets/shop_home.jpg'), loadAsset(`assets/${sl.end.grid}.jpg`)]); sl._hero = { home, grid }; if (document.fonts) await Promise.all(['400 80px "DM Serif Display"', '500 40px Figtree', '600 40px Figtree'].map(f => document.fonts.load(f).catch(() => {}))); }
     render(ctx, sl, arts, bgI);
-    let blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', .93));
-    if (!blob) { const d = atob(canvas.toDataURL('image/jpeg', .9).split(',')[1]), u8 = new Uint8Array(d.length); for (let k = 0; k < d.length; k++) u8[k] = d.charCodeAt(k); blob = new Blob([u8], { type: 'image/jpeg' }); }
+    let blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', .97));
+    if (!blob) { const d = atob(canvas.toDataURL('image/jpeg', .96).split(',')[1]), u8 = new Uint8Array(d.length); for (let k = 0; k < d.length; k++) u8[k] = d.charCodeAt(k); blob = new Blob([u8], { type: 'image/jpeg' }); }
     blobs.push(blob); await new Promise(r => setTimeout(r, 0));
   }
   canvas.width = canvas.height = 1;

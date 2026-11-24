@@ -30,3 +30,7 @@ Eine Datei (`index.html`), kein Build. Slides werden auf Canvas gezeichnet (TikT
 
 
 Winter-Formate mit Intro (Winter Fits Rot, Bateman, Wolf of Wall Street, James Bond): erste Folie = Intro, danach Winternacht-Hintergründe (`bg/lux_alpennacht`, `lux_wienschnee`, `lux_schneestrasse` + Schnee-Bilder). In `LUX` steuert `winter: true`, welche Bilder dazugehören.
+
+## Auflösung
+
+Alle Hintergründe (`bg/`) und `assets/end_london.jpg` liegen in echtem 9:16-4K (2160×3840), per KI-Upscaling (Real-ESRGAN realesr-general-x4v3) aus den Originalen erzeugt – nicht im Browser hochgezogen. Die Intros „Winter Fits (Rot)“, „Chainsaw“ und „Wolf“ wurden ebenfalls nachgeschärft. Export als JPEG mit Qualität 97 %. Neue Hintergründe immer mindestens 2160×3840 anlegen.
