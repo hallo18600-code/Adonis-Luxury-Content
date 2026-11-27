@@ -276,18 +276,6 @@
 "k2": "teile-2k/23-ralph-lauren-zopfstrick-muetze-creme.webp"
 },
 {
-"id": "p24",
-"file": "teile/24-lacoste-muetze-schwarz.webp",
-"cat": "hat",
-"color": "black",
-"brand": "Lacoste",
-"loud": false,
-"name": "lacoste muetze schwarz",
-"hd": "teile-hd/24-lacoste-muetze-schwarz.webp",
-"ar": 1.217,
-"k2": "teile-2k/24-lacoste-muetze-schwarz.webp"
-},
-{
 "id": "p25",
 "file": "teile/25-ralph-lauren-strickpolo-navy.webp",
 "cat": "polo",
@@ -394,30 +382,6 @@
 "hd": "teile-hd/33-parajumpers-hybridjacke-schwarz.webp",
 "ar": 0.724,
 "k2": "teile-2k/33-parajumpers-hybridjacke-schwarz.webp"
-},
-{
-"id": "p34",
-"file": "teile/34-ralph-lauren-daunenjacke-navy-glanz.webp",
-"cat": "outer_w",
-"color": "navy",
-"brand": "Ralph Lauren",
-"loud": false,
-"name": "ralph lauren daunenjacke navy glanz",
-"hd": "teile-hd/34-ralph-lauren-daunenjacke-navy-glanz.webp",
-"ar": 1.053,
-"k2": "teile-2k/34-ralph-lauren-daunenjacke-navy-glanz.webp"
-},
-{
-"id": "p35",
-"file": "teile/35-moncler-daunenjacke-schwarz-glanz.webp",
-"cat": "outer_w",
-"color": "black",
-"brand": "Moncler",
-"loud": true,
-"name": "moncler daunenjacke schwarz glanz",
-"hd": "teile-hd/35-moncler-daunenjacke-schwarz-glanz.webp",
-"ar": 0.883,
-"k2": "teile-2k/35-moncler-daunenjacke-schwarz-glanz.webp"
 },
 {
 "id": "p36",
@@ -850,5 +814,161 @@
 "hd": "teile-hd/71-cartier-santos-weiss.webp",
 "ar": 0.579,
 "k2": "teile-2k/71-cartier-santos-weiss.webp"
+},
+{
+"id": "p72",
+"file": "teile/72-ralph-lauren-baer-pulli-schwarz.webp",
+"cat": "knit",
+"color": "black",
+"brand": "Ralph Lauren",
+"loud": true,
+"name": "ralph lauren baer pulli schwarz",
+"hd": "teile-hd/72-ralph-lauren-baer-pulli-schwarz.webp",
+"ar": 1.024,
+"k2": "teile-2k/72-ralph-lauren-baer-pulli-schwarz.webp"
+},
+{
+"id": "p73",
+"file": "teile/73-ralph-lauren-rugby-navy.webp",
+"cat": "polo",
+"color": "navy",
+"brand": "Ralph Lauren",
+"loud": false,
+"name": "ralph lauren rugby navy",
+"hd": "teile-hd/73-ralph-lauren-rugby-navy.webp",
+"ar": 1.028,
+"k2": "teile-2k/73-ralph-lauren-rugby-navy.webp"
+},
+{
+"id": "p74",
+"file": "teile/74-stone-island-strickpulli-hellgrau-2.webp",
+"cat": "knit",
+"color": "lightgrey",
+"brand": "Stone Island",
+"loud": true,
+"name": "stone island strickpulli hellgrau 2",
+"hd": "teile-hd/74-stone-island-strickpulli-hellgrau-2.webp",
+"ar": 1.326,
+"k2": "teile-2k/74-stone-island-strickpulli-hellgrau-2.webp"
+},
+{
+"id": "p75",
+"file": "teile/75-stone-island-strickpulli-schwarz.webp",
+"cat": "knit",
+"color": "black",
+"brand": "Stone Island",
+"loud": true,
+"name": "stone island strickpulli schwarz",
+"hd": "teile-hd/75-stone-island-strickpulli-schwarz.webp",
+"ar": 0.909,
+"k2": "teile-2k/75-stone-island-strickpulli-schwarz.webp"
+},
+{
+"id": "p76",
+"file": "teile/76-moncler-muetze-grau.webp",
+"cat": "hat",
+"color": "grey",
+"brand": "Moncler",
+"loud": false,
+"name": "moncler muetze grau",
+"hd": "teile-hd/76-moncler-muetze-grau.webp",
+"ar": 0.966,
+"k2": "teile-2k/76-moncler-muetze-grau.webp"
+},
+{
+"id": "p77",
+"file": "teile/77-ralph-lauren-lederhandschuhe-schwarz.webp",
+"cat": "gloves",
+"color": "black",
+"brand": "Ralph Lauren",
+"loud": false,
+"name": "ralph lauren lederhandschuhe schwarz",
+"hd": "teile-hd/77-ralph-lauren-lederhandschuhe-schwarz.webp",
+"ar": 0.798,
+"k2": "teile-2k/77-ralph-lauren-lederhandschuhe-schwarz.webp"
+},
+{
+"id": "p78",
+"file": "teile/78-burberry-schal-creme.webp",
+"cat": "scarf",
+"color": "cream",
+"brand": "Burberry",
+"loud": true,
+"name": "burberry schal creme",
+"hd": "teile-hd/78-burberry-schal-creme.webp",
+"ar": 0.645,
+"k2": "teile-2k/78-burberry-schal-creme.webp"
+},
+{
+"id": "p79",
+"file": "teile/79-burberry-schal-navy.webp",
+"cat": "scarf",
+"color": "navy",
+"brand": "Burberry",
+"loud": true,
+"name": "burberry schal navy",
+"hd": "teile-hd/79-burberry-schal-navy.webp",
+"ar": 0.708,
+"k2": "teile-2k/79-burberry-schal-navy.webp"
+},
+{
+"id": "p80",
+"file": "teile/80-loewe-schal-navy.webp",
+"cat": "scarf",
+"color": "navy",
+"brand": "Loewe",
+"loud": true,
+"name": "loewe schal navy",
+"hd": "teile-hd/80-loewe-schal-navy.webp",
+"ar": 0.821,
+"k2": "teile-2k/80-loewe-schal-navy.webp"
+},
+{
+"id": "p81",
+"file": "teile/81-ralph-lauren-yankees-hoodie-grau.webp",
+"cat": "hoodie",
+"color": "grey",
+"brand": "Ralph Lauren",
+"loud": true,
+"name": "ralph lauren yankees hoodie grau",
+"hd": "teile-hd/81-ralph-lauren-yankees-hoodie-grau.webp",
+"ar": 0.868,
+"k2": "teile-2k/81-ralph-lauren-yankees-hoodie-grau.webp"
+},
+{
+"id": "p82",
+"file": "teile/82-prada-strickpulli-navy.webp",
+"cat": "knit",
+"color": "navy",
+"brand": "Prada",
+"loud": true,
+"name": "prada strickpulli navy",
+"hd": "teile-hd/82-prada-strickpulli-navy.webp",
+"ar": 0.72,
+"k2": "teile-2k/82-prada-strickpulli-navy.webp"
+},
+{
+"id": "p83",
+"file": "teile/83-clive-christian-xxi-parfum.webp",
+"cat": "scent",
+"color": "black",
+"brand": "Clive Christian",
+"loud": false,
+"name": "clive christian xxi parfum",
+"hd": "teile-hd/83-clive-christian-xxi-parfum.webp",
+"ar": 0.375,
+"k2": "teile-2k/83-clive-christian-xxi-parfum.webp"
+},
+{
+"id": "p84",
+"file": "teile/84-dior-sauvage-parfum.webp",
+"cat": "scent",
+"color": "navy",
+"brand": "Dior",
+"loud": false,
+"name": "dior sauvage parfum",
+"hd": "teile-hd/84-dior-sauvage-parfum.webp",
+"ar": 0.424,
+"k2": "teile-2k/84-dior-sauvage-parfum.webp"
 }
 ]

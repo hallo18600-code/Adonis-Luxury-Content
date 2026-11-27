@@ -202,7 +202,7 @@ const seedRnd = str => { let h = 2166136261; for (const c of String(str)) h = Ma
   return () => { h += 0x6D2B79F5; let t = h; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; };
 
 /* ---------- Teile ---------- */
-const CATS = { outer_w: 'Winterjacke', outer_l: 'Leichte Jacke', vest: 'Weste', hoodie: 'Hoodie', sweat: 'Sweatshirt', knit: 'Pulli / Strick', polo: 'Polo', shirt: 'Hemd', pants: 'Hose', shoes: 'Schuhe', hat: 'Mütze', watch: 'Uhr', scent: 'Parfum' };
+const CATS = { outer_w: 'Winterjacke', outer_l: 'Leichte Jacke', vest: 'Weste', hoodie: 'Hoodie', sweat: 'Sweatshirt', knit: 'Pulli / Strick', polo: 'Polo', shirt: 'Hemd', pants: 'Hose', shoes: 'Schuhe', hat: 'Mütze', scarf: 'Schal', gloves: 'Handschuhe', watch: 'Uhr', scent: 'Parfum' };
 const COLORS = { navy: 'Navy', black: 'Schwarz', charcoal: 'Anthrazit', grey: 'Grau', lightgrey: 'Hellgrau', white: 'Weiß', cream: 'Creme', lightblue: 'Hellblau', denim: 'Jeans-Blau', blue: 'Blau (Uhr)', green: 'Grün (Uhr)', gold: 'Gold (Duft)' };
 let parts = [], ownParts = [];
 let off = new Set(load('ad-off2', []));
@@ -325,7 +325,7 @@ const SERIES = {
     titles: [L('Emo vs. Road Man vs. Grisch', 'emo vs road man vs grisch')],
     tops: [[['knit'], 3], [['knit', 'shirt'], 2.5], [['outer_w', 'knit'], 1.5], [['polo'], 1.5], [['outer_l', 'knit'], 1]],
     extras: [['ws', 3], ['w', 3], ['hw', 1], ['s', 1]], white: 0.15, quietish: true, tags: ['#grisch', '#grischstyle'] },
-  bateman: { label: 'Winter Fits (Bateman)', ex: 'Winter fits · 2 Intro-Bilder', intro: ['bateman', 'wf_chainsaw'], lux: true, luxPool: 'winter',
+  bateman: { label: 'Winter Fits (Bateman)', ex: 'Winter fits · 2 Intro-Bilder', intro: ['bateman', 'wf_chainsaw', 'bateman_red'], lux: true, luxPool: 'winter',
     titles: [L('winter fits', 'winter fits')],
     tops: [[['outer_w'], 3], [['outer_w', 'knit'], 3], [['outer_w', 'hoodie'], 1.5], [['knit'], 2], [['vest', 'knit'], 1.5]],
     extras: [['hw', 3], ['ws', 2], ['w', 2], ['h', 1.5], ['hws', 1]], white: 0, tags: ['#winteroutfit', '#winterfits'] },
@@ -337,6 +337,14 @@ const SERIES = {
     titles: [L('Wer hat den besten Style?', 'who has the best style')],
     tops: [[['outer_w'], 3], [['outer_w', 'knit'], 2.5], [['knit'], 2], [['outer_w', 'hoodie'], 1], [['vest', 'knit'], 1]],
     extras: [['ws', 3], ['w', 3], ['hw', 1.5], ['s', 1]], white: 0, tags: ['#grisch', '#grischstyle'] },
+  franca: { label: 'Franca-Meme', ex: 'Franca Style · Streetwear · Grisch', intro: ['franca'], bg: 'intro_white',
+    titles: [L('Franca Style vs. Streetwear vs. Grisch', 'franca style vs streetwear vs grisch')],
+    tops: [[['outer_w', 'knit'], 3], [['outer_w'], 2], [['knit'], 2], [['outer_l', 'knit'], 1.5], [['vest', 'knit'], 1.5]],
+    extras: [['ws', 3], ['w', 3], ['hw', 1], ['s', 1]], white: 0, tags: ['#grisch', '#grischstyle'] },
+  streetgrisch: { label: 'Streetwear-vs-Grisch-Meme', ex: 'Silhouetten · Grau', intro: ['streetgrisch'], bg: 'intro_grey',
+    titles: [L('Streetwear vs. Grisch', 'streetwear vs grisch')],
+    tops: [[['knit'], 3], [['outer_w', 'knit'], 2.5], [['knit', 'shirt'], 2], [['outer_l', 'knit'], 1.5], [['polo'], 1]],
+    extras: [['ws', 3], ['w', 3], ['hw', 1], ['s', 1]], white: 0, tags: ['#grisch', '#oldmoneystyle'] },
   autumnyou: { label: 'Autumn Fits For You', ex: 'Intro · Navy', intro: ['autumnyou'], bg: 'intro_autumn', quietish: true,
     titles: [L('Herbst-Outfits für dich', 'autumn fits for you')],
     tops: [[['outer_l'], 2], [['outer_l', 'knit'], 2.5], [['knit'], 3], [['knit', 'shirt'], 2.5], [['vest', 'knit'], 1], [['shirt'], 1]],
@@ -358,6 +366,21 @@ const SERIES = {
     tops: [[['knit'], 3], [['knit', 'shirt'], 2], [['outer_l', 'knit'], 2], [['shirt'], 1.5], [['polo'], 1.5], [['outer_w', 'knit'], 1]],
     extras: [['ws', 4], ['s', 3], ['hs', 1]], white: 0.15, quietish: true, tags: ['#outfitideas', '#mensfashion'] },
 };
+/* 4 Content-Arten statt vieler einzelner Formate */
+const GROUPS = {
+  simple: { label: 'Outfits · schlichter Hintergrund', ex: 'Winter, Old Money, Date … mit Text', ids: ['winter', 'omwinter', 'fall', 'date', 'xmas', 'nye', 'parents', 'uni', 'oldmoney', 'pure', 'shewants'] },
+  lux: { label: 'Luxus-Hintergrund', ex: 'Villen, Autos, Winternacht', ids: ['luxus', 'winternacht'] },
+  famous: { label: 'Bekannte Personen', ex: 'Wolf, Bond, Bateman, Leo … als Intro', ids: ['wolf', 'bond', 'bateman', 'winterred', 'leo', 'starboy', 'howdress', 'autumnyou', 'niche', 'winteryou'] },
+  meme: { label: 'Memes', ex: 'Best Style, Emo, Franca, Grisch …', ids: ['beststyle', 'emo', 'grisch', 'handshake', 'franca', 'streetgrisch'] },
+};
+/* Grundgerüst jedes Outfits: Jacke + Pulli + Hose + Schuhe + Parfum.
+   Mütze/Schal/Handschuhe (h) nur selten, Parfum (s) immer, Zwei-Schichten-Looks bevorzugt. */
+for (const cfg of Object.values(SERIES)) {
+  const ex = {};
+  for (const [code, w] of cfg.extras) { const k = [...new Set((code + 's').split(''))].sort().join(''); ex[k] = (ex[k] || 0) + w * (code.includes('h') ? .45 : 1); }
+  cfg.extras = Object.entries(ex);
+  cfg.tops = cfg.tops.map(([sh, w]) => [sh, sh.length === 2 && /outer|vest/.test(sh[0]) ? w * 1.8 : sh.length === 1 && /outer/.test(sh[0]) ? w * .5 : w]);
+}
 // Call-to-Action über den Hashtags – soll Leute in die Bio bringen
 const CTAS = { en: ['Shop now – link in bio', 'Authentic vintage clothes. Link in bio.', 'All pieces available now – link in bio', 'Shop in my bio 🔗', 'Clothes like this in bio', 'Original pieces, top condition – link in bio', 'Vintage designer, available now in bio', '100% authentic. Shop in bio.', 'Available now – link in bio', 'Shop the look – link in bio'], de: ['Shop now – link in bio', 'Authentic vintage clothes. Link in bio.', 'All pieces available now – link in bio', 'Shop in my bio 🔗', 'Clothes like this in bio', 'Original pieces, top condition – link in bio', 'Vintage designer, available now in bio', '100% authentic. Shop in bio.', 'Available now – link in bio', 'Shop the look – link in bio'] };
 // Hashtags: #fyp immer, der Rest wechselt
@@ -394,6 +417,8 @@ function buildOutfit(cfg, used, last) {
       // innere Schicht: passende, aber andere Farbe (Kontrast) – Ton-in-Ton nur manchmal
       const c = of(shape[1]).filter(p => goes(outer.color, p.color) && (p.color !== outer.color || rnd() < .25));
       inner = choose(c, used); if (!inner) continue;
+      // nicht zwei laute Logos verschiedener Marken übereinander
+      if (outer.loud && inner.loud && outer.brand !== inner.brand) continue;
     }
     const tops = [outer, inner].filter(Boolean), colors = tops.map(p => p.color);
     const wantWhite = rnd() < (cfg.white || 0) && tops.every(p => ['navy', 'lightblue', 'black', 'grey', 'lightgrey', 'cream'].includes(p.color));
@@ -406,7 +431,12 @@ function buildOutfit(cfg, used, last) {
     const ex = wpick(cfg.extras), clothes = [...base.filter(c => c !== 'denim'), shoes.color].filter(Boolean);
     const acc = cat => choose(pool.filter(p => p.cat === cat && accFits(p, clothes.length ? clothes : ['navy'])), used);
     const watch = ex.includes('w') ? acc('watch') : null, scent = ex.includes('s') ? acc('scent') : null;
-    const hat = ex.includes('h') ? choose(pool.filter(p => p.cat === 'hat' && !bgAvoid.includes(p.color) && goesAll(p.color, clothes) && quietOK(p)), used) : null;
+    // Mütze / Schal / Handschuhe: höchstens eins, und nur wenn die Marken nicht zusammengewürfelt wirken
+    const topBrands = [...new Set(tops.map(p => p.brand))], topLoud = tops.some(p => p.loud);
+    const brandOK = p => topBrands.includes(p.brand) ? (!p.loud || !topLoud || tops.every(t => !t.loud || t.brand === p.brand)) : (topBrands.length === 1 && !topLoud && !(p.loud && cfg.quiet));
+    const coldCats = cfg.dark ? ['scarf', 'gloves'] : ['hat', 'scarf', 'gloves'];
+    const warm = tops.some(p => ['outer_w', 'outer_l', 'vest', 'knit', 'hoodie', 'sweat'].includes(p.cat));
+    const hat = ex.includes('h') && warm ? choose(pool.filter(p => coldCats.includes(p.cat) && !bgAvoid.includes(p.color) && goesAll(p.color, clothes) && brandOK(p) && (!cfg.quiet || !p.loud)), used) : null;
     if ((ex.includes('w') && !watch) || (ex.includes('s') && !scent)) { if (tries < 40) continue; }
     const items = { outer, inner, pants, shoes, watch, scent, hat };
     Object.values(items).forEach(p => p && used.add(p.id));
@@ -415,10 +445,10 @@ function buildOutfit(cfg, used, last) {
   return null;
 }
 function pickSeries() {
-  if (S.series !== 'random' && SERIES[S.series]) return S.series;
-  let deck = load('ad-deck2', []).filter(id => SERIES[id]);
-  if (!deck.length) deck = shuffle(Object.keys(SERIES).filter(id => !recent.series.includes(id))).concat(shuffle(recent.series.filter(id => SERIES[id])));
-  const id = deck.shift(); save('ad-deck2', deck); return id;
+  const g = GROUPS[S.series], ids = g ? g.ids.filter(id => SERIES[id]) : Object.keys(SERIES), dk = 'ad-deck3-' + (g ? S.series : 'all');
+  let deck = load(dk, []).filter(id => ids.includes(id));
+  if (!deck.length) deck = shuffle(ids.filter(id => !recent.series.includes(id))).concat(shuffle(ids.filter(id => recent.series.includes(id))));
+  const id = deck.shift(); save(dk, deck); return id;
 }
 function planPost(series, n, lang) {
   const cfg = SERIES[series], used = new Set(), outfits = [];
@@ -760,7 +790,11 @@ function render(ctx, sl, arts, bgImg) {
   // 3) Schuhe unten auf der anderen Seite
   lay(ctx, A(it.shoes), X(W * .5, W * .48), Y(.68), W * .48, HH * .28, R(-.08 + j(.1)));
   // 4) Mütze oben in der Ecke
-  if (it.hat) lay(ctx, A(it.hat), X(W * -.01, W * .27), Y(.005), W * .27, HH * .16, R(-.2 + j(.1)));
+  if (it.hat) {
+    if (it.hat.cat === 'scarf') lay(ctx, A(it.hat), X(W * -.02, W * .32), Y(.0), W * .32, HH * .24, R(-.12 + j(.08)));
+    else if (it.hat.cat === 'gloves') lay(ctx, A(it.hat), X(W * .0, W * .27), Y(.01), W * .27, HH * .17, R(-.15 + j(.1)));
+    else lay(ctx, A(it.hat), X(W * -.01, W * .27), Y(.005), W * .27, HH * .16, R(-.2 + j(.1)));
+  }
   // 5) Uhr und Parfum liegen auf dem Oberteil / neben der Hose
   const accs = [it.scent, it.watch].filter(Boolean);
   if (accs.length === 2) {
@@ -954,7 +988,8 @@ async function startUpload(file) {
 /* ---------- Einstellungen ---------- */
 function bindSettings() {
   const persist = () => save('ad-settings3', S);
-  const types = [['random', 'Zufall', 'wechselt jedes Mal'], ...Object.entries(SERIES).map(([id, s]) => [id, s.label, s.ex])];
+  if (S.series !== 'random' && !GROUPS[S.series]) S.series = 'random';
+  const types = [['random', 'Zufall', 'alle Arten gemischt'], ...Object.entries(GROUPS).map(([id, g]) => [id, g.label, g.ex])];
   $('#types').innerHTML = types.map(([id, l, ex]) => `<button type="button" class="type" data-v="${id}">${esc(l)}<small>${esc(ex)}</small></button>`).join('');
   const syncTypes = () => document.querySelectorAll('#types .type').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === S.series)));
   $('#types').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.series = b.dataset.v; persist(); syncTypes(); newFeed(); });
