@@ -33,4 +33,6 @@ Winter-Formate mit Intro (Winter Fits Rot, Bateman, Wolf of Wall Street, James B
 
 ## Auflösung
 
-Alle Hintergründe (`bg/`) und `assets/end_london.jpg` liegen in echtem 9:16-4K (2160×3840), per KI-Upscaling (Real-ESRGAN realesr-general-x4v3) aus den Originalen erzeugt – nicht im Browser hochgezogen. Die Intros „Winter Fits (Rot)“, „Chainsaw“ und „Wolf“ wurden ebenfalls nachgeschärft. Export als JPEG mit Qualität 97 %. Neue Hintergründe immer mindestens 2160×3840 anlegen.
+Die Luxus-Hintergründe (`bg/lux_*`) und `assets/end_london.jpg` sind 9:16-4K (2160×3840) mit echter, weicher Objektiv-Unschärfe (Bokeh, in linearem Licht) plus feinem Korn – kein KI-Upscaling mehr (das hat die Bilder „verschmiert“). Skript: Original → auf 3840 px Höhe, mittig 2160 px breit, Disk-Blur Radius 14 px, Korn. Neue Hintergründe genauso anlegen.
+
+Bekannte Personen (Wolf, Bond, Bateman, Winter Fits Rot, Leo, Starboy, How I would dress, Autumn/Winter Fits For You, Niche): erste Folie = Intro, danach durchgehend **ein** Luxus-Hintergrund für alle Outfit-Folien (Helligkeit passend zu den Outfits), Abschluss mit London.
